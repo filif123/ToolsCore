@@ -1,0 +1,59 @@
+﻿<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="NameColorSettings_Border" xml:space="preserve">
+    <value>Okrej</value>
+  </data>
+  <data name="NameColorSettings_Label" xml:space="preserve">
+    <value>Popisek</value>
+  </data>
+  <data name="Global_Abort" xml:space="preserve">
+    <value>Zamítnout</value>
+  </data>
+  <data name="Global_Cancel" xml:space="preserve">
+    <value>Storno</value>
+  </data>
+  <data name="Global_Ignore" xml:space="preserve">
+    <value>Ignorovat</value>
+  </data>
+  <data name="Global_No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="Global_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Global_Retry" xml:space="preserve">
+    <value>Opakovat</value>
+  </data>
+  <data name="Global_Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="NameAppFontSetting_Buttons" xml:space="preserve">
+    <value>Tlačítka formulářů</value>
+  </data>
+  <data name="NameAppFontSetting_ChartData" xml:space="preserve">
+    <value>Data v tabulkách</value>
+  </data>
+  <data name="NameAppFontSetting_ChartHeaders" xml:space="preserve">
+    <value>Nadpisy v tabulkách</value>
+  </data>
+  <data name="NameAppFontSetting_Labels" xml:space="preserve">
+    <value>Popisy formulářů</value>
+  </data>
+  <data name="NameAppFontSetting_StateRow" xml:space="preserve">
+    <value>Stavový řádek</value>
+  </data>
+  <data name="NameAppFontSetting_Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+</root>
