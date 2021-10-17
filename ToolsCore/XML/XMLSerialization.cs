@@ -9,16 +9,15 @@ namespace ToolsCore.XML
 {
     public static class XMLSerialization
     {
-        private const string constXMLRedundant =
-            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"";
+        private const string constXMLRedundant = " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"";
 
         private const string constXMLNS1 = "xsi:";
         private const string constXMLNS2 = "xsd:";
 
         /// <summary>
-        ///     Nacitava data z XML suboru
+        ///     Nacitava data z XML suboru.
         /// </summary>
-        /// <param name="file">cesta k suboru</param>
+        /// <param name="file">Cesta k suboru.</param>
         /// <returns></returns>
         public static T ReadData<T>(string file) where T : new()
         {
@@ -42,10 +41,10 @@ namespace ToolsCore.XML
         }
 
         /// <summary>
-        ///     Zapise data do XML suboru
+        ///     Zapise data do XML suboru.
         /// </summary>
-        /// <param name="file">cesta k suboru</param>
-        /// <param name="obj">data</param>
+        /// <param name="file">Cesta k suboru</param>
+        /// <param name="obj">Data.</param>
         public static void WriteData<T>(string file, T obj)
         {
             SerializeToFile(file, RuntimeHelpers.GetObjectValue(obj));

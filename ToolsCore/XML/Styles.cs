@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using ToolsCore.Tools;
@@ -16,16 +17,6 @@ namespace ToolsCore.XML
     public class Styles<T> where T : Style, new()
     {
         /// <summary>
-        ///     Predvoleny nazov predvoleneho stylu
-        /// </summary>
-        public const string DEFAULT_STYLE_NAME = "Default";
-
-        /// <summary>
-        ///     Predvoleny nazov tmaveho stylu
-        /// </summary>
-        public const string DARK_STYLE_NAME = "Dark";
-
-        /// <summary>
         ///     Aktualne pouzivany styl v programe
         /// </summary>
         [XmlElement("using")] 
@@ -37,7 +28,6 @@ namespace ToolsCore.XML
         /// </summary>
         [XmlElement("styles")] 
         public List<T> StyleList;
-
 
         /// <summary>
         ///     Konstruktor
@@ -107,19 +97,21 @@ namespace ToolsCore.XML
                     }
 
                     var rewrite = false;
-                    if (!ids.Contains(DEFAULT_STYLE_NAME))
+
+                    if (!ids.Contains(StyleNames.LIGHT))
                     {
-                        styles.StyleList.Insert(0, SetDefaultStyle());
+                        styles.StyleList.Insert(0, GetDefaultStyle(false));
                         rewrite = true;
                     }
 
-                    if (!ids.Contains(DARK_STYLE_NAME))
+                    if (!ids.Contains(StyleNames.DARK))
                     {
-                        styles.StyleList.Insert(1, SetDarkStyle());
+                        styles.StyleList.Insert(1, GetDefaultStyle(true));
                         rewrite = true;
                     }
 
-                    if (rewrite) WriteData(fileName, styles);
+                    if (rewrite) 
+                        WriteData(fileName, styles);
 
                     if (styles.UsingStyleID < 0 || styles.UsingStyleID > styles.StyleList.Count - 1)
                     {
@@ -137,8 +129,9 @@ namespace ToolsCore.XML
             if (styles == null)
             {
                 styles = new Styles<T>();
-                styles.StyleList.Insert(0, SetDefaultStyle());
-                styles.StyleList.Insert(1, SetDarkStyle());
+
+                styles.StyleList.Insert(0, GetDefaultStyle(false));
+                styles.StyleList.Insert(1, GetDefaultStyle(true));
                 WriteData(fileName, styles);
             }
 
@@ -155,29 +148,12 @@ namespace ToolsCore.XML
             XMLSerialization.SerializeToFile(fileName, RuntimeHelpers.GetObjectValue(obj));
         }
 
-        /// <summary>
-        ///     Nastav predvoleny styl
-        /// </summary>
-        /// <returns>predvoleny predvoleny styl</returns>
-        public static T SetDefaultStyle()
+        private static T GetDefaultStyle(bool dark)
         {
-            var style = new T { Name = DEFAULT_STYLE_NAME };
-            return style;
-        }
-
-        /// <summary>
-        ///     Nastav tmavy styl
-        /// </summary>
-        /// <returns>predvoleny tmavy styl</returns>
-        public static T SetDarkStyle()
-        {
-            var style = SetDefaultStyle();
-            style.Name = DARK_STYLE_NAME;
-            style.ControlsDefaultStyle = false;
-            style.DarkScrollBar = true;
-            style.DarkTitleBar = true;
-            style.ControlsColorScheme = Style.SetDefaultDarkControlsScheme();
-            return style;
+            var type = typeof(T);
+            var property = type.GetProperty(dark ? nameof(Style.DefaultDarkStyle) : nameof(Style.DefaultLightStyle),
+                BindingFlags.Public | BindingFlags.Static);
+            return property?.GetValue(null) as T;
         }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.Office.Interop.Excel;
 namespace ToolsCore.Tools
 {
     /// <summary>
-    ///     Nacitava udaje zo .XLS a .XLSX suborov
+    ///     Nacitava udaje zo .XLS a .XLSX suborov.
     /// </summary>
     public class XLSReader : TableFileReader
     {
@@ -13,10 +13,10 @@ namespace ToolsCore.Tools
         private readonly Worksheet worksheet;
 
         /// <summary>
-        ///     Konstruktor
+        ///     Vytvori novu instanciu triedy <see cref="XLSReader"/>.
         /// </summary>
-        /// <param name="fileName">cesta k suboru</param>
-        /// <param name="worksheetID">ID sheetu</param>
+        /// <param name="fileName">Cesta k suboru.</param>
+        /// <param name="worksheetID">Identifikator sheetu.</param>
         public XLSReader(string fileName, int worksheetID = 1)
         {
             excelApp = new Application();

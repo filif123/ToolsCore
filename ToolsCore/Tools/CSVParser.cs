@@ -5,7 +5,7 @@ using System.Text;
 namespace ToolsCore.Tools
 {
     /// <summary>
-    ///     Trieda pre ulozenie CSV riadku
+    ///     Trieda pre ulozenie CSV riadku.
     /// </summary>
     public class CSVRow : List<string>
     {
@@ -23,13 +23,13 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Nespracovany text riadku
+        ///     Nespracovany text riadku.
         /// </summary>
         public string LineText { get; set; }
     }
 
     /// <summary>
-    ///     Trieda pre ulozenie dat do textoveho suboru
+    ///     Trieda pre ulozenie dat do textoveho suboru.
     /// </summary>
     public class CSVFileWriter : StreamWriter
     {
@@ -39,9 +39,9 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise jeden riadok do suboru
+        ///     Zapise jeden riadok do suboru.
         /// </summary>
-        /// <param name="row">Riadok k zapisaniu</param>
+        /// <param name="row">Riadok k zapisaniu.</param>
         public void WriteRow(CSVRow row)
         {
             var builder = new StringBuilder();
@@ -61,10 +61,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise komentar do suboru
+        ///     Zapise komentar do suboru.
         /// </summary>
-        /// <param name="row">Komentar k zapisaniu</param>
-        /// <param name="commentIndicator">Indikator komentaru, ktory sa zadava do suboru pred komentar</param>
+        /// <param name="row">Komentar k zapisaniu.</param>
+        /// <param name="commentIndicator">Indikator komentaru, ktory sa zadava do suboru pred komentar.</param>
         public void WriteComment(string row, char commentIndicator = ';')
         {
             WriteLine(commentIndicator + row);
@@ -72,7 +72,7 @@ namespace ToolsCore.Tools
     }
 
     /// <summary>
-    ///     Trieda pre citanie dat z textoveho suboru
+    ///     Trieda pre citanie dat z textoveho suboru.
     /// </summary>
     public class CSVFileReader : StreamReader
     {
@@ -82,7 +82,7 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Precita jeden riadok zo suboru
+        ///     Precita jeden riadok zo suboru.
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
@@ -90,10 +90,14 @@ namespace ToolsCore.Tools
         {
             row.LineText = ReadLine();
 
-            if (row.LineText == null) return ReadStartChar.EOF;
-            if (string.Equals(row.LineText, string.Empty)) return ReadStartChar.EMPTY;
-            if (row.LineText.StartsWith(";")) return ReadStartChar.SEMICOLON;
-            if (row.LineText.StartsWith("/")) return ReadStartChar.SLASH;
+            if (row.LineText == null) 
+                return ReadStartChar.EOF;
+            if (row.LineText == "" || string.IsNullOrWhiteSpace(row.LineText)) 
+                return ReadStartChar.EMPTY;
+            if (row.LineText.StartsWith(";")) 
+                return ReadStartChar.SEMICOLON;
+            if (row.LineText.StartsWith("/")) 
+                return ReadStartChar.SLASH;
 
             var pos = 0;
             var rows = 0;

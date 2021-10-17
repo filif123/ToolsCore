@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExControls;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,10 +9,8 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Windows.Forms;
-using ExControls;
 using ToolsCore.Properties;
 
 // ReSharper disable UnusedMethodReturnValue.Global
@@ -21,50 +20,54 @@ namespace ToolsCore.Tools
     public static class Utils
     {
         /// <summary>
-        ///     Skonveruje pole bytov kodovany v ANSI (Windows 1250) na UTF8
+        ///     Skonveruje pole bytov kodovany v ANSI (Windows 1250) na UTF8.
         /// </summary>
-        /// <param name="data">pole bytov</param>
-        /// <returns>skonverovane pole bytov</returns>
+        /// <param name="data">Pole bytov.</param>
+        /// <returns>skonverovane pole bytov.</returns>
+        [ExcludeFromCodeCoverage]
         public static string ANSItoUTF(this byte[] data)
         {
             return Encoding.UTF8.GetString(Encoding.Convert(Encodings.Win1250, Encodings.UTF8, data));
         }
 
         /// <summary>
-        ///     Skonvertuje retazec kodovany v ANSI (Windows 1250) na UTF8
+        ///     Skonvertuje retazec kodovany v ANSI (Windows 1250) na UTF8.
         /// </summary>
-        /// <param name="data">retazec</param>
-        /// <returns>skonvetovany retazec</returns>
+        /// <param name="data">Retazec.</param>
+        /// <returns>skonvetovany retazec.</returns>
+        [ExcludeFromCodeCoverage]
         public static string ANSItoUTF(this string data)
         {
             return Encoding.UTF8.GetString(Encoding.Convert(Encodings.Win1250, Encoding.UTF8, Encodings.Win1250.GetBytes(data)));
         }
 
         /// <summary>
-        ///     Skonveruje pole bytov kodovany v UTF8 na ANSI (Windows 1250)
+        ///     Skonveruje pole bytov kodovany v UTF8 na ANSI (Windows 1250).
         /// </summary>
-        /// <param name="data">pole bytov</param>
-        /// <returns>skonverovane pole bytov</returns>
+        /// <param name="data">Pole bytov.</param>
+        /// <returns>skonverovane pole bytov.</returns>
+        [ExcludeFromCodeCoverage]
         public static string UTFtoANSI(this byte[] data)
         {
             return Encodings.Win1250.GetString(Encoding.Convert(Encoding.UTF8, Encodings.Win1250, data));
         }
 
         /// <summary>
-        ///     Skonvertuje retazec kódovaný v UTF8 na ANSI (Windows 1250)
+        ///     Skonvertuje retazec kódovaný v UTF8 na ANSI (Windows 1250).
         /// </summary>
-        /// <param name="data">retazec</param>
-        /// <returns>skonvetovany retazec</returns>
+        /// <param name="data">Retazec.</param>
+        /// <returns>skonvetovany retazec.</returns>
+        [ExcludeFromCodeCoverage]
         public static string UTFtoANSI(this string data)
         {
             return Encodings.Win1250.GetString(Encoding.Convert(Encoding.UTF8, Encodings.Win1250, Encoding.UTF8.GetBytes(data)));
         }
 
         /// <summary>
-        ///     Skominuje cestu k suborom/priecinkom
+        ///     Skombinuje cestu k suborom/priecinkom.
         /// </summary>
-        /// <param name="paths"></param>
-        /// <returns>skombinovanu cestu</returns>
+        /// <param name="paths">pole retazcov s cestami k suborom/priecinkom.</param>
+        /// <returns>skombinovanu cestu.</returns>
         public static string CombinePath(params string[] paths)
         {
             if (paths.Length == 0) return null;
@@ -81,7 +84,7 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Reštartuje program
+        ///     Reštartuje program.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public static void RestartApp()
@@ -92,11 +95,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zobrazi chybovu hlasku s tlacidlom OK a ikonou cerveneho kriza
+        ///     Zobrazi chybovu hlasku s tlacidlom OK a ikonou cerveneho kriza.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
+        /// <param name="text">Text spravy.</param>
+        /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialogu.</param>
+        /// <returns>vysledok dialogu.</returns>
         [ExcludeFromCodeCoverage]
         public static void ShowError([Localizable(true)] string text, MessageBoxButtons buttons = MessageBoxButtons.OK)
         {
@@ -104,11 +107,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zobrazi dialog s otazkou a ikonou bieleho otaznika v modrom kruhu
+        ///     Zobrazi dialog s otazkou a ikonou bieleho otaznika v modrom kruhu.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
+        /// <param name="text">Text spravy.</param>
+        /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialogu.</param>
+        /// <returns>vysledok dialogu.</returns>
         [ExcludeFromCodeCoverage]
         public static DialogResult ShowQuestion([Localizable(true)] string text, MessageBoxButtons buttons = MessageBoxButtons.YesNo)
         {
@@ -116,11 +119,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zobrazi dialog s varovanim a ikonou cierneho vykricnika v zltom trojuholniku
+        ///     Zobrazi dialog s varovanim a ikonou cierneho vykricnika v zltom trojuholniku.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
+        /// <param name="text">Text spravy.</param>
+        /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialogu.</param>
+        /// <returns>vysledok dialogu.</returns>
         [ExcludeFromCodeCoverage]
         public static DialogResult ShowWarning([Localizable(true)] string text, MessageBoxButtons buttons = MessageBoxButtons.OK)
         {
@@ -128,12 +131,12 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zobrazi dialog s informaciou a ikonou bieleho pismena 'i' v modrom kruhu
+        ///     Zobrazi dialog s informaciou a ikonou bieleho pismena 'i' v modrom kruhu.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="title"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
+        /// <param name="text">Text spravy.</param>
+        /// <param name="title">Titulok dialogu.</param>
+        /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialogu.</param>
+        /// <returns>vysledok dialogu.</returns>
         [ExcludeFromCodeCoverage]
         public static DialogResult ShowInfo([Localizable(true)] string text, string title = null, MessageBoxButtons buttons = MessageBoxButtons.OK)
         {
@@ -141,10 +144,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Konvertuje dlzku zvuku v milisekundach (ms) to textovej podoby "mm:ss"
+        ///     Konvertuje dlzku zvuku v milisekundach (ms) to textovej podoby "mm:ss".
         /// </summary>
-        /// <param name="len">dlzka zvuku v ms</param>
-        /// <returns>textovu podobu dlzky zvuku vo formate "mm:ss"</returns>
+        /// <param name="len">Dlzka zvuku v ms.</param>
+        /// <returns>textovu podobu dlzky zvuku vo formate "mm:ss".</returns>
         public static string LengthIntToString(int len)
         {
             if (len < 0) return "--:--";
@@ -157,13 +160,12 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vráti čislo ako reťazec doplnené o určitý počet 0 na začiatok
-        ///     <br></br>
-        ///     Ak je pocet cifier menší ako 1, vráti číslo ako reťazec (bez žiadnych 0 pred začiatkom)
+        ///     Vráti čislo ako reťazec doplnené o určitý počet 0 na začiatok. <br></br>
+        ///     Ak je pocet cifier menší ako 1, vráti číslo ako reťazec (bez žiadnych 0 pred začiatkom).
         /// </summary>
-        /// <param name="num">číslo</param>
-        /// <param name="pocetCifier">počet cifier</param>
-        /// <returns>reťazec s cislom</returns>
+        /// <param name="num">Cislo.</param>
+        /// <param name="pocetCifier">Pocet cifier.</param>
+        /// <returns>reťazec s cislom.</returns>
         public static string PadZeros(this int num, int pocetCifier = 3)
         {
             if (pocetCifier <= 0) return num.ToString();
@@ -176,54 +178,42 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zistí, či je zadaná hodnota v reťazci celé číslo (int)
+        ///     Zistí, či je zadaná hodnota v reťazci celé číslo (<see cref="int"/>).
         /// </summary>
-        /// <param name="num">retazec s moznym cislom</param>
-        /// <returns>ci sa retazec da konverovat na cislo</returns>
-        public static bool IsInt(string num)
-        {
-            return int.TryParse(num, out _);
-        }
+        /// <param name="num">Retazec s moznym cislom.</param>
+        /// <returns>ci sa retazec da konverovat na cislo.</returns>
+        public static bool IsInt(string num) => int.TryParse(num, out _);
 
         /// <summary>
-        ///     Vráti skonverované číslo z retazca, alebo ak sa nedal retazec skonvertovat vrati nastavenu predvolenu hodnotu
+        ///     Vrati skonverované číslo z retazca, alebo ak sa nedal retazec skonvertovat vrati nastavenu predvolenu hodnotu.
         /// </summary>
-        /// <param name="nums">retazec s moznym cislom</param>
-        /// <param name="def">predvolena hodnota</param>
-        /// <returns>skonverovane cislo alebo predvolenu hodnotu</returns>
-        public static int ParseIntOrDefault(string nums, int def = 0)
-        {
-            return int.TryParse(nums, out var numi) ? numi : def;
-        }
+        /// <param name="nums">Retazec s moznym cislom.</param>
+        /// <param name="def">Predvolena hodnota.</param>
+        /// <returns>skonverovane cislo alebo predvolenu hodnotu.</returns>
+        public static int ParseIntOrDefault(string nums, int def = 0) => int.TryParse(nums, out var numi) ? numi : def;
 
         /// <summary>
-        ///     Vráti skonverované číslo z retazca, alebo ak sa nedal retazec skonvertovat vrati nastavenu predvolenu hodnotu
-        ///     (null)
+        ///     Vráti skonverované číslo z retazca,
+        ///     alebo ak sa nedal retazec skonvertovat vrati nastavenu predvolenu hodnotu (<see langword="null"/>).
         /// </summary>
-        /// <param name="nums">retazec s moznym cislom</param>
-        /// <param name="def">predvolena hodnota</param>
-        /// <returns>skonverovane cislo alebo predvolenu hodnotu</returns>
-        public static int? ParseIntOrNull(string nums, int? def = null)
-        {
-            return int.TryParse(nums, out var numi) ? numi : def;
-        }
+        /// <param name="nums">Retazec s moznym cislom.</param>
+        /// <param name="def">Predvolena hodnota.</param>
+        /// <returns>skonverovane cislo alebo predvolenu hodnotu.</returns>
+        public static int? ParseIntOrNull(string nums, int? def = null) => int.TryParse(nums, out var numi) ? numi : def;
 
         /// <summary>
-        ///     Vrati retazec, ak je retazec <see langword="null" />, vrati predvoleny retazec
+        ///     Vrati retazec, ak je retazec <see langword="null" />, vrati predvoleny retazec.
         /// </summary>
-        /// <param name="str">retazec</param>
-        /// <param name="def">predvoleny retazec</param>
+        /// <param name="str">Retazec.</param>
+        /// <param name="def">Predvoleny retazec.</param>
         /// <returns></returns>
-        public static string ParseStringOrDefault(string str, string def = "")
-        {
-            return str ?? def;
-        }
+        public static string ParseStringOrDefault(string str, string def = "") => str ?? def;
 
         /// <summary>
-        ///     Vrati pole bitov ako string
+        ///     Vrati pole bitov ako <see cref="string"/>.
         /// </summary>
-        /// <param name="bits">pole bitov</param>
-        /// <returns>pole bitov ako string</returns>
+        /// <param name="bits">Pole bitov.</param>
+        /// <returns>pole bitov ako <see cref="string"/>.</returns>
         public static string BitArrayToString(BitArray bits)
         {
             var sb = new StringBuilder();
@@ -238,60 +228,48 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Konveruje pole bitov (string) ako BitArray
+        ///     Konveruje pole bitov (ako <see cref="string"/>) ako pole bitov <see cref="BitArray"/>.
         /// </summary>
-        /// <param name="bits">BitArray</param>
-        /// <returns>pole bitov ako BitArray</returns>
-        public static BitArray StringToBitArray(string bits)
-        {
-            return new BitArray(bits.Select(c => c == '1').ToArray());
-        }
+        /// <param name="bits">Pole bitov.</param>
+        /// <returns>pole bitov ako <see cref="BitArray"/>.</returns>
+        public static BitArray StringToBitArray(string bits) => new(bits.Select(c => c == '1').ToArray());
 
         /// <summary>
-        ///     Vrati retazec v uvodzovkach
+        ///     Vrati retazec v uvodzovkach. Ak je text <see langword="null"/>, vrati "\"\"".
         /// </summary>
-        /// <param name="text">povodny retazec</param>
-        /// <returns>retazec v uvodzovkach</returns>
-        public static string ToQuotedString(this string text)
-        {
-            return text == null ? "\"\"" : $"\"{text}\"";
-        }
+        /// <param name="text">Povodny retazec.</param>
+        /// <returns>retazec v uvodzovkach.</returns>
+        public static string Quote(this string text) => text == null ? "\"\"" : $"\"{text}\"";
 
         /// <summary>
-        ///     Vrati 1 pre true, 0 pre false
+        ///     Vrati 1 pre <see langword="true"/>, 0 pre <see langword="false"/>.
         /// </summary>
-        /// <param name="hodnota">hodnota true alebo false</param>
-        /// <returns>0 alebo 1</returns>
-        public static int ToNumber(this bool hodnota)
-        {
-            return hodnota ? 1 : 0;
-        }
+        /// <param name="hodnota">Hodnota <see langword="true"/> alebo <see langword="false"/>.</param>
+        /// <returns>0 alebo 1.</returns>
+        public static int ToNumber(this bool hodnota) => hodnota ? 1 : 0;
 
         /// <summary>
-        ///     Vrati false pre 0, inak vrati 1
+        ///     Vrati <see langword="false"/> pre 0, inak vrati 1.
         /// </summary>
-        /// <param name="hodnota">hodnota</param>
-        /// <returns>true alebo false</returns>
-        public static bool ToBool(this int hodnota)
-        {
-            return hodnota != 0;
-        }
+        /// <param name="hodnota">Hodnota ako cislo.</param>
+        /// <returns><see langword="true"/> alebo <see langword="false"/>.</returns>
+        public static bool ToBool(this int hodnota) => hodnota != 0;
 
         /// <summary>
-        ///     Vrati farbu zadanu v hexadecimalnom tvare (BGR) z objektu Color
+        ///     Vrati farbu zadanu v hexadecimalnom tvare (BGR) z objektu <see cref="Color"/>.
         /// </summary>
-        /// <param name="c">objekt Color</param>
-        /// <returns>farba v hexadecimalnom tvare</returns>
+        /// <param name="c">Farbu <see cref="Color"/>.</param>
+        /// <returns>farba v hexadecimalnom tvare.</returns>
         public static string ToHEX(this Color c)
         {
             return "0x" + c.B.ToString("X2") + c.G.ToString("X2") + c.R.ToString("X2");
         }
 
         /// <summary>
-        ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR)
+        ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR).
         /// </summary>
-        /// <param name="hex">farba v hexadecimalnom tvare</param>
-        /// <returns>objekt Color</returns>
+        /// <param name="hex">Farba v hexadecimalnom tvare.</param>
+        /// <returns>farbu <see cref="Color"/>.</returns>
         public static Color ParseHEX(string hex)
         {
             var replaced = hex.Replace("0x", "#");
@@ -301,10 +279,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR) alebo null
+        ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR) alebo <see langword="null"/>.
         /// </summary>
-        /// <param name="hex">farba v hexadecimalnom tvare</param>
-        /// <returns>objekt Color</returns>
+        /// <param name="hex">Farba v hexadecimalnom tvare.</param>
+        /// <returns>farbu <see cref="Color"/> alebo <see langword="null"/>, ak konvertovanie neprebehlo uspesne.</returns>
         public static Color? TryParseHEX(string hex)
         {
             if (hex == null) return null;
@@ -319,29 +297,10 @@ namespace ToolsCore.Tools
             }
         }
 
-        /*/// <summary>
-        ///     Zisti, ci sa sirky stlpcov v katalogovej tabuli prekryvaju
-        /// </summary>
-        /// <param name="st1">pociatocny pixel 1. stlpca</param>
-        /// <param name="end1">posledny pixel 1. stlpca</param>
-        /// <param name="st2">pociatocny pixel 2. stlpca</param>
-        /// <param name="end2">posledny pixel 2. stlpca</param>
-        /// <param name="l1">riadok, na ktorom sa nachadza 1. stlpec</param>
-        /// <param name="l2">riadok, na ktorom sa nachadza 2. stlpec</param>
-        /// <returns></returns>
-        public static bool IntersectCols(int st1, int end1, int st2, int end2, int l1, int l2)
-        {
-            if (l1 != l2) return false;
-            if (st1 < st2 && end1 > end2) return true;
-            if (st1 > st2 && end1 > end2) return true;
-            if (st1 < st2 && end1 < end2) return true;
-            return false;
-        }*/
-
         /// <summary>
-        ///     Vrati zoznam vsetkych systemovych fontov
+        ///     Vrati zoznam vsetkych systemovych fontov.
         /// </summary>
-        /// <returns>zoznam systemovych fontov</returns>
+        /// <returns>zoznam systemovych fontov.</returns>
         public static List<string> GetSystemFontNames()
         {
             var fontnames = new List<string>();
@@ -353,11 +312,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zisti, ci je font neproporcionalny
+        ///     Zisti, ci je <see cref="Font"/> <paramref name="ft"/> neproporcionalny.
         /// </summary>
-        /// <param name="g">grafika</param>
-        /// <param name="ft">font</param>
-        /// <returns><see langword="true" /> ak je font neproporcionalny</returns>
+        /// <param name="g">Grafika, na ktorej sa bude testovat proporcialnost.</param>
+        /// <param name="ft">Pismo na otestovanie.</param>
+        /// <returns><see langword="true" /> ak je font neproporcionalny, inak <see langword="false"/>.</returns>
         public static bool IsFontMonospaced(Graphics g, Font ft)
         {
             char[] charSizes = { 'i', 'a', 'Z', '%', '#', 'a', 'B', 'l', 'm', ',', '.' };
@@ -371,25 +330,25 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zisti, ci zoznam obsahuje vsetky prvky ineho zoznamu
+        ///     Zisti, ci zoznam obsahuje vsetky prvky ineho zoznamu.
         /// </summary>
-        /// <param name="containingList">vacsi zoznam, ktory kontrolujeme</param>
-        /// <param name="lookupList">zoznam, ktory treba vyhladat v zozname</param>
-        /// <returns>true ak obsahuje vsetky prvky</returns>
+        /// <param name="containingList">Vacsi zoznam, ktory kontrolujeme.</param>
+        /// <param name="lookupList">Zoznam, ktory treba vyhladat v zozname.</param>
+        /// <returns><see langword="true"/> ak obsahuje vsetky prvky, inak <see langword="false"/>.</returns>
         public static bool ContainsAllItems<T>(this IEnumerable<T> containingList, IEnumerable<T> lookupList)
         {
             return !lookupList.Except(containingList).Any();
         }
 
         /// <summary>
-        ///     Vrati retazec, ktory sa nachadza na indexe pola/listu a ak je index mimo rozsahu pola alebo je retazec na indexe
-        ///     <see langword="null" />, vrati predvoleny retazec
+        ///     Vrati retazec, ktory sa nachadza na pozicii <paramref name="index"/> pola/listu <paramref name="source"/>.<br></br>
+        ///     Ak je <paramref name="index"/> mimo rozsahu pola alebo je retazec na indexe
+        ///     <see langword="null"/>, vrati predvoleny retazec urceny parametrom <paramref name="def"/>.
         /// </summary>
-        /// ///
-        /// <param name="source"></param>
-        /// <param name="index"></param>
-        /// <param name="def">predvoleny retazec</param>
-        /// <returns></returns>
+        /// <param name="source">Pole/list retazcov.</param>
+        /// <param name="index">Pozicia prvku.</param>
+        /// <param name="def">Predvoleny retazec.</param>
+        /// <returns>Retazec, alebo predvoleny retazec <paramref name="def"/>.</returns>
         public static string ElementAtOrDefaultStr(this IEnumerable<string> source, int index, string def = "")
         {
             var value = source.ElementAtOrDefault(index);
@@ -397,7 +356,7 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Kopiruje obsah priecinka, ak je aspon 1 z parametov string.Empty alebo null, nic sa nevykona
+        ///     Kopiruje obsah priecinka, ak je aspon 1 z parametov <see cref="string.Empty"/> alebo <see langword="null"/>, nic sa nevykona.
         /// </summary>
         /// <param name="sourcePath">zdrojovy priecinok</param>
         /// <param name="destinationPath">cielovy priecinok</param>
@@ -415,9 +374,9 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vrati nazov priecinka
+        ///     Vrati nazov priecinka.
         /// </summary>
-        /// <returns>nazov priecinka alebo null ak je vstup null alebo string.Empty</returns>
+        /// <returns>nazov priecinka alebo <see langword="null"/> ak je vstup <see langword="null"/> alebo <see cref="string.Empty"/>.</returns>
         public static string GetDirectoryName(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
@@ -426,17 +385,7 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vrati verziu programu ako triedu Version
-        /// </summary>
-        /// <returns></returns>
-        [ExcludeFromCodeCoverage]
-        public static Version GetAppVersion(string version)
-        {
-            return new Version(version);
-        }
-
-        /// <summary>
-        ///     Skontroluje, či zadaná klávesová stkratka je správna
+        ///     Skontroluje, či zadaná klávesová stkratka je správna.
         /// </summary>
         /// <param name="keys">klávesy</param>
         /// <returns></returns>
@@ -447,11 +396,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Odstrani diakritiku
+        ///     Odstrani diakritiku z retazca text. <br></br>
         ///     Source: https://stackoverflow.com/a/37070320/14438039
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">Text.</param>
+        /// <returns>text bez diakritiky.</returns>
         public static string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -467,21 +416,21 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Prevedie reťazec, ktorý je vo formáte dátumu (dd.MM.yyyy) na DateTime
+        ///     Prevedie reťazec <paramref name="text"/>, ktorý je vo formáte dátumu (dd.MM.yyyy) na <see cref="DateTime"/>.
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">Retazec s datumom.</param>
+        /// <returns>datum vo forme objektu typu <see cref="DateTime"/>.</returns>
         public static DateTime ParseDate(string text)
         {
             return DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
         }
 
         /// <summary>
-        ///     Prevedie reťazec na DateTime, pričom reťazec musí byť vo formáte:
-        ///     dd.MM.yyyy / d.MM.yyyy / d.M.yyyy / dd.M.yyyy
+        ///     Prevedie reťazec <paramref name="text"/> na <see cref="DateTime"/>, pričom reťazec musí byť vo formáte:
+        ///     dd.MM.yyyy / d.MM.yyyy / d.M.yyyy / dd.M.yyyy .
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">Retazec s datumom.</param>
+        /// <returns>datum vo forme objektu typu <see cref="DateTime"/>.</returns>
         public static DateTime ParseDateAlts(string text)
         {
             string[] types = { "dd.MM.yyyy", "d.MM.yyyy", "d.M.yyyy", "dd.M.yyyy" };
@@ -489,21 +438,21 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Prevedie reťazec, ktorý je vo formáte času (HH:mm / H:mm) na DateTime
+        ///     Prevedie reťazec <paramref name="text"/>, ktorý je vo formáte času (HH:mm / H:mm) na <see cref="DateTime"/>.
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="text">Retazec s casom.</param>
+        /// <returns>cas vo forme objektu typu <see cref="DateTime"/>.</returns>
         public static DateTime ParseTime(string text)
         {
             return DateTime.ParseExact(text, new[] { "HH:mm", "H:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None);
         }
 
         /// <summary>
-        ///     Skúsi previesť reťazec, ktorý je vo formáte času (HH:mm / H:mm) na DateTime
+        ///     Skúsi previesť reťazec <paramref name="text"/>, ktorý je vo formáte času (HH:mm / H:mm) na <see cref="DateTime"/>.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="time"></param>
-        /// <returns><see langword="true" /> ak sa prevod podarí, inak vráti <see langword="false" /></returns>
+        /// <param name="text">Retazec s casom.</param>
+        /// <param name="time">Cas vo forme objektu typu <see cref="DateTime"/> ak sa prevod podari, inak obsahuje <see cref="DateTime.MinValue"/>.</param>
+        /// <returns><see langword="true" /> ak sa prevod podarí, inak vráti <see langword="false"/>.</returns>
         public static bool TryParseTime(string text, out DateTime time)
         {
             try
@@ -520,11 +469,11 @@ namespace ToolsCore.Tools
 
         /// <summary>
         ///     Skúsi previesť reťazec na DateTime, pričom reťazec musí byť vo formáte:
-        ///     dd.MM.yyyy / d.MM.yyyy / d.M.yyyy / dd.M.yyyy
+        ///     dd.MM.yyyy / d.MM.yyyy / d.M.yyyy / dd.M.yyyy .
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="date"></param>
-        /// <returns><see langword="true" /> ak sa prevod podarí, inak vráti <see langword="false" /></returns>
+        /// <param name="text">Retazec s datumom.</param>
+        /// <param name="date">Datum vo forme objektu typu <see cref="DateTime"/> ak sa prevod podari, inak obsahuje <see cref="DateTime.MinValue"/>.</param>
+        /// <returns><see langword="true"/> ak sa prevod podarí, inak vráti <see langword="false"/>.</returns>
         public static bool TryParseDateAlts(string text, out DateTime date)
         {
             try
@@ -540,9 +489,9 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zisti, ci zadanany retazec je vo formate casu
+        ///     Zisti, ci zadanany retazec <paramref name="str"/> je vo formate casu.
         /// </summary>
-        /// <param name="str">retazec na testovanie</param>
+        /// <param name="str">Retazec na testovanie.</param>
         /// <returns></returns>
         public static bool IsTime(string str)
         {
@@ -550,21 +499,21 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Porovna retazce, pricom ignoruje velkost pismen (VELKE/male)
+        ///     Porovna retazce, pricom ignoruje velkost pismen (VELKE/male).
         /// </summary>
-        /// <param name="str1"></param>
-        /// <param name="str2"></param>
-        /// <returns></returns>
+        /// <param name="str1">Prvy retazec na porovnavanie.</param>
+        /// <param name="str2">Druhy retazec na porovnavanie.</param>
+        /// <returns>ci sa retazce zhoduju.</returns>
         public static bool EqualsIgnoreCase(this string str1, string str2)
         {
             return str1 != null && str1.Equals(str2, StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// <summary>
-        ///     Zisti, ci je riadok prazdny (pouzitie v: CSVRow)
+        ///     Zisti, ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#) (pouzitie v: <see cref="CSVRow"/>).
         /// </summary>
-        /// <param name="ch"></param>
-        /// <returns></returns>
+        /// <param name="ch">Typ zaciatku riadku.</param>
+        /// <returns>Ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#).</returns>
         [ExcludeFromCodeCoverage]
         public static bool LineIsEmpty(ReadStartChar ch)
         {
@@ -572,10 +521,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zisti, ci je riadok posledny (pouzitie v: CSVRow)
+        ///     Zisti, ci je riadok posledny (pouzitie v: <see cref="CSVRow"/>)
         /// </summary>
-        /// <param name="ch"></param>
-        /// <returns></returns>
+        /// <param name="ch">Typ zaciatku riadku.</param>
+        /// <returns>Ci riadok obsahuje koniec suboru (EOF).</returns>
         [ExcludeFromCodeCoverage]
         public static bool LineIsEOF(ReadStartChar ch)
         {
@@ -660,9 +609,9 @@ namespace ToolsCore.Tools
         /// <summary>
         ///     Vytvori relativnu cestu k suboru <paramref name="filePath"/> podla absolutnej cesty <paramref name="folderPath"/>.
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="folderPath"></param>
-        /// <returns>relativnu cestu k suboru</returns>
+        /// <param name="filePath">Absolutna cesta k suboru.</param>
+        /// <param name="folderPath">Cesta k priecinku, od ktoreho sa bude brat cesta k suboru ako relativna.</param>
+        /// <returns>relativnu cestu k suboru.</returns>
         public static string GetRelativePath(string filePath, string folderPath)
         {
             var pathUri = new Uri(filePath);
@@ -676,11 +625,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vrati retazec, v ktorom sa nachadza sipka ako znak podla enumeracie <see cref="Tools.Arrow" />.
+        ///     Vrati retazec, v ktorom sa nachadza sipka ako znak podla enumeracie <see cref="Tools.Arrow"/>.
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="type">Typ sipky.</param>
+        /// <returns>znak sipky ako text.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Ak bol zadany neplatny typ sipky.</exception>
         [ExcludeFromCodeCoverage]
         public static string Arrow(Arrow type)
         {
@@ -696,58 +645,58 @@ namespace ToolsCore.Tools
     }
 
     /// <summary>
-    ///     Oznacuje typ sipky pre metodu <see cref="Utils.Arrow(Arrow)" />
+    ///     Oznacuje typ sipky pre metodu <see cref="Utils.Arrow(Arrow)"/>.
     /// </summary>
     public enum Arrow : byte
     {
         /// <summary>
-        ///     Sipka hore
+        ///     Sipka hore.
         /// </summary>
         UP,
 
         /// <summary>
-        ///     Sipka dolu
+        ///     Sipka dolu.
         /// </summary>
         DOWN,
 
         /// <summary>
-        ///     Sipka dolava
+        ///     Sipka dolava.
         /// </summary>
         LEFT,
 
         /// <summary>
-        ///     Sipka doprava
+        ///     Sipka doprava.
         /// </summary>
         RIGHT
     }
 
     /// <summary>
-    ///     Typ znaku na zaciatku riadku
+    ///     Typ znaku na zaciatku riadku.
     /// </summary>
     public enum ReadStartChar
     {
         /// <summary>
-        ///     Neprazdny riadok
+        ///     Neprazdny riadok.
         /// </summary>
         NON_EMPTY,
 
         /// <summary>
-        ///     Prazdny riadok
+        ///     Prazdny riadok.
         /// </summary>
         EMPTY,
 
         /// <summary>
-        ///     Bodkociarka
+        ///     Bodkociarka.
         /// </summary>
         SEMICOLON,
 
         /// <summary>
-        ///     #
+        ///     Mriezka (#).
         /// </summary>
         SLASH,
 
         /// <summary>
-        ///     Znak konca suboru
+        ///     Znak konca suboru.
         /// </summary>
         EOF
     }

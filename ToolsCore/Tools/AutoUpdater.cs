@@ -19,7 +19,7 @@ namespace ToolsCore.Tools
         /// <returns></returns>
         public static bool UpdateAvailable(string thisVersionAsString, out string newVersion)
         {
-            var thisVersion = Utils.GetAppVersion(thisVersionAsString);
+            var thisVersion = new Version(thisVersionAsString);
 
             var allVersions = GetAllVersions();
             foreach (var v in allVersions)
@@ -48,7 +48,7 @@ namespace ToolsCore.Tools
                 var stream = web.OpenRead(GlobSettings.LinkUpdater);
                 using var reader = new StreamReader(stream ?? throw new InvalidOperationException());
                 var text = reader.ReadToEnd();
-                var csv = new CsvStringReader(text);
+                var csv = new CSVStringReader(text);
 
                 for (var i = 0; i < csv.RowCount; i++)
                 {

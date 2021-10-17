@@ -10,10 +10,18 @@ namespace ToolsCore.XML
     /// </summary>
     public class AppFont
     {
+        public AppFont()
+        {
+        }
+
+        public AppFont(Font font)
+        {
+            Font = font;
+        }
+
         /// <summary>
         ///     Názov použitia písma pre program.
         /// </summary>
-        
         [XmlIgnore, Localizable(true)]
         public string Name { get; set; }
 

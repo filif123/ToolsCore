@@ -10,51 +10,46 @@ namespace ToolsCore.XML
     /// </summary>
     public struct XMLColor
     {
-        private Color _color;
+        private Color color;
 
         /// <summary>
-        ///     Konstruktor
+        ///     Vytvori novu instanciu struktury <see cref="XMLColor"/>.
         /// </summary>
         /// <param name="c"></param>
         public XMLColor(Color c)
         {
-            _color = c;
+            color = c;
         }
 
         /// <summary>
-        ///     Farba ako text pre XML
+        ///     Farba ako text pre XML.
         /// </summary>
         [XmlText]
         public string Default
         {
-            get => FromColor(_color);
-            set => _color = ToColor(value);
-        }
-
-
-        /// <summary>
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static implicit operator Color(XMLColor x)
-        {
-            return x._color;
+            get => FromColor(color);
+            set => color = ToColor(value);
         }
 
         /// <summary>
+        ///     Implicitny operator sluziaci na konvertovanie <see cref="XMLColor"/> na <see cref="Color"/>.
         /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        public static implicit operator XMLColor(Color c)
-        {
-            return new XMLColor(c);
-        }
+        /// <param name="x">Farba ako <see cref="XMLColor"/>.</param>
+        /// <returns>farba ako <see cref="Color"/>.</returns>
+        public static implicit operator Color(XMLColor x) => x.color;
 
         /// <summary>
-        ///     Vygeneruje reťazec (string) podľa objektu typu Color
+        ///     Implicitny operator sluziaci na konvertovanie <see cref="Color"/> na <see cref="XMLColor"/>.
         /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
+        /// <param name="c">Farba ako <see cref="Color"/>.</param>
+        /// <returns>farba ako <see cref="XMLColor"/>.</returns>
+        public static implicit operator XMLColor(Color c) => new(c);
+
+        /// <summary>
+        ///     Vygeneruje reťazec (string) podľa objektu typu <see cref="Color"/>.
+        /// </summary>
+        /// <param name="color">Farba ako objekt typu <see cref="Color"/>.</param>
+        /// <returns>farba definovana textovej podobe.</returns>
         public static string FromColor(Color color)
         {
             if (color.IsNamedColor)
@@ -66,10 +61,10 @@ namespace ToolsCore.XML
         }
 
         /// <summary>
-        ///     Konvertuje string na object Color
+        ///     Konvertuje <see cref="string"/> value na objekt typu <see cref="Color"/>.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">Farba definovana textovej podobe.</param>
+        /// <returns>farba ako objekt typu <see cref="Color"/>.</returns>
         public static Color ToColor(string value)
         {
             try

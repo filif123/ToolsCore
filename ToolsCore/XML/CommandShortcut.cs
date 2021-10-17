@@ -1,22 +1,23 @@
 ﻿using System.Windows.Forms;
 using System.Xml.Serialization;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace ToolsCore.XML
 {
     /// <summary>
-    ///     Reprezentuje klavesovu skratku pouzivanu na hlavnej pracovnej ploche programu
+    ///     Reprezentuje klavesovu skratku pouzivanu na hlavnej pracovnej ploche programu.
     /// </summary>
     public class CommandShortcut
     {
         /// <summary>
-        ///     Konstuktor
+        ///     Vytvori novu instanciu triedy <see cref="CommandShortcut"/>.
         /// </summary>
         public CommandShortcut()
         {
         }
 
         /// <summary>
-        ///     Konstuktor
+        ///     Vytvori novu instanciu triedy <see cref="CommandShortcut"/> podla struktury <see cref="ShortcutName"/>.
         /// </summary>
         /// <param name="shortcut"></param>
         public CommandShortcut(ShortcutName shortcut)
@@ -25,19 +26,19 @@ namespace ToolsCore.XML
         }
 
         /// <summary>
-        ///     Názov použitia klávesovej skratky
+        ///     Názov použitia klávesovej skratky.
         /// </summary>
         [XmlIgnore]
         public string Name { get; set; }
 
         /// <summary>
-        ///     Klávesová skratka ako štruktúra <see cref="ShortcutName" />
+        ///     Klávesová skratka ako štruktúra <see cref="ShortcutName"/>.
         /// </summary>
         [XmlIgnore]
         public ShortcutName Shortcut { get; set; }
 
         /// <summary>
-        ///     XML reprezentácia klávesovej skratky
+        ///     XML reprezentácia klávesovej skratky.
         /// </summary>
         [XmlAttribute("sc")]
         public string ShortcutXML
@@ -55,12 +56,12 @@ namespace ToolsCore.XML
     public readonly struct ShortcutName
     {
         /// <summary>
-        ///     Klávesová skratka ako štruktúra
+        ///     Klávesová skratka ako štruktúra.
         /// </summary>
         public readonly Shortcut ThisShortcut;
 
         /// <summary>
-        ///     Konstruktor
+        ///     Vytvori novu instanciu struktury <see cref="ShortcutName"/> podla enumeracie <see cref="Shortcut"/>.
         /// </summary>
         /// <param name="shortcut"></param>
         public ShortcutName(Shortcut shortcut)
@@ -71,7 +72,8 @@ namespace ToolsCore.XML
         /// <inheritdoc />
         public override string ToString()
         {
-            if (ThisShortcut == Shortcut.None) return "(Žiadna)";
+            if (ThisShortcut == Shortcut.None) 
+                return "(Žiadna)";
             return new KeysConverter().ConvertToString((Keys)ThisShortcut) ?? "";
         }
     }

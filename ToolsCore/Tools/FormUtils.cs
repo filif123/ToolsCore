@@ -7,12 +7,12 @@ using ToolsCore.XML;
 namespace ToolsCore.Tools
 {
     /// <summary>
-    ///     Trieda obsahujúca metódy na správu Formu
+    ///     Trieda obsahujúca metódy na správu formularov.
     /// </summary>
     public static class FormUtils
     {
         /// <summary>
-        ///     Zmena farebnej schémy dialogu alebo ovladacieho prvku
+        ///     Zmena farebnej schémy dialogu alebo ovladacieho prvku.
         /// </summary>
         /// <param name="c">form alobo ovladaci prvok</param>
         public static void ApplyTheme(this Control c)
@@ -78,7 +78,8 @@ namespace ToolsCore.Tools
                             dclb.HighlightColor = scheme.Highlight.BackColor;
                         }
 
-                        if (style.DarkScrollBar) dclb.SetTheme(WindowsTheme.DarkExplorer);
+                        if (style.DarkScrollBar) 
+                            dclb.SetTheme(WindowsTheme.DarkExplorer);
 
                         break;
                     }
@@ -240,7 +241,8 @@ namespace ToolsCore.Tools
                         control.ForeColor = scheme.Box.ForeColor;
                         if (!style.ControlsDefaultStyle) tv.BorderStyle = BorderStyle.None;
 
-                        if (style.DarkScrollBar) tv.SetTheme(WindowsTheme.DarkExplorer);
+                        if (style.DarkScrollBar) 
+                            tv.SetTheme(WindowsTheme.DarkExplorer);
 
                         break;
                     }
@@ -250,7 +252,8 @@ namespace ToolsCore.Tools
                         control.ForeColor = scheme.Box.ForeColor;
                         if (!style.ControlsDefaultStyle) lb.BorderStyle = BorderStyle.None;
 
-                        if (style.DarkScrollBar) lb.SetTheme(WindowsTheme.DarkExplorer);
+                        if (style.DarkScrollBar) 
+                            lb.SetTheme(WindowsTheme.DarkExplorer);
 
                         break;
                     }
@@ -270,6 +273,7 @@ namespace ToolsCore.Tools
                     case ExComboBox dcombo:
                     {
                         dcombo.DefaultStyle = dcombo.DefaultStyle && style.ControlsDefaultStyle;
+                        dcombo.UseDarkScrollBar = style.DarkScrollBar;
                         if (!dcombo.DefaultStyle)
                         {
                             dcombo.BackColor = scheme.Box.BackColor;
@@ -675,7 +679,8 @@ namespace ToolsCore.Tools
 
             protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
             {
-                if (e.Item.Enabled) e.ArrowColor = GlobSettings.UsingStyle.ControlsColorScheme.Button.ForeColor;
+                if (e.Item.Enabled) 
+                    e.ArrowColor = GlobSettings.UsingStyle.ControlsColorScheme.Button.ForeColor;
 
                 base.OnRenderArrow(e);
             }

@@ -3,17 +3,17 @@
 namespace ToolsCore.Tools
 {
     /// <summary>
-    ///     Class to read data from a CSV string
+    ///     Class to read data from a CSV string.
     /// </summary>
-    public class CsvStringReader : TableFileReader
+    public class CSVStringReader : TableFileReader
     {
         /// <summary>
-        ///     Konstruktor
+        ///     Vytvori novu instanciu triedy <see cref="CSVStringReader"/>.
         /// </summary>
-        /// <param name="text">text v tvare .CSV suboru</param>
-        /// <param name="linesep">separator riadkov</param>
-        /// <param name="rowsep">separator buniek</param>
-        public CsvStringReader(string text, char linesep = '\n', char rowsep = ';')
+        /// <param name="text">Text v tvare .CSV suboru.</param>
+        /// <param name="linesep">Separator riadkov.</param>
+        /// <param name="rowsep">Separator buniek.</param>
+        public CSVStringReader(string text, char linesep = '\n', char rowsep = ';')
         {
             text = text.Replace("\r", "");
             var rows = text.Split(new[] { linesep }, StringSplitOptions.RemoveEmptyEntries);

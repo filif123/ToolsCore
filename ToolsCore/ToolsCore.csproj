@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ToolsCore</RootNamespace>
     <AssemblyName>ToolsCore</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -82,6 +82,7 @@
     <Compile Include="XML\DesktopColumn.cs" />
     <Compile Include="XML\SettingsNaming.cs" />
     <Compile Include="XML\Style.cs" />
+    <Compile Include="XML\StyleNames.cs" />
     <Compile Include="XML\Styles.cs" />
     <Compile Include="XML\XMLColor.cs" />
     <Compile Include="XML\XMLEnum.cs" />

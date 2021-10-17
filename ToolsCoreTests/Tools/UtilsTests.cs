@@ -8,111 +8,12 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToolsCore.Tools;
 
-namespace ToolsCoreTests
+namespace ToolsCoreTests.Tools
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
     public class UtilsTests
     {
-        [TestMethod]
-        public void ANSItoUTF_Bytes_Null()
-        {
-            try
-            {
-                // ReSharper disable once InvokeAsExtensionMethod
-                Utils.ANSItoUTF((byte[])null);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.IsTrue(e is ArgumentNullException);
-            }
-        }
-
-        [TestMethod]
-        public void ANSItoUTF_Bytes_NotNull()
-        {
-            byte[] bytes = { 0x20, 0x40, 0x60 };
-
-            var res = bytes.ANSItoUTF();
-
-            Assert.AreEqual("\x0020\x0040\x0060", res);
-        }
-
-        [TestMethod]
-        public void ANSItoUTF_String_Null()
-        {
-            try
-            {
-                // ReSharper disable once InvokeAsExtensionMethod
-                Utils.ANSItoUTF((string)null);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.IsTrue(e is ArgumentNullException);
-            }
-        }
-
-        [TestMethod]
-        public void ANSItoUTF_String_NotNull()
-        {
-            const string input = "č š ř";
-            var res = input.ANSItoUTF();
-
-            Assert.AreEqual("č š ř", res);
-        }
-
-        [TestMethod]
-        public void UTFtoANSI_Bytes_Null()
-        {
-            try
-            {
-                // ReSharper disable once InvokeAsExtensionMethod
-                Utils.UTFtoANSI((byte[])null);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.IsTrue(e is ArgumentNullException);
-            }
-        }
-
-        [TestMethod]
-        public void UTFtoANSI_Bytes_NotNull()
-        {
-            byte[] bytes = { 0x20, 0x40, 0x60 };
-
-            var res = bytes.UTFtoANSI();
-
-            Assert.AreEqual("\x0020\x0040\x0060", res);
-        }
-
-        [TestMethod]
-        public void UTFtoANSI_String_Null()
-        {
-            try
-            {
-                // ReSharper disable once InvokeAsExtensionMethod
-                Utils.UTFtoANSI((string)null);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.IsTrue(e is ArgumentNullException);
-            }
-        }
-
-        [TestMethod]
-        public void UTFtoANSI_String_NotNull()
-        {
-            const string input = "č š ř";
-
-            var res = input.UTFtoANSI();
-
-            Assert.AreEqual("č š ř", res);
-        }
-
         [TestMethod]
         public void PadZeros()
         {
@@ -198,7 +99,7 @@ namespace ToolsCoreTests
         {
             const string input = null;
 
-            var res = Utils.ParseStringOrDefault(input);
+            var res = Utils.ParseStringOrDefault(input, null);
 
             Assert.AreEqual(null, res);
         }
@@ -241,7 +142,7 @@ namespace ToolsCoreTests
         {
             const string arr = "Bratislava- N.Mesto";
 
-            var res = arr.ToQuotedString();
+            var res = arr.Quote();
 
             Assert.AreEqual("\"Bratislava- N.Mesto\"", res);
         }

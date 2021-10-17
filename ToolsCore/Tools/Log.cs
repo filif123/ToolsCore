@@ -6,37 +6,37 @@ using System.Windows.Forms;
 namespace ToolsCore.Tools
 {
     /// <summary>
-    ///     Trieda sluziaca na logovanie do suborov
+    ///     Trieda sluziaca na logovanie do suborov.
     /// </summary>
     public static class Log
     {
         /// <summary>
-        ///     Nazov logovacieho suboru Info.log
+        ///     Nazov logovacieho suboru Info.log.
         /// </summary>
         public const string LOG_APP_NAME = "Info.log";
 
         /// <summary>
-        ///     Nazov logovacieho suboru Error.log
+        ///     Nazov logovacieho suboru Error.log.
         /// </summary>
         public const string LOG_ERROR_NAME = "Error.log";
 
         /// <summary>
-        ///     Cesta k priecinku s logmi
+        ///     Cesta k priecinku s logmi.
         /// </summary>
         public const string LogPath = "\\Log";
 
         /// <summary>
-        ///     Cesta k priecinku s programom
+        ///     Cesta k priecinku s programom.
         /// </summary>
         public static string AppDirPath = Application.StartupPath;
 
         /// <summary>
-        ///     Rob logy informacii
+        ///     Vykonavaj logy informacii.
         /// </summary>
         public static bool DoAppLogs = true;
 
         /// <summary>
-        ///     Rob logy chyb a vynimiek
+        ///     Vykonavaj logy chyb a vynimiek.
         /// </summary>
         public static bool DoErrorLogs = true;
 
@@ -49,7 +49,7 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise chybu do logovacieho suboru
+        ///     Zapise chybu do logovacieho suboru.
         /// </summary>
         /// <param name="s">text chybovej hlasky</param>
         public static void Error(string s)
@@ -62,10 +62,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise chybu do logovacieho suboru zo zadanymi parametrami
+        ///     Zapise chybu do logovacieho suboru zo zadanymi parametrami.
         /// </summary>
-        /// <param name="sFmt">formát parametrov</param>
-        /// <param name="aoPar">zadane parametre</param>
+        /// <param name="sFmt">Formát parametrov.</param>
+        /// <param name="aoPar">Zadane parametre.</param>
         public static void Error(string sFmt, params object[] aoPar)
         {
             if (DoErrorLogs) 
@@ -73,10 +73,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise vynimku do logovacieho suburu
+        ///     Zapise vynimku do logovacieho suburu.
         /// </summary>
-        /// <param name="e">vynimka</param>
-        /// <param name="s">dobrovodna informacia o vynimke (dobrovolna)</param>
+        /// <param name="e">Vynimka.</param>
+        /// <param name="s">Dobrovodna informacia o vynimke (dobrovolna).</param>
         public static void Exception(Exception e, string s = null)
         {
             if (e != null)
@@ -91,11 +91,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise vynimku do logovacieho suburu
+        ///     Zapise vynimku do logovacieho suburu.
         /// </summary>
-        /// <param name="e">vynimka</param>
-        /// <param name="sFmt">format parametrov</param>
-        /// <param name="aoPar">zadane parametre</param>
+        /// <param name="e">Vynimka.</param>
+        /// <param name="sFmt">Format parametrov.</param>
+        /// <param name="aoPar">Zadane parametre.</param>
         public static void Exception(Exception e, string sFmt, params object[] aoPar)
         {
             if (DoErrorLogs) 
@@ -103,9 +103,9 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Zapise informaciu do logovacieho suboru
+        ///     Zapise informaciu do logovacieho suboru.
         /// </summary>
-        /// <param name="s">text informacie</param>
+        /// <param name="s">Text informacie.</param>
         public static void AppInfo(string s)
         {
             if (DoAppLogs)
@@ -156,7 +156,8 @@ namespace ToolsCore.Tools
 
             public void LogString(string text)
             {
-                if (text == null) return;
+                if (text == null) 
+                    return;
 
                 lock (Locker)
                 {

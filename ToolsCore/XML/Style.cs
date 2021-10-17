@@ -10,19 +10,19 @@ namespace ToolsCore.XML
     public class Style
     {
         /// <summary>
-        ///     Ci ovladacie prvky v GUI pouzivaju predvoleny vzhlad
+        ///     Ci ovladacie prvky v GUI pouzivaju predvoleny vzhlad.
         /// </summary>
         [XmlElement("DefaultStyle"), DefaultValue(true)] 
         public bool ControlsDefaultStyle;
 
         /// <summary>
-        ///     Ci okna v GUI maju mat tmavy TitleBar (funguje len vo Windows 10)
+        ///     Ci okna v GUI maju mat tmavy TitleBar (funguje len vo Windows 10).
         /// </summary>
         [XmlElement("DarkTitlebar"), DefaultValue(false)] 
         public bool DarkTitleBar;
 
         /// <summary>
-        ///     Ci ovladacie prvky v GUI maju mat tmavy ScrollBar (funguje len vo Windows 10)
+        ///     Ci ovladacie prvky v GUI maju mat tmavy ScrollBar (funguje len vo Windows 10).
         /// </summary>
         [XmlElement("DarkScrollBar"), DefaultValue(false)]
         public bool DarkScrollBar;
@@ -30,16 +30,17 @@ namespace ToolsCore.XML
         /// <summary>
         ///     Farebna schema pre ovladacie prvky v GUI
         /// </summary>
-        [XmlElement("ControlsColorScheme")] public ControlsColorScheme ControlsColorScheme = new();
-
+        [XmlElement("ControlsColorScheme")] 
+        public ControlsColorScheme ControlsColorScheme = new();
 
         /// <summary>
         ///     Nazov stylu
         /// </summary>
-        [XmlAttribute("name")] public string Name;
+        [XmlAttribute("name")] 
+        public string Name;
 
         /// <summary>
-        ///     Konstructor
+        ///     Vyvori novu instanciu triedy <see cref="Style"/>.
         /// </summary>
         public Style()
         {
@@ -48,12 +49,18 @@ namespace ToolsCore.XML
             DarkTitleBar = false;
         }
 
+        public Style(Style original)
+        {
+            ControlsDefaultStyle = original.ControlsDefaultStyle;
+            DarkScrollBar = original.DarkScrollBar;
+            DarkTitleBar = original.DarkTitleBar;
+            Name = original.Name;
+            ControlsColorScheme = original.ControlsColorScheme;
+        }
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
         /// <summary>
         ///     Nastavi nastavenia farieb pre ovladacie prvky na predvolene hodnoty pre tmavy rezim
@@ -72,6 +79,35 @@ namespace ToolsCore.XML
             };
 
             return scheme;
+        }
+
+        [XmlIgnore]
+        public static Style DefaultLightStyle
+        {
+            get
+            {
+                var style = new Style
+                {
+                    Name = StyleNames.LIGHT
+                };
+
+                return style;
+            }
+        }
+
+        [XmlIgnore]
+        public static Style DefaultDarkStyle
+        {
+            get
+            {
+                var style = DefaultLightStyle;
+                style.Name = StyleNames.DARK;
+                style.ControlsColorScheme = SetDefaultDarkControlsScheme();
+                style.ControlsDefaultStyle = false;
+                style.DarkScrollBar = true;
+                style.DarkTitleBar = true;
+                return style;
+            }
         }
     }
 }

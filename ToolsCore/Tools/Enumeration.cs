@@ -13,10 +13,10 @@ namespace ToolsCore.Tools
         private readonly bool useKey;
 
         /// <summary>
-        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified ID and name
+        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified ID and name.
         /// </summary>
-        /// <param name="id">ID</param>
-        /// <param name="name">Name of the element</param>
+        /// <param name="id">Identifier.</param>
+        /// <param name="name">Name of the element.</param>
         protected Enumeration(int id, string name)
         {
             ID = id;
@@ -26,11 +26,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified ID, name and description
+        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified ID, name and description.
         /// </summary>
-        /// <param name="id">ID</param>
-        /// <param name="name">Name of the element</param>
-        /// <param name="description">description of the element</param>
+        /// <param name="id">Identifier.</param>
+        /// <param name="name">Name of the element.</param>
+        /// <param name="description">description of the element.</param>
         protected Enumeration(int id, string name, string description)
         {
             ID = id;
@@ -40,10 +40,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified key and name
+        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified key and name.
         /// </summary>
-        /// <param name="key">Key</param>
-        /// <param name="name">Name of the element</param>
+        /// <param name="key">Key.</param>
+        /// <param name="name">Name of the element.</param>
         protected Enumeration(string key, string name)
         {
             Key = key;
@@ -53,11 +53,11 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified key, name and description
+        ///     Creates new instance of <see cref="Enumeration{T}" /> with specified key, name and description.
         /// </summary>
-        /// <param name="key">Key</param>
-        /// <param name="name">Name of the element</param>
-        /// <param name="description">description of the element</param>
+        /// <param name="key">Key.</param>
+        /// <param name="name">Name of the element.</param>
+        /// <param name="description">description of the element.</param>
         protected Enumeration(string key, string name, string description)
         {
             Key = key;
@@ -67,22 +67,22 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Identifikator prvku ako poradove cislo
+        ///     Identifikator prvku ako poradove cislo.
         /// </summary>
         public int ID { get; }
 
         /// <summary>
-        ///     Identifikator prvku ako kluc v tvare retazca
+        ///     Identifikator prvku ako kluc v tvare retazca.
         /// </summary>
         public string Key { get; }
 
         /// <summary>
-        ///     Viditelny nazov prvku
+        ///     Viditelny nazov prvku.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        ///     Poznamka k prvku
+        ///     Poznamka k prvku.
         /// </summary>
         public string Description { get; }
 
@@ -129,10 +129,10 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Vrati vsetky prvky enumeracie (Public static fields)
+        ///     Vrati vsetky prvky enumeracie (public static fields).
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">Enumeration type.</typeparam>
+        /// <returns>Zoznam prvkov zadaneho enumeracneho typu.</returns>
         public static List<T> GetValues()
         {
             return typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
@@ -153,53 +153,38 @@ namespace ToolsCore.Tools
 
 
         /// <summary>
-        ///     Compares two enumeration types
+        ///     Compares two enumeration types.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        protected bool Equals(Enumeration<T> other)
-        {
-            return useKey ? Key == other.Key : ID == other.ID;
-        }
+        protected bool Equals(Enumeration<T> other) => useKey ? Key == other.Key : ID == other.ID;
 
-        /// <summary>Serves as the default hash function. </summary>
+        /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return useKey ? Key.GetHashCode() : ID;
-        }
+        public override int GetHashCode() => useKey ? Key.GetHashCode() : ID;
 
         /// <summary>
-        ///     Compares two enumeration types
+        ///     Compares two enumeration types.
         /// </summary>
-        /// <param name="e1"></param>
-        /// <param name="e2"></param>
+        /// <param name="e1">First enumeration item.</param>
+        /// <param name="e2">Second enumeration item.</param>
         /// <returns></returns>
-        public static bool operator ==(Enumeration<T> e1, Enumeration<T> e2)
-        {
-            return Equals(e1, e2);
-        }
+        public static bool operator ==(Enumeration<T> e1, Enumeration<T> e2) => Equals(e1, e2);
 
         /// <summary>
-        ///     Compares two enumeration types
+        ///     Compares two enumeration types.
         /// </summary>
-        /// <param name="e1"></param>
-        /// <param name="e2"></param>
+        /// <param name="e1">First enumeration item.</param>
+        /// <param name="e2">Second enumeration item.</param>
         /// <returns></returns>
-        public static bool operator !=(Enumeration<T> e1, Enumeration<T> e2)
-        {
-            return !(e1 == e2);
-        }
+        public static bool operator !=(Enumeration<T> e1, Enumeration<T> e2) => !(e1 == e2);
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
         /// <summary>
-        ///     Pokusi sa konvertovat retazec na prvok enumeracie podla mena prvku
+        ///     Pokusi sa konvertovat retazec na prvok enumeracie podla mena prvku.
         /// </summary>
         /// <param name="name">vstupny retazec</param>
         /// <returns>prvok enumeracie</returns>
@@ -213,9 +198,9 @@ namespace ToolsCore.Tools
         }
 
         /// <summary>
-        ///     Pokusi sa konvertovat retazec na prvok enumeracie podla mena prvku.
-        ///     V pripade uspechu vrati <see langword="true" /> a v <paramref name="result" /> bude ulzena konvertovany prvok
-        ///     V pripade ak nebol prvok uspesne konvertovany, vrati <see langword="false" />
+        ///     Pokusi sa konvertovat retazec na prvok enumeracie podla mena prvku.<br></br>
+        ///     V pripade uspechu vrati <see langword="true" /> a v <paramref name="result" /> bude ulzena konvertovany prvok.
+        ///     V pripade ak nebol prvok uspesne konvertovany, vrati <see langword="false" />.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="result"></param>

@@ -2,10 +2,13 @@
 
 namespace ToolsCore.XML
 {
+    /// <summary>
+    ///     Trieda obsahujuca metody na lokalizane pomenovanie nastaveni.
+    /// </summary>
     public static class SettingsNaming
     {
         /// <summary>
-        ///     Nazve nastavenia farieb podla aktualnej lokalizacie
+        ///     Nazve nastavenia farieb podla aktualnej lokalizacie.
         /// </summary>
         public static void NameColorSettings(Style style)
         {
@@ -21,7 +24,7 @@ namespace ToolsCore.XML
         }
 
         /// <summary>
-        ///     Pomenuje názvy typov použitia písiem pre rôzne časti formulára
+        ///     Pomenuje názvy typov použitia písiem pre rôzne časti formulára.
         /// </summary>
         /// <param name="fonts"></param>
         public static void NameAppFontSetting(ControlFonts fonts)
