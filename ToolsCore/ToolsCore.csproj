@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="GlobSettings.cs" />
     <Compile Include="Tools\AppRegistry.cs" />
     <Compile Include="Tools\AutoUpdater.cs" />

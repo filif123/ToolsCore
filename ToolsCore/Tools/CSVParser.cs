@@ -1,170 +1,165 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿namespace ToolsCore.Tools;
 
-namespace ToolsCore.Tools
+/// <summary>
+///     Trieda pre ulozenie CSV riadku.
+/// </summary>
+public class CSVRow : List<string>
 {
-    /// <summary>
-    ///     Trieda pre ulozenie CSV riadku.
-    /// </summary>
-    public class CSVRow : List<string>
+    /// <inheritdoc />
+    public CSVRow()
     {
-        /// <inheritdoc />
-        public CSVRow()
-        {
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1" /> class that is empty and
-        ///     has the default initial capacity.
-        /// </summary>
-        public CSVRow(int initCount) : base(initCount)
-        {
-        }
-
-        /// <summary>
-        ///     Nespracovany text riadku.
-        /// </summary>
-        public string LineText { get; set; }
     }
 
     /// <summary>
-    ///     Trieda pre ulozenie dat do textoveho suboru.
+    ///     Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1" /> class that is empty and
+    ///     has the default initial capacity.
     /// </summary>
-    public class CSVFileWriter : StreamWriter
+    public CSVRow(int initCount) : base(initCount)
     {
-        /// <inheritdoc />
-        public CSVFileWriter(string filename) : base(filename, false, Encodings.Win1250)
-        {
-        }
-
-        /// <summary>
-        ///     Zapise jeden riadok do suboru.
-        /// </summary>
-        /// <param name="row">Riadok k zapisaniu.</param>
-        public void WriteRow(CSVRow row)
-        {
-            var builder = new StringBuilder();
-            var firstColumn = true;
-            foreach (var value in row)
-            {
-                // Add separator if this isn't the first value
-                if (!firstColumn)
-                    builder.Append(',');
-
-                builder.Append(value);
-                firstColumn = false;
-            }
-
-            row.LineText = builder.ToString();
-            WriteLine(row.LineText);
-        }
-
-        /// <summary>
-        ///     Zapise komentar do suboru.
-        /// </summary>
-        /// <param name="row">Komentar k zapisaniu.</param>
-        /// <param name="commentIndicator">Indikator komentaru, ktory sa zadava do suboru pred komentar.</param>
-        public void WriteComment(string row, char commentIndicator = ';')
-        {
-            WriteLine(commentIndicator + row);
-        }
     }
 
     /// <summary>
-    ///     Trieda pre citanie dat z textoveho suboru.
+    ///     Nespracovany text riadku.
     /// </summary>
-    public class CSVFileReader : StreamReader
+    public string LineText { get; set; }
+}
+
+/// <summary>
+///     Trieda pre ulozenie dat do textoveho suboru.
+/// </summary>
+public class CSVFileWriter : StreamWriter
+{
+    /// <inheritdoc />
+    public CSVFileWriter(string filename) : base(filename, false, Encodings.Win1250)
     {
-        /// <inheritdoc />
-        public CSVFileReader(string filename) : base(filename, Encodings.Win1250)
+    }
+
+    /// <summary>
+    ///     Zapise jeden riadok do suboru.
+    /// </summary>
+    /// <param name="row">Riadok k zapisaniu.</param>
+    public void WriteRow(CSVRow row)
+    {
+        var builder = new StringBuilder();
+        var firstColumn = true;
+        foreach (var value in row)
         {
+            // Add separator if this isn't the first value
+            if (!firstColumn)
+                builder.Append(',');
+
+            builder.Append(value);
+            firstColumn = false;
         }
 
-        /// <summary>
-        ///     Precita jeden riadok zo suboru.
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
-        public ReadStartChar ReadRow(CSVRow row)
+        row.LineText = builder.ToString();
+        WriteLine(row.LineText);
+    }
+
+    /// <summary>
+    ///     Zapise komentar do suboru.
+    /// </summary>
+    /// <param name="row">Komentar k zapisaniu.</param>
+    /// <param name="commentIndicator">Indikator komentaru, ktory sa zadava do suboru pred komentar.</param>
+    public void WriteComment(string row, char commentIndicator = ';')
+    {
+        WriteLine(commentIndicator + row);
+    }
+}
+
+/// <summary>
+///     Trieda pre citanie dat z textoveho suboru.
+/// </summary>
+public class CSVFileReader : StreamReader
+{
+    /// <inheritdoc />
+    public CSVFileReader(string filename) : base(filename, Encodings.Win1250)
+    {
+    }
+
+    /// <summary>
+    ///     Precita jeden riadok zo suboru.
+    /// </summary>
+    /// <param name="row"></param>
+    /// <returns></returns>
+    public ReadStartChar ReadRow(CSVRow row)
+    {
+        row.LineText = ReadLine();
+
+        if (row.LineText == null) 
+            return ReadStartChar.EOF;
+        if (row.LineText == "" || string.IsNullOrWhiteSpace(row.LineText)) 
+            return ReadStartChar.EMPTY;
+        if (row.LineText.StartsWith(";")) 
+            return ReadStartChar.SEMICOLON;
+        if (row.LineText.StartsWith("/")) 
+            return ReadStartChar.SLASH;
+
+        var pos = 0;
+        var rows = 0;
+
+        while (pos < row.LineText.Length)
         {
-            row.LineText = ReadLine();
+            string value;
 
-            if (row.LineText == null) 
-                return ReadStartChar.EOF;
-            if (row.LineText == "" || string.IsNullOrWhiteSpace(row.LineText)) 
-                return ReadStartChar.EMPTY;
-            if (row.LineText.StartsWith(";")) 
-                return ReadStartChar.SEMICOLON;
-            if (row.LineText.StartsWith("/")) 
-                return ReadStartChar.SLASH;
-
-            var pos = 0;
-            var rows = 0;
-
-            while (pos < row.LineText.Length)
+            // Special handling for quoted field
+            if (row.LineText[pos] == '"')
             {
-                string value;
+                // Skip initial quote
+                pos++;
 
-                // Special handling for quoted field
-                if (row.LineText[pos] == '"')
+                // Parse quoted value
+                var start = pos;
+                while (pos < row.LineText.Length)
                 {
-                    // Skip initial quote
-                    pos++;
-
-                    // Parse quoted value
-                    var start = pos;
-                    while (pos < row.LineText.Length)
+                    // Test for quote character
+                    if (row.LineText[pos] == '"')
                     {
-                        // Test for quote character
-                        if (row.LineText[pos] == '"')
-                        {
-                            // Found one
-                            pos++;
-
-                            // If two quotes together, keep one
-                            // Otherwise, indicates end of value
-                            if (pos >= row.LineText.Length || row.LineText[pos] != '"')
-                            {
-                                pos--;
-                                break;
-                            }
-                        }
-
+                        // Found one
                         pos++;
+
+                        // If two quotes together, keep one
+                        // Otherwise, indicates end of value
+                        if (pos >= row.LineText.Length || row.LineText[pos] != '"')
+                        {
+                            pos--;
+                            break;
+                        }
                     }
 
-                    value = row.LineText.Substring(start, pos - start);
-                    value = value.Replace("\"\"", "\"");
-                }
-                else
-                {
-                    // Parse unquoted value
-                    var start = pos;
-                    while (pos < row.LineText.Length && row.LineText[pos] != ',')
-                        pos++;
-                    value = row.LineText.Substring(start, pos - start);
+                    pos++;
                 }
 
-                // Add field to list
-                if (rows < row.Count)
-                    row[rows] = value;
-                else
-                    row.Add(value);
-                rows++;
-
-                // Eat up to and including next comma
+                value = row.LineText.Substring(start, pos - start);
+                value = value.Replace("\"\"", "\"");
+            }
+            else
+            {
+                // Parse unquoted value
+                var start = pos;
                 while (pos < row.LineText.Length && row.LineText[pos] != ',')
                     pos++;
-                if (pos < row.LineText.Length)
-                    pos++;
+                value = row.LineText.Substring(start, pos - start);
             }
 
-            // Delete any unused items
-            while (row.Count > rows)
-                row.RemoveAt(rows);
+            // Add field to list
+            if (rows < row.Count)
+                row[rows] = value;
+            else
+                row.Add(value);
+            rows++;
 
-            return ReadStartChar.NON_EMPTY;
+            // Eat up to and including next comma
+            while (pos < row.LineText.Length && row.LineText[pos] != ',')
+                pos++;
+            if (pos < row.LineText.Length)
+                pos++;
         }
+
+        // Delete any unused items
+        while (row.Count > rows)
+            row.RemoveAt(rows);
+
+        return ReadStartChar.NON_EMPTY;
     }
 }
