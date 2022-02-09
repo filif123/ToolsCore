@@ -87,13 +87,13 @@ public class CSVFileReader : StreamReader
         row.LineText = ReadLine();
 
         if (row.LineText == null) 
-            return ReadStartChar.EOF;
+            return ReadStartChar.Eof;
         if (row.LineText == "" || string.IsNullOrWhiteSpace(row.LineText)) 
-            return ReadStartChar.EMPTY;
+            return ReadStartChar.Empty;
         if (row.LineText.StartsWith(";")) 
-            return ReadStartChar.SEMICOLON;
+            return ReadStartChar.Semicolon;
         if (row.LineText.StartsWith("/")) 
-            return ReadStartChar.SLASH;
+            return ReadStartChar.Slash;
 
         var pos = 0;
         var rows = 0;
@@ -160,6 +160,6 @@ public class CSVFileReader : StreamReader
         while (row.Count > rows)
             row.RemoveAt(rows);
 
-        return ReadStartChar.NON_EMPTY;
+        return ReadStartChar.NonEmpty;
     }
 }

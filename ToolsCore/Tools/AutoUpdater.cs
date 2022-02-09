@@ -37,16 +37,12 @@ public static class AutoUpdater
     private static IEnumerable<Version> GetAllVersions()
     {
         var allversions = new List<Version>();
-
+        
         try
         {
-            var web = new WebClient();
-            //var stream = web.OpenRead("http://iniss.6f.sk/gvdeditor-updater/update.txt");
-            var stream = web.OpenRead(GlobSettings.LinkUpdater);
-            using var reader = new StreamReader(stream ?? throw new InvalidOperationException());
-            var text = reader.ReadToEnd();
-            var csv = new CSVStringReader(text);
-
+            var web = new TimedWebClient();
+            var csv = new CSVStringReader(web.DownloadString(GlobSettings.LinkUpdater));
+            //BUG: stranka sa neda otvorit (chyba je vo vsetkych verziach programu)
             for (var i = 0; i < csv.RowCount; i++)
             {
                 var version = new Version(csv[i, 0]);
@@ -59,5 +55,15 @@ public static class AutoUpdater
         }
 
         return allversions;
+    }
+
+    private class TimedWebClient : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri uri)
+        {
+            var w = base.GetWebRequest(uri);
+            if (w is not null) w.Timeout = 3000;
+            return w;
+        }
     }
 }

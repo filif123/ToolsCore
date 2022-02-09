@@ -598,23 +598,6 @@ public static class FormUtils
         }
     }
 
-    public class ColorScheme
-    {
-        public Color PanelBG { get; set; }
-        public Color PanelFG { get; set; }
-
-        public Color ButtonBG { get; set; }
-        public Color ButtonFG { get; set; }
-
-        public Color LabelFG { get; set; }
-        public Color BorderBG { get; set; }
-
-        public Color BoxBG { get; set; }
-        public Color BoxFG { get; set; }
-        public Color ComponentFG { get; set; }
-        public Color Highlight { get; set; }
-    }
-
     private class MyColorTable : ProfessionalColorTable
     {
         public override Color MenuItemSelected => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;

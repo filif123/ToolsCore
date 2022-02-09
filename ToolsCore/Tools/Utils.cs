@@ -180,12 +180,11 @@ public static class Utils
     /// <returns>reťazec s cislom.</returns>
     public static string PadZeros(this int num, int pocetCifier = 3)
     {
-        if (pocetCifier <= 0) return num.ToString();
-
+        if (pocetCifier <= 0) 
+            return num.ToString();
         var sb = new StringBuilder();
-
-        for (var i = 0; i < pocetCifier; i++) sb.Append('0');
-
+        for (var i = 0; i < pocetCifier; i++) 
+            sb.Append('0');
         return num.ToString(sb.ToString());
     }
 
@@ -205,7 +204,7 @@ public static class Utils
     public static int ParseIntOrDefault(string nums, int def = 0) => int.TryParse(nums, out var numi) ? numi : def;
 
     /// <summary>
-    ///     Vráti skonverované číslo z retazca,
+    ///     Vráti skonvertované číslo z retazca,
     ///     alebo ak sa nedal retazec skonvertovat vrati nastavenu predvolenu hodnotu (<see langword="null"/>).
     /// </summary>
     /// <param name="nums">Retazec s moznym cislom.</param>
@@ -233,11 +232,8 @@ public static class Utils
 
         var sb = new StringBuilder();
 
-        for (var i = 0; i < bits.Count; i++)
-        {
-            var c = bits[i] ? '1' : '0';
-            sb.Append(c);
-        }
+        for (var i = 0; i < bits.Count; i++) 
+            sb.Append(bits[i] ? '1' : '0');
 
         return sb.ToString();
     }
@@ -252,7 +248,7 @@ public static class Utils
         if (bits is null)
             throw new ArgumentNullException(nameof(bits));
 
-        return new(bits.Select(c => c == '1').ToArray());
+        return new BitArray(bits.Select(c => c == '1').ToArray());
     }
 
     /// <summary>
@@ -430,7 +426,8 @@ public static class Utils
         foreach (var c in normalizedString)
         {
             var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-            if (unicodeCategory != UnicodeCategory.NonSpacingMark) stringBuilder.Append(c);
+            if (unicodeCategory != UnicodeCategory.NonSpacingMark) 
+                stringBuilder.Append(c);
         }
 
         return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
@@ -443,10 +440,9 @@ public static class Utils
     /// <returns>datum vo forme objektu typu <see cref="DateTime"/>.</returns>
     public static DateTime ParseDate(string text)
     {
-        if (string.IsNullOrEmpty(text))
-            return DateTime.MinValue;
-        
-        return DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+        return string.IsNullOrEmpty(text) ?
+            DateTime.MinValue : 
+            DateTime.ParseExact(text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
     }
 
     /// <summary>
@@ -471,10 +467,9 @@ public static class Utils
     /// <returns>cas vo forme objektu typu <see cref="DateTime"/>.</returns>
     public static DateTime ParseTime(string text)
     {
-        if (string.IsNullOrEmpty(text))
-            return DateTime.MinValue;
-
-        return DateTime.ParseExact(text, new[] { "HH:mm", "H:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None);
+        return string.IsNullOrEmpty(text) ? 
+            DateTime.MinValue : 
+            DateTime.ParseExact(text, new[] { "HH:mm", "H:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None);
     }
 
     /// <summary>
@@ -547,7 +542,7 @@ public static class Utils
     [ExcludeFromCodeCoverage]
     public static bool LineIsEmpty(ReadStartChar ch)
     {
-        return ch is ReadStartChar.SEMICOLON or ReadStartChar.EMPTY or ReadStartChar.SLASH;
+        return ch is ReadStartChar.Semicolon or ReadStartChar.Empty or ReadStartChar.Slash;
     }
 
     /// <summary>
@@ -558,7 +553,7 @@ public static class Utils
     [ExcludeFromCodeCoverage]
     public static bool LineIsEOF(ReadStartChar ch)
     {
-        return ch == ReadStartChar.EOF;
+        return ch == ReadStartChar.Eof;
     }
 
     /// <summary>
@@ -665,10 +660,10 @@ public static class Utils
     {
         return type switch
         {
-            Tools.Arrow.UP => char.ConvertFromUtf32(8593),
-            Tools.Arrow.DOWN => char.ConvertFromUtf32(8595),
-            Tools.Arrow.LEFT => char.ConvertFromUtf32(8592),
-            Tools.Arrow.RIGHT => char.ConvertFromUtf32(8594),
+            Tools.Arrow.Up => char.ConvertFromUtf32(8593),
+            Tools.Arrow.Down => char.ConvertFromUtf32(8595),
+            Tools.Arrow.Left => char.ConvertFromUtf32(8592),
+            Tools.Arrow.Right => char.ConvertFromUtf32(8594),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }
@@ -682,22 +677,22 @@ public enum Arrow : byte
     /// <summary>
     ///     Sipka hore.
     /// </summary>
-    UP,
+    Up,
 
     /// <summary>
     ///     Sipka dolu.
     /// </summary>
-    DOWN,
+    Down,
 
     /// <summary>
     ///     Sipka dolava.
     /// </summary>
-    LEFT,
+    Left,
 
     /// <summary>
     ///     Sipka doprava.
     /// </summary>
-    RIGHT
+    Right
 }
 
 /// <summary>
@@ -708,25 +703,25 @@ public enum ReadStartChar
     /// <summary>
     ///     Neprazdny riadok.
     /// </summary>
-    NON_EMPTY,
+    NonEmpty,
 
     /// <summary>
     ///     Prazdny riadok.
     /// </summary>
-    EMPTY,
+    Empty,
 
     /// <summary>
     ///     Bodkociarka.
     /// </summary>
-    SEMICOLON,
+    Semicolon,
 
     /// <summary>
     ///     Mriezka (#).
     /// </summary>
-    SLASH,
+    Slash,
 
     /// <summary>
     ///     Znak konca suboru.
     /// </summary>
-    EOF
+    Eof
 }
