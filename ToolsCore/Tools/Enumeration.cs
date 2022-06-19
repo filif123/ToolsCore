@@ -1,4 +1,7 @@
 ﻿using System.Reflection;
+// ReSharper disable MemberCanBeProtected.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace ToolsCore.Tools;
 
@@ -102,7 +105,6 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     {
         if (obj is Enumeration<T> en)
             return CompareTo(en);
-
         throw new ArgumentException(@"Argument is not the same type as this instance.", nameof(obj));
     }
 
@@ -121,8 +123,7 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     public int CompareTo(Enumeration<T> other)
     {
         if (ReferenceEquals(this, other)) return 0;
-        if (other is null) return 1;
-        return ID.CompareTo(other.ID);
+        return other is null ? 1 : ID.CompareTo(other.ID);
     }
 
     /// <summary>
@@ -140,14 +141,12 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (obj is not Enumeration<T> otherValue) return false;
-
+        if (obj is not Enumeration<T> otherValue) 
+            return false;
         var typeMatches = GetType() == obj.GetType();
         var valueMatches = useKey ? Key == otherValue.Key : ID == otherValue.ID;
-
         return typeMatches && valueMatches;
     }
-
 
     /// <summary>
     ///     Compares two enumeration types.
@@ -185,14 +184,7 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     /// </summary>
     /// <param name="name">vstupny retazec</param>
     /// <returns>prvok enumeracie</returns>
-    public static T Parse(string name)
-    {
-        foreach (var val in GetValues())
-            if (val.Name == name)
-                return val;
-
-        return null;
-    }
+    public static T Parse(string name) => GetValues().FirstOrDefault(val => val.Name == name);
 
     /// <summary>
     ///     Pokusi sa konvertovat retazec na prvok enumeracie podla mena prvku.<br></br>

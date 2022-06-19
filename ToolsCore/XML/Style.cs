@@ -11,31 +11,31 @@ public class Style
     ///     Ci ovladacie prvky v GUI pouzivaju predvoleny vzhlad.
     /// </summary>
     [XmlElement("DefaultStyle"), DefaultValue(true)] 
-    public bool ControlsDefaultStyle;
+    public bool ControlsDefaultStyle { get; set; }
 
     /// <summary>
     ///     Ci okna v GUI maju mat tmavy TitleBar (funguje len vo Windows 10).
     /// </summary>
     [XmlElement("DarkTitlebar"), DefaultValue(false)] 
-    public bool DarkTitleBar;
+    public bool DarkTitleBar { get; set; }
 
     /// <summary>
     ///     Ci ovladacie prvky v GUI maju mat tmavy ScrollBar (funguje len vo Windows 10).
     /// </summary>
     [XmlElement("DarkScrollBar"), DefaultValue(false)]
-    public bool DarkScrollBar;
+    public bool DarkScrollBar { get; set; }
 
     /// <summary>
     ///     Farebna schema pre ovladacie prvky v GUI
     /// </summary>
     [XmlElement("ControlsColorScheme")] 
-    public ControlsColorScheme ControlsColorScheme = new();
+    public ControlsColorScheme ControlsColorScheme { get; set; } = new();
 
     /// <summary>
     ///     Nazov stylu
     /// </summary>
     [XmlAttribute("name")] 
-    public string Name;
+    public string Name { get; set; }
 
     /// <summary>
     ///     Vyvori novu instanciu triedy <see cref="Style"/>.

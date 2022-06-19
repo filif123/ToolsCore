@@ -277,10 +277,7 @@ public static class Utils
     /// </summary>
     /// <param name="c">Farbu <see cref="Color"/>.</param>
     /// <returns>farba v hexadecimalnom tvare.</returns>
-    public static string ToHEX(this Color c)
-    {
-        return "0x" + c.B.ToString("X2") + c.G.ToString("X2") + c.R.ToString("X2");
-    }
+    public static string ToHEX(this Color c) => "0x" + c.B.ToString("X2") + c.G.ToString("X2") + c.R.ToString("X2");
 
     /// <summary>
     ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR).
@@ -349,10 +346,7 @@ public static class Utils
     /// <param name="containingList">Vacsi zoznam, ktory kontrolujeme.</param>
     /// <param name="lookupList">Zoznam, ktory treba vyhladat v zozname.</param>
     /// <returns><see langword="true"/> ak obsahuje vsetky prvky, inak <see langword="false"/>.</returns>
-    public static bool ContainsAllItems<T>(this IEnumerable<T> containingList, IEnumerable<T> lookupList)
-    {
-        return !lookupList.Except(containingList).Any();
-    }
+    public static bool ContainsAllItems<T>(this IEnumerable<T> containingList, IEnumerable<T> lookupList) => !lookupList.Except(containingList).Any();
 
     /// <summary>
     ///     Vrati retazec, ktory sa nachadza na pozicii <paramref name="index"/> pola/listu <paramref name="source"/>.<br></br>
@@ -363,11 +357,7 @@ public static class Utils
     /// <param name="index">Pozicia prvku.</param>
     /// <param name="def">Predvoleny retazec.</param>
     /// <returns>Retazec, alebo predvoleny retazec <paramref name="def"/>.</returns>
-    public static string ElementAtOrDefaultStr(this IEnumerable<string> source, int index, string def = "")
-    {
-        var value = source.ElementAtOrDefault(index);
-        return value ?? def;
-    }
+    public static string ElementAtOrDefaultStr(this IEnumerable<string> source, int index, string def = "") => source.ElementAtOrDefault(index) ?? def;
 
     /// <summary>
     ///     Kopiruje obsah priecinka, ak je aspon 1 z parametov <see cref="string.Empty"/> alebo <see langword="null"/>, nic sa nevykona.
@@ -485,7 +475,7 @@ public static class Utils
             time = ParseTime(text);
             return true;
         }
-        catch (Exception)
+        catch
         {
             time = DateTime.MinValue;
             return false;
@@ -506,7 +496,7 @@ public static class Utils
             date = ParseDateAlts(text);
             return true;
         }
-        catch (Exception)
+        catch
         {
             date = DateTime.MinValue;
             return false;
@@ -518,10 +508,7 @@ public static class Utils
     /// </summary>
     /// <param name="str">Retazec na testovanie.</param>
     /// <returns></returns>
-    public static bool IsTime(string str)
-    {
-        return TryParseTime(str, out _);
-    }
+    public static bool IsTime(string str) => TryParseTime(str, out _);
 
     /// <summary>
     ///     Porovna retazce, pricom ignoruje velkost pismen (VELKE/male).
@@ -529,10 +516,7 @@ public static class Utils
     /// <param name="str1">Prvy retazec na porovnavanie.</param>
     /// <param name="str2">Druhy retazec na porovnavanie.</param>
     /// <returns>ci sa retazce zhoduju.</returns>
-    public static bool EqualsIgnoreCase(this string str1, string str2)
-    {
-        return str1 != null && str1.Equals(str2, StringComparison.CurrentCultureIgnoreCase);
-    }
+    public static bool EqualsIgnoreCase(this string str1, string str2) => str1 != null && str1.Equals(str2, StringComparison.CurrentCultureIgnoreCase);
 
     /// <summary>
     ///     Zisti, ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#) (pouzitie v: <see cref="CSVRow"/>).
@@ -540,10 +524,7 @@ public static class Utils
     /// <param name="ch">Typ zaciatku riadku.</param>
     /// <returns>Ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#).</returns>
     [ExcludeFromCodeCoverage]
-    public static bool LineIsEmpty(ReadStartChar ch)
-    {
-        return ch is ReadStartChar.Semicolon or ReadStartChar.Empty or ReadStartChar.Slash;
-    }
+    public static bool LineIsEmpty(ReadStartChar ch) => ch is ReadStartChar.Semicolon or ReadStartChar.Empty or ReadStartChar.Slash;
 
     /// <summary>
     ///     Zisti, ci je riadok posledny (pouzitie v: <see cref="CSVRow"/>)
@@ -551,10 +532,7 @@ public static class Utils
     /// <param name="ch">Typ zaciatku riadku.</param>
     /// <returns>Ci riadok obsahuje koniec suboru (EOF).</returns>
     [ExcludeFromCodeCoverage]
-    public static bool LineIsEOF(ReadStartChar ch)
-    {
-        return ch == ReadStartChar.Eof;
-    }
+    public static bool LineIsEOF(ReadStartChar ch) => ch == ReadStartChar.Eof;
 
     /// <summary>
     ///     Returns a new string in which all occurrences of a specified string in the current instance are replaced with

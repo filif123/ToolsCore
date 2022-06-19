@@ -81,6 +81,26 @@ public static class FormUtils
 
                     break;
                 }
+                case PropertyGrid grid:
+                {
+                    if (style.ControlsDefaultStyle)
+                        break;
+                    grid.BackColor = scheme.Panel.BackColor;
+                    grid.ForeColor = scheme.Panel.ForeColor;
+                    grid.ViewBackColor = scheme.Box.BackColor;
+                    grid.ViewForeColor = scheme.Box.ForeColor;
+                    grid.HelpBorderColor = scheme.Border.ForeColor;
+                    grid.HelpBackColor = scheme.Panel.BackColor;
+                    grid.HelpForeColor = scheme.Panel.ForeColor;
+                    grid.LineColor = scheme.Button.BackColor;
+                    grid.CategoryForeColor = scheme.Box.ForeColor;
+                    grid.CategorySplitterColor = scheme.Box.ForeColor;
+                    grid.ViewBorderColor = scheme.Border.ForeColor;
+                    grid.CommandsBorderColor = scheme.Panel.BackColor;
+                    grid.CommandsForeColor = scheme.Panel.ForeColor;
+                    grid.CommandsBackColor = scheme.Panel.BackColor;
+                    break;
+                }
                 case ExGroupBox dgb:
                 {
                     ChangeStyleOfControls(style, dgb.Controls);
@@ -178,6 +198,8 @@ public static class FormUtils
                     tb.DefaultStyle = style.ControlsDefaultStyle;
                     tb.DisabledBorderColor = scheme.Button.BackColor;
                     tb.DisabledBackColor = scheme.Panel.BackColor;
+                    if (style.DarkScrollBar) 
+                        tb.SetTheme(WindowsTheme.DarkExplorer);
                     break;
                 }
                 case RichTextBox tb:
@@ -188,7 +210,8 @@ public static class FormUtils
                         tb.ForeColor = scheme.Box.ForeColor;
                         tb.BorderStyle = BorderStyle.None;
                     }
-
+                    if (style.DarkScrollBar) 
+                        tb.SetTheme(WindowsTheme.DarkExplorer);
                     break;
                 }
                 case ExNumericUpDown nud:
@@ -288,6 +311,8 @@ public static class FormUtils
                         dcombo.StyleSelected.ButtonBorderColor = scheme.Highlight.BackColor;
                         dcombo.StyleHighlight.BorderColor = scheme.Highlight.BackColor;
                         dcombo.StyleHighlight.ButtonBorderColor = scheme.Highlight.BackColor;
+                        dcombo.StyleDisabled.BackColor = scheme.Box.BackColor;
+                        dcombo.StyleDisabled.ForeColor = scheme.Border.ForeColor;
                     }
 
                     break;
@@ -333,7 +358,7 @@ public static class FormUtils
                                 case ToolStripMenuItem tsmi:
                                     SetColorMenuItems(tsmi.DropDown.Items);
                                     break;
-                                case ToolStripExComboBox tcb:
+                                case ExToolStripComboBox tcb:
                                 {
                                     tcb.ComboBox.DefaultStyle = style.ControlsDefaultStyle;
                                     if (!style.ControlsDefaultStyle)
@@ -395,7 +420,7 @@ public static class FormUtils
                                 case ToolStripDropDownButton tsddb:
                                     SetColorMenuItems(tsddb.DropDownItems);
                                     break;
-                                case ToolStripExComboBox tcb:
+                                case ExToolStripComboBox tcb:
                                     tcb.ComboBox.DefaultStyle = style.ControlsDefaultStyle;
                                     if (!style.ControlsDefaultStyle)
                                     {

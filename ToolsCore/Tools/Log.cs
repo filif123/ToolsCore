@@ -40,10 +40,7 @@ public static class Log
     private static LogFile logApp;
     private static LogFile logError;
 
-    private static void LogString(LogFile logFile, string text)
-    {
-        logFile.LogString(text);
-    }
+    private static void LogString(LogFile logFile, string text) => logFile.LogString(text);
 
     /// <summary>
     ///     Zapise chybu do logovacieho suboru.

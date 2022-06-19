@@ -5,6 +5,7 @@ namespace ToolsCore.XML;
 /// <summary>
 ///     Trieda reprezentujuca nastavenie pisma pre určity ovladaci prvok programu.
 /// </summary>
+[TypeConverter(typeof(ExpandableObjectConverter))]
 public class AppFont
 {
     public AppFont()
@@ -19,7 +20,7 @@ public class AppFont
     /// <summary>
     ///     Názov použitia písma pre program.
     /// </summary>
-    [XmlIgnore, Localizable(true)]
+    [XmlIgnore, Localizable(true), Browsable(false)]
     public string Name { get; set; }
 
     /// <summary>
@@ -44,7 +45,7 @@ public class AppFont
     /// <summary>
     ///     XML reprezentácia písma.
     /// </summary>
-    [XmlElement(Type = typeof(XMLFont), ElementName = "f")]
+    [XmlElement(Type = typeof(XMLFont), ElementName = "f"),Browsable(false)]
     public XMLFont FontXML
     {
         get => XMLFont.FromFont(Font);
@@ -57,4 +58,7 @@ public class AppFont
     /// <param name="f"></param>
     /// <returns></returns>
     public static implicit operator Font(AppFont f) => f.Font;
+
+    /// <inheritdoc />
+    public override string ToString() => string.IsNullOrEmpty(Name) ? Font.Name : Name;
 }

@@ -132,6 +132,13 @@ public class CSVFileReader : StreamReader
 
                 value = row.LineText.Substring(start, pos - start);
                 value = value.Replace("\"\"", "\"");
+
+                // Add field to list
+                if (rows < row.Count)
+                    row[rows] = value;
+                else
+                    row.Add(value);
+                rows++;
             }
             else
             {
@@ -140,14 +147,14 @@ public class CSVFileReader : StreamReader
                 while (pos < row.LineText.Length && row.LineText[pos] != ',')
                     pos++;
                 value = row.LineText.Substring(start, pos - start);
-            }
 
-            // Add field to list
-            if (rows < row.Count)
-                row[rows] = value;
-            else
-                row.Add(value);
-            rows++;
+                // Add field to list
+                if (rows < row.Count)
+                    row[rows] = value.Trim();
+                else
+                    row.Add(value.Trim());
+                rows++;
+            }
 
             // Eat up to and including next comma
             while (pos < row.LineText.Length && row.LineText[pos] != ',')

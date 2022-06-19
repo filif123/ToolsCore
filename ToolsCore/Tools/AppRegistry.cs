@@ -10,7 +10,12 @@ public static class AppRegistry
     /// <summary>
     ///     Nazov kluca v Registy so zoznamom poslednych pouzivanych priecinkov s datami.
     /// </summary>
-    public const string REG_RECENT_DIRS = "RecentDirs";
+    private const string REG_RECENT_DIRS = "RecentDirs";
+
+    /// <summary>
+    ///     Nazov kluca v Registy so zoznamom poslednych pouzivanych suborov.
+    /// </summary>
+    private const string REG_RECENT_FILES = "RecentFiles";
 
     /// <summary>
     ///     Vrati zoznam vsetkych ciest poslednych pouzivanych priecinkov s datami
@@ -18,21 +23,24 @@ public static class AppRegistry
     ///     Ak kluc v Registri s tymto zoznamom neexisstuje, metoda vrati prazdny list.
     /// </summary>
     /// <param name="productName">Nazov programu.</param>
+    /// /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
     /// <returns>zoznam ciest.</returns>
-    public static List<string> GetRecentDirs(string productName)
+    public static List<string> GetRecentDirs(string productName, bool forFiles = false)
     {
         var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{productName}");
         var dirs = new HashSet<string>();
 
-        if (key?.GetValue(REG_RECENT_DIRS) != null)
-        {
-            var dirsString = key.GetValue(REG_RECENT_DIRS).ToString();
-            var dirsArray = dirsString.Split(';');
+        var value = key?.GetValue(forFiles ? REG_RECENT_FILES : REG_RECENT_DIRS);
 
-            foreach (var dir in dirsArray)
-                if (!string.IsNullOrEmpty(dir))
-                    dirs.Add(dir);
-        }
+        if (value == null) 
+            return dirs.ToList();
+
+        var itemsString = value.ToString();
+        var items = itemsString.Split(';');
+
+        foreach (var item in items)
+            if (!string.IsNullOrEmpty(item))
+                dirs.Add(item);
 
         return dirs.ToList();
     }
@@ -44,26 +52,27 @@ public static class AppRegistry
     /// </summary>
     /// <param name="productName">Nazov programu.</param>
     /// <param name="path">Cesta k priecinku.</param>
-    public static void SetNewRecentDir(string productName, string path)
+    /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
+    public static void SetNewRecentDir(string productName, string path, bool forFiles = false)
     {
         var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{productName}");
 
-        if (key != null)
-        {
-            var sb = new StringBuilder();
-            var dirs = GetRecentDirs(productName);
-            foreach (var dir in dirs)
-            {
-                if (dir == path) return;
+        if (key == null) 
+            return;
 
-                sb.Append(";");
-                sb.Append(dir);
-            }
+        var sb = new StringBuilder();
+        var items = GetRecentDirs(productName);
+        foreach (var item in items)
+        {
+            if (item == path) return;
 
             sb.Append(";");
-            sb.Append(path);
-
-            key.SetValue(REG_RECENT_DIRS, sb.ToString());
+            sb.Append(item);
         }
+
+        sb.Append(";");
+        sb.Append(path);
+
+        key.SetValue(forFiles ? REG_RECENT_FILES : REG_RECENT_DIRS, sb.ToString());
     }
 }

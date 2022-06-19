@@ -75,76 +75,88 @@ public abstract class Config
     }
 
     /// <summary>
-    ///     Mod zobrazovania chybovych hlasok v GUI
+    ///     Mod zobrazovania chybovych hlasok v GUI.
     /// </summary>
     [XmlElement("DebugModeGUI")] 
-    public DebugMode DebugModeGUI = DebugMode.OnlyMessage;
+    [Description("Mod zobrazovania chybovych hlasok v GUI.")]
+    public DebugMode DebugModeGUI { get; set; } = DebugMode.OnlyMessage;
 
     /// <summary>
-    ///     Zobrazenie menu v FMain
+    ///     Zobrazenie menu v hlavnom dialogu programu.
     /// </summary>
     [XmlElement("DesktopMenu")] 
-    public DesktopMenu DesktopMenuMode = DesktopMenu.MsTs;
+    [Description("Zobrazenie menu v hlavnom dialogu programu.")]
+    public DesktopMenu DesktopMenuMode { get; set; } = DesktopMenu.MsTs;
 
     /// <summary>
     ///     Pouzivat klasicky dizajn komponetov v GUI.
     /// </summary>
     [XmlElement("ClassicGUI"), DefaultValue(false)]
-    public bool ClassicGUI;
+    [Description("Pouzivat klasicky dizajn komponetov v GUI.")]
+    public bool ClassicGUI { get; set; }
 
     /// <summary>
     ///     Nastavi jazyk pouzivatelskeho rozhrania (GUI).
     /// </summary>
     [XmlElement("Language"), DefaultValue(0)] 
-    public AppLanguage Language = AppLanguage.Slovak;
+    [Description("Nastavi jazyk pouzivatelskeho rozhrania (GUI).")]
+    public AppLanguage Language { get; set; } = AppLanguage.Slovak;
 
     /// <summary>
     ///     Nastavi jazyk generovania datumovych obmedzeni.
     /// </summary>
     [XmlElement("DateRemLocate"), DefaultValue(0)] 
-    public AppLanguage DateRemLocate = AppLanguage.Slovak;
+    [Description("Nastavi jazyk generovania datumovych obmedzeni.")]
+    public AppLanguage DateRemLocate { get; set; } = AppLanguage.Slovak;
 
     /// <summary>
     ///     Povolit alebo zakazat viacero instancii tohto programu.
     /// </summary>
     [XmlElement("MoreInstances"), DefaultValue(false)]
-    public bool MoreInstance;
+    [Description("Povolit alebo zakazat viacero instancii tohto programu.")]
+    public bool MoreInstance { get; set; }
 
     /// <summary>
     ///     Ci sa ma prisposobit posledny stlpec v tabulke na pracovnej ploche programu.
     /// </summary>
     [XmlElement("FitLastColumn"), DefaultValue(true)]
-    public bool FitLastColumn = true;
+    [Description("Ci sa ma prisposobit posledny stlpec v tabulke na pracovnej ploche programu.")]
+    public bool FitLastColumn { get; set; } = true;
 
     /// <summary>
     ///     Nastavenia pisiem pre jednotlive komponenty GUI.
     /// </summary>
-    [XmlElement("ControlFonts")] 
-    public ControlFonts Fonts = new();
+    [XmlElement("ControlFonts"), TypeConverter(typeof(ExpandableObjectConverter))] 
+    [Description("Nastavenia pisiem pre jednotlive komponenty GUI.")]
+    public ControlFonts Fonts { get; set; } = new();
 
     /// <summary>
     ///     Ci sa ma zobrazovat stavovy riadok na pracovnej ploche programu.
     /// </summary>
     [XmlElement("ShowStateRow"), DefaultValue(true)]
-    public bool ShowStateRow = true;
+    [Description("Ci sa ma zobrazovat stavovy riadok na pracovnej ploche programu.")]
+    public bool ShowStateRow { get; set; } = true;
 
     /// <summary>
     ///     Vrati alebo nastavi, ci sa maju zobrazovat hlavicky riadkov v tabulke na pracovnej ploche programu.
     /// </summary>
     [XmlElement("ShowRowsHeader"), DefaultValue(true)]
-    public bool ShowRowsHeader = true;
+    [Description("Vrati alebo nastavi, ci sa maju zobrazovat hlavicky riadkov v tabulke na pracovnej ploche programu.")]
+    public bool ShowRowsHeader { get; set; } = true;
 
     /// <summary>
     ///      Vrati alebo nastavi ci sa maju logovat informacie a oznamy.
     ///     <see langword="true"/> ak logovat informacie o aplikacii, inak <see langword="false"/>.
     /// </summary>
     [XmlElement("LoggingInfo"), DefaultValue(true)]
-    public bool LoggingInfo = true;
+    [Description("Vrati alebo nastavi ci sa maju logovat informacie a oznamy.")]
+    public bool LoggingInfo { get; set; } = true;
 
     /// <summary>
     ///     Vrati alebo nastavi ci sa maju logovat chyby.
     ///     <see langword="true"/> ak logovat chyby a vynimky, inak <see langword="false"/>.
     /// </summary>
     [XmlElement("LoggingError"), DefaultValue(true)]
-    public bool LoggingError = true;
+    [Description("Vrati alebo nastavi ci sa maju logovat chyby.")]
+    public bool LoggingError { get; set; } = true;
 }
