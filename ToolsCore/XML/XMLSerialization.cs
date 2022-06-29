@@ -1,15 +1,16 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Serialization;
+using ToolsCore.Tools;
 
 namespace ToolsCore.XML;
 
 public static class XMLSerialization
 {
-    private const string constXMLRedundant = " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"";
+    private const string XMLRedundant = " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"";
 
-    private const string constXMLNS1 = "xsi:";
-    private const string constXMLNS2 = "xsd:";
+    private const string XMLNS1 = "xsi:";
+    private const string XMLNS2 = "xsd:";
 
     /// <summary>
     ///     Nacitava data z XML suboru.
@@ -61,8 +62,8 @@ public static class XMLSerialization
         oSerializer.Serialize(xmlWriter, RuntimeHelpers.GetObjectValue(oObject));
         var text = stringWriter.ToString();
 
-        if (text.Length < 10000 && text.IndexOf(constXMLNS1, StringComparison.Ordinal) < 0 &&
-            text.IndexOf(constXMLNS2, StringComparison.Ordinal) < 0) text = text.Replace(constXMLRedundant, "");
+        if (text.Length < 10000 && text.IndexOf(XMLNS1, StringComparison.Ordinal) < 0 &&
+            text.IndexOf(XMLNS2, StringComparison.Ordinal) < 0) text = text.Replace(XMLRedundant, "");
 
         return text.Trim(" \r\n".ToCharArray());
     }

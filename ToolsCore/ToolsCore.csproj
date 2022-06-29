@@ -50,8 +50,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\FileSystemElement.cs" />
+    <Compile Include="Entities\FyzGroup.cs" />
+    <Compile Include="Entities\FyzLanguage.cs" />
+    <Compile Include="Entities\FyzSound.cs" />
+    <Compile Include="Entities\FyzGroupType.cs" />
+    <Compile Include="FileConsts.cs" />
+    <Compile Include="Forms\FAboutApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FAboutApp.Designer.cs">
+      <DependentUpon>FAboutApp.cs</DependentUpon>
+    </Compile>
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="GlobSettings.cs" />
+    <Compile Include="LinkConsts.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tools\AppRegistry.cs" />
     <Compile Include="Tools\AutoUpdater.cs" />
     <Compile Include="Tools\CSVParser.cs" />
@@ -67,6 +85,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tools\ProgressStatus.cs" />
+    <Compile Include="Tools\RawBankParser.cs" />
     <Compile Include="Tools\TableFileReader.cs" />
     <Compile Include="Tools\TXTProps.cs" />
     <Compile Include="Tools\TXTPropsAreas.cs" />
@@ -91,11 +111,18 @@
     <Compile Include="XML\XMLSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\FAboutApp.resx">
+      <DependentUpon>FAboutApp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\GlobalResources.cs.resx" />
     <EmbeddedResource Include="Properties\GlobalResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +145,20 @@
       <Name>ExControls</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\correct.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rename.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

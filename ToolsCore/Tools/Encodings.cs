@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ToolsCore;
+namespace ToolsCore.Tools;
 
 /// <summary>
 ///     Trieda obsahujuca najdolezitejsie kodovania textu.
@@ -9,7 +9,7 @@ namespace ToolsCore;
 public static class Encodings
 {
     /// <summary>
-    ///     Kodovanie Windowns-1250.
+    ///     Kodovanie Windows-1250.
     /// </summary>
     public static readonly Encoding Win1250 = Encoding.GetEncoding(1250);
 
