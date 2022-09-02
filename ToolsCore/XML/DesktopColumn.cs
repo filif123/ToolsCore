@@ -6,13 +6,22 @@ namespace ToolsCore.XML;
 /// <summary>
 ///     Reprezentuje jeden stlpec, ktory sa sa moze vyskytovat tabulke DataGridView na pracovnej ploche.
 /// </summary>
-public class DesktopColumn
+public record DesktopColumn()
 {
+    public DesktopColumn(string name, string propname, int order, int minWidth, bool visible = true) : this()
+    {
+        Name = name;
+        PropertyName = propname;
+        MinWidth = minWidth;
+        Order = order;
+        Visible = visible;
+    }
+
     /// <summary>
-    ///     Identifikator stlpca.
+    ///     Nazov property.
     /// </summary>
     [XmlIgnore]
-    public int Id { get; set; }
+    public string PropertyName { get; set; }
 
     /// <summary>
     ///     Nazov stlpca, ktory sa zobrazuje v hlavicke stlpca.

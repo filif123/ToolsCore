@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing.Imaging;
 using ExControls;
 using ToolsCore.XML;
 
@@ -12,7 +13,15 @@ public static class FormUtils
     /// <summary>
     ///     Zmena farebnej schémy dialogu alebo ovladacieho prvku.
     /// </summary>
-    /// <param name="c">form alobo ovladaci prvok</param>
+    /// <param name="form">formular</param>
+    public static void ApplyThemeAndFonts(this Form form)
+    {
+        form.SuspendLayout();
+        form.ApplyTheme();
+        form.SetFormFont();
+        form.ResumeLayout(true);
+    }
+
     public static void ApplyTheme(this Control c)
     {
         var style = GlobSettings.UsingStyle;
@@ -36,7 +45,7 @@ public static class FormUtils
         }
 
         strip.RenderMode = ToolStripRenderMode.Professional;
-        strip.Renderer = new MyMenuRenderer(new MyColorTable());
+        strip.Renderer = new MyMenuRenderer(new MyColorTable(), true);
 
         strip.BackColor = style.ControlsColorScheme.Panel.BackColor;
         strip.ForeColor = style.ControlsColorScheme.Panel.ForeColor;
@@ -99,6 +108,10 @@ public static class FormUtils
                     grid.CommandsBorderColor = scheme.Panel.BackColor;
                     grid.CommandsForeColor = scheme.Panel.ForeColor;
                     grid.CommandsBackColor = scheme.Panel.BackColor;
+                    grid.SelectedItemWithFocusBackColor = scheme.Highlight.BackColor;
+                    grid.SelectedItemWithFocusForeColor = scheme.Highlight.ForeColor;
+                    if (style.DarkScrollBar) 
+                        grid.Controls[2].Controls[0].SetTheme(WindowsTheme.DarkExplorer);
                     break;
                 }
                 case ExGroupBox dgb:
@@ -332,6 +345,8 @@ public static class FormUtils
                 }
                 case MenuStrip ms:
                 {
+                    ms.BackColor = scheme.Panel.BackColor;
+                    ms.ForeColor = scheme.Panel.ForeColor;
                     if (style.ControlsDefaultStyle)
                     {
                         ms.RenderMode = ToolStripRenderMode.Professional;
@@ -339,10 +354,8 @@ public static class FormUtils
                     }
                     else
                     {
-                        ms.BackColor = scheme.Panel.BackColor;
-                        ms.ForeColor = scheme.Panel.ForeColor;
                         ms.RenderMode = ToolStripRenderMode.Professional;
-                        ms.Renderer = new MyMenuRenderer(new MyColorTable());
+                        ms.Renderer = new MyMenuRenderer(new MyColorTable(), false);
                     }
 
                     SetColorMenuItems(ms.Items);
@@ -387,19 +400,20 @@ public static class FormUtils
                 }
                 case ToolStrip ts:
                 {
+                    ts.BackColor = scheme.Panel.BackColor;
+                    ts.ForeColor = scheme.Panel.ForeColor;
                     if (style.ControlsDefaultStyle)
                     {
                         ts.RenderMode = ToolStripRenderMode.Professional;
-                        ts.Renderer = new MyMenuRenderer(new LightColorTable());
+                        ts.Renderer = new MyMenuRenderer(new LightColorTable(), true);
                     }
                     else
                     {
                         ts.BackColor = scheme.Panel.BackColor;
                         ts.ForeColor = scheme.Panel.ForeColor;
                         ts.RenderMode = ToolStripRenderMode.Professional;
-                        ts.Renderer = new MyMenuRenderer(new MyColorTable());
+                        ts.Renderer = new MyMenuRenderer(new MyColorTable(), false);
                     }
-
 
                     SetColorMenuItems(ts.Items);
 
@@ -445,9 +459,20 @@ public static class FormUtils
 
                     break;
                 }
+                case ExOptionsView ov:
+                    ChangeStyleOfControls(style, ov.Panels);
+                    ChangeStyleOfControls(style, new Control[]{ov.TreeView, ov.ToolStripMenu, ov.SearchBox});
+                    ov.LinkToChildrenForeColor = scheme.Highlight.BackColor;
+                    ov.HeaderNodeNameForeColor = scheme.Label.ForeColor;
+                    ov.HeaderNodeNameBackColor = scheme.Panel.BackColor;
+                    break;
                 case DataGridView dgv:
                 {
                     dgv.EnableHeadersVisualStyles = style.ControlsDefaultStyle;
+                    dgv.DefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
+                    dgv.DefaultCellStyle.SelectionForeColor = scheme.Highlight.ForeColor;
+                    dgv.RowHeadersDefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
 
                     if (!style.ControlsDefaultStyle)
                     {
@@ -466,8 +491,13 @@ public static class FormUtils
                         dgv.BackColor = scheme.Panel.BackColor;
                         dgv.BackgroundColor = scheme.Box.BackColor;
                         dgv.GridColor = scheme.Border.ForeColor;
-
                         dgv.BorderStyle = BorderStyle.None;
+                    }
+                    else
+                    {
+                        dgv.ForeColor = SystemColors.ControlText;
+                        dgv.BackColor = SystemColors.Control;
+                        dgv.BackgroundColor = SystemColors.AppWorkspace;
                     }
 
                     foreach (DataGridViewColumn column in dgv.Columns)
@@ -522,6 +552,17 @@ public static class FormUtils
 
                                 break;
                             }
+                            case DataGridViewLinkColumn dcl:
+                            {
+                                if (!style.ControlsDefaultStyle)
+                                {
+                                    dcl.LinkColor = ControlPaint.LightLight(scheme.Highlight.BackColor);
+                                    dcl.ActiveLinkColor = scheme.Panel.ForeColor;
+                                    dcl.TrackVisitedState = false;
+                                    dcl.LinkBehavior = LinkBehavior.HoverUnderline;
+                                }
+                                break;
+                            }
                             case DataGridViewCheckBoxColumn ccb:
                             {
                                 var template = new DataGridViewExCheckBoxCell
@@ -557,7 +598,7 @@ public static class FormUtils
     ///     Zmení písmo Formu
     /// </summary>
     /// <param name="form">upravovaný Form</param>
-    public static void SetFormFont(Form form)
+    public static void SetFormFont(this Form form)
     {
         form.AutoSize = true;
         form.Font = GlobSettings.Fonts.Labels.Font;
@@ -623,7 +664,7 @@ public static class FormUtils
         }
     }
 
-    private class MyColorTable : ProfessionalColorTable
+    private sealed class MyColorTable : ProfessionalColorTable
     {
         public override Color MenuItemSelected => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
         public override Color MenuBorder => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
@@ -664,7 +705,9 @@ public static class FormUtils
         public override Color ButtonPressedGradientMiddle => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
         public override Color ButtonPressedBorder => Color.Transparent;
 
-        public override Color CheckBackground => GlobSettings.UsingStyle.ControlsColorScheme.Button.ForeColor;
+        public override Color CheckBackground => GlobSettings.UsingStyle.ControlsColorScheme.Panel.BackColor;
+        public override Color CheckSelectedBackground => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
+        public override Color CheckPressedBackground => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
     }
 
     public class LightColorTable : ProfessionalColorTable
@@ -676,12 +719,18 @@ public static class FormUtils
 
     public class MyMenuRenderer : ToolStripProfessionalRenderer
     {
-        public MyMenuRenderer(ProfessionalColorTable table) : base(table)
+        private bool WithBorder { get; set; }
+        public MyMenuRenderer(ProfessionalColorTable table, bool withBorder) : base(table)
         {
+            WithBorder = withBorder;
         }
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
+            if (WithBorder)
+            {
+                base.OnRenderToolStripBorder(e);
+            }
         }
 
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
@@ -690,6 +739,23 @@ public static class FormUtils
                 e.ArrowColor = GlobSettings.UsingStyle.ControlsColorScheme.Button.ForeColor;
 
             base.OnRenderArrow(e);
+        }
+
+        protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
+        {
+            var bitmap = new Bitmap(e.Image);
+
+            // Set the image attribute's color mappings
+            var colorMap = new ColorMap[1];
+            colorMap[0] = new ColorMap
+            {
+                OldColor = Color.FromArgb(4, 2, 4),
+                NewColor = GlobSettings.UsingStyle.ControlsColorScheme.Mark.ForeColor
+            };
+            var attr = new ImageAttributes();
+            attr.SetRemapTable(colorMap);
+
+            e.Graphics.DrawImage(bitmap, e.ImageRectangle, 0, 0, e.ImageRectangle.Width, e.ImageRectangle.Height, GraphicsUnit.Pixel, attr);
         }
     }
 }

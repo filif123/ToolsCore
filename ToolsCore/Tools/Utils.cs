@@ -3,7 +3,9 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Text;
 using System.Globalization;
-using ToolsCore.Properties;
+using Microsoft.VisualBasic.FileIO;
+using Shell32;
+using SearchOption = System.IO.SearchOption;
 
 // ReSharper disable UnusedMethodReturnValue.Global
 
@@ -79,7 +81,7 @@ public static class Utils
     ///     Skombinuje cestu k suborom/priecinkom.
     /// </summary>
     /// <param name="paths">pole retazcov s cestami k suborom/priecinkom.</param>
-    /// <returns>skombinovanu cestu.</returns>
+    /// <returns>skombinovanú cestu.</returns>
     public static string CombinePath(params string[] paths)
     {
         if (paths.Length == 0) return null;
@@ -102,7 +104,7 @@ public static class Utils
     public static void RestartApp()
     {
         Application.Restart();
-        Log.AppInfo("Program sa reštartuje\r\n");
+        Log.Info("Program sa reštartuje\r\n");
         Environment.Exit(0);
     }
 
@@ -143,11 +145,11 @@ public static class Utils
     }
 
     /// <summary>
-    ///     Zobrazi dialog s informaciou a ikonou bieleho pismena 'i' v modrom kruhu.
+    ///     Zobrazí dialog s informaciou a ikonou bieleho pismena 'i' v modrom kruhu.
     /// </summary>
     /// <param name="text">Text spravy.</param>
     /// <param name="title">Titulok dialogu.</param>
-    /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialogu.</param>
+    /// <param name="buttons">Tlacidla, ktore sa zobrazia v dialógu.</param>
     /// <returns>vysledok dialogu.</returns>
     [ExcludeFromCodeCoverage]
     public static DialogResult ShowInfo([Localizable(true)] string text, string title = null, MessageBoxButtons buttons = MessageBoxButtons.OK)
@@ -239,7 +241,7 @@ public static class Utils
     }
 
     /// <summary>
-    ///     Konveruje pole bitov (ako <see cref="string"/>) ako pole bitov <see cref="BitArray"/>.
+    ///     Konvertuje pole bitov (ako <see cref="string"/>) ako pole bitov <see cref="BitArray"/>.
     /// </summary>
     /// <param name="bits">Pole bitov.</param>
     /// <returns>pole bitov ako <see cref="BitArray"/>.</returns>
@@ -277,14 +279,14 @@ public static class Utils
     /// </summary>
     /// <param name="c">Farbu <see cref="Color"/>.</param>
     /// <returns>farba v hexadecimalnom tvare.</returns>
-    public static string ToHEX(this Color c) => "0x" + c.B.ToString("X2") + c.G.ToString("X2") + c.R.ToString("X2");
+    public static string ToHex(this Color c) => "0x" + c.B.ToString("X2") + c.G.ToString("X2") + c.R.ToString("X2");
 
     /// <summary>
-    ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR).
+    ///     Vrati objekt Color z farby zadanej hexadecimalnou hodnotou (BGR).
     /// </summary>
     /// <param name="hex">Farba v hexadecimalnom tvare.</param>
     /// <returns>farbu <see cref="Color"/>.</returns>
-    public static Color ParseHEX(string hex)
+    public static Color ParseHex(string hex)
     {
         if (hex is null)
             throw new ArgumentNullException(nameof(hex));
@@ -296,14 +298,14 @@ public static class Utils
     }
 
     /// <summary>
-    ///     Vrati objekt Color z farby zadanej s hexadecimalnej hodnoty (BGR) alebo <see langword="null"/>.
+    ///     Vrati objekt Color z farby zadanej hexadecimalnou hodnotou (BGR) alebo <see langword="null"/>.
     /// </summary>
     /// <param name="hex">Farba v hexadecimalnom tvare.</param>
     /// <returns>farbu <see cref="Color"/> alebo <see langword="null"/>, ak konvertovanie neprebehlo uspesne.</returns>
-    public static Color? TryParseHEX(string hex)
+    public static Color? TryParseHex(string hex)
     {
         if (hex == null) return null;
-        try { return ParseHEX(hex); } catch { return null; }
+        try { return ParseHex(hex); } catch { return null; }
     }
 
     /// <summary>
@@ -519,7 +521,7 @@ public static class Utils
     public static bool EqualsIgnoreCase(this string str1, string str2) => str1 != null && str1.Equals(str2, StringComparison.CurrentCultureIgnoreCase);
 
     /// <summary>
-    ///     Zisti, ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#) (pouzitie v: <see cref="CSVRow"/>).
+    ///     Zisti, ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#) (pouzitie v: <see cref="CsvRow"/>).
     /// </summary>
     /// <param name="ch">Typ zaciatku riadku.</param>
     /// <returns>Ci je riadok prazdny alebo obsahuje komentar alebo zacina mriezkou (#).</returns>
@@ -527,7 +529,7 @@ public static class Utils
     public static bool LineIsEmpty(ReadStartChar ch) => ch is ReadStartChar.Semicolon or ReadStartChar.Empty or ReadStartChar.Slash;
 
     /// <summary>
-    ///     Zisti, ci je riadok posledny (pouzitie v: <see cref="CSVRow"/>)
+    ///     Zisti, ci je riadok posledny (pouzitie v: <see cref="CsvRow"/>)
     /// </summary>
     /// <param name="ch">Typ zaciatku riadku.</param>
     /// <returns>Ci riadok obsahuje koniec suboru (EOF).</returns>
@@ -628,49 +630,103 @@ public static class Utils
     }
 
     /// <summary>
-    ///     Vrati retazec, v ktorom sa nachadza sipka ako znak podla enumeracie <see cref="Tools.Arrow"/>.
+    ///     Odstrani subor a premiestni ho do kosa (recycle bin).
     /// </summary>
-    /// <param name="type">Typ sipky.</param>
-    /// <returns>znak sipky ako text.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Ak bol zadany neplatny typ sipky.</exception>
-    [ExcludeFromCodeCoverage]
-    public static string Arrow(Arrow type)
+    /// <param name="path">cesta k suboru</param>
+    /// /// <param name="allDialogs"></param>
+    public static void DeleteFileToRecycleBin(string path, bool allDialogs = false) 
+        => FileSystem.DeleteFile(path, allDialogs ? UIOption.AllDialogs : UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+    /// <summary>
+    ///     Odstrani priecinok a premiestni ho do kosa (recycle bin).
+    /// </summary>
+    /// <param name="path">cesta k suboru</param>
+    /// <param name="allDialogs"></param>
+    public static void DeleteDirectoryToRecycleBin(string path, bool allDialogs = false) 
+        => FileSystem.DeleteDirectory(path, allDialogs ? UIOption.AllDialogs : UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+    /// <summary>
+    ///     Pokusi sa obnovit subor/priecinok, ktory bol premiestneneny do kosa (recycle bin).
+    /// </summary>
+    /// <param name="fullPath">povodna cesta k suboru</param>
+    /// <returns>ci sa podarilo obnovit subor/priecinok</returns>
+    public static bool RecoverFileOrDirFromBin(string fullPath)
     {
-        return type switch
-        {
-            Tools.Arrow.Up => char.ConvertFromUtf32(8593),
-            Tools.Arrow.Down => char.ConvertFromUtf32(8595),
-            Tools.Arrow.Left => char.ConvertFromUtf32(8592),
-            Tools.Arrow.Right => char.ConvertFromUtf32(8594),
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-        };
+        var shell = new Shell();
+        var recycler = shell.NameSpace(10);
+        for (var i = 0; i < recycler.Items().Count; i++) {
+            var fi = recycler.Items().Item(i);
+            var fileName = recycler.GetDetailsOf(fi, 0);
+
+            if (Path.GetExtension(fileName) == "") 
+                fileName += Path.GetExtension(fi.Path);
+
+            //Necessary for systems with hidden file extensions.
+            var filePath = recycler.GetDetailsOf(fi, 1);
+
+            if (fullPath == Path.Combine(filePath, fileName)) {
+                return DoVerb(fi, @"ESTORE");
+            }
+        }
+        return false;
     }
-}
 
-/// <summary>
-///     Oznacuje typ sipky pre metodu <see cref="Utils.Arrow(Arrow)"/>.
-/// </summary>
-public enum Arrow : byte
-{
-    /// <summary>
-    ///     Sipka hore.
-    /// </summary>
-    Up,
+    private static bool DoVerb(FolderItem item, string verb)
+    {
+        foreach (var fiVerb in item.Verbs().Cast<FolderItemVerb>().Where(fiVerb => fiVerb.Name.ToUpper().Contains(verb.ToUpper())))
+        {
+            fiVerb.DoIt();
+            return true;
+        }
 
-    /// <summary>
-    ///     Sipka dolu.
-    /// </summary>
-    Down,
+        return false;
+    }
 
     /// <summary>
-    ///     Sipka dolava.
+    ///     Zisti, ci je v DGV vybrany aspon 1 riadok.
     /// </summary>
-    Left,
+    /// <param name="dgv"></param>
+    /// <returns></returns>
+    public static bool IsSelectionEmpty(this DataGridView dgv) => dgv.SelectedRows.Count == 0;
 
     /// <summary>
-    ///     Sipka doprava.
+    ///     Zisti, ci zadany nazov suboru/priecinka je platny.
     /// </summary>
-    Right
+    /// <param name="fullPath"></param>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    public static bool IsFileNameCorrect(string fullPath, string fileName) 
+        => !string.IsNullOrWhiteSpace(fileName) && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && !File.Exists(CombinePath(fullPath, fileName));
+
+    ///<summary>Finds the index of the first item matching an expression in an enumerable.</summary>
+    ///<param name="items">The enumerable to search.</param>
+    ///<param name="predicate">The expression to test the items against.</param>
+    ///<returns>The index of the first matching item, or -1 if no items match.</returns>
+    public static int FindIndex<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+    {
+        if (items == null) 
+            throw new ArgumentNullException(nameof(items));
+        if (predicate == null) 
+            throw new ArgumentNullException(nameof(predicate));
+
+        int retVal = 0;
+        foreach (var item in items)
+        {
+            if (predicate(item)) 
+                return retVal;
+            retVal++;
+        }
+        return -1;
+    }
+
+    ///<summary>Finds the index of the first occurrence of an item in an enumerable.</summary>
+    ///<param name="items">The enumerable to search.</param>
+    ///<param name="item">The item to find.</param>
+    ///<returns>The index of the first matching item, or -1 if the item was not found.</returns>
+    public static int IndexOf<T>(this IEnumerable<T> items, T item)
+    {
+        return items.FindIndex(i => EqualityComparer<T>.Default.Equals(item, i));
+    }
 }
 
 /// <summary>

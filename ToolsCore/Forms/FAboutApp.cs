@@ -5,14 +5,13 @@ namespace ToolsCore.Forms;
 
 public partial class FAboutApp : Form
 {
-    public FAboutApp(string appName, string appVersion, string textAbout, Image icon = null)
+    public FAboutApp(string textAbout, Image icon = null)
     {
         InitializeComponent();
-        FormUtils.SetFormFont(this);
-        this.ApplyTheme();
+        this.ApplyThemeAndFonts();
 
-        lAppName.Text = appName;
-        lAppVersion.Text = appVersion;
+        lAppName.Text = Application.ProductName;
+        lAppVersion.Text = Application.ProductVersion;
         lText.Text = textAbout;
         if (icon != null)
             picIcon.Image = icon;

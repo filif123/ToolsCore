@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using ToolsCore.Entities;
+﻿using ToolsCore.Entities;
 
 namespace ToolsCore.Tools;
 
@@ -29,14 +28,14 @@ public static class RawBankParser
             var name = reader.ReadBytes(reader.ReadNumWithVarLength()).ANSItoUTF();
 
             reader.ReadBytes(4); // 4 byte padding
-            languages.Add(new FyzLanguage(key, fileFyzZvukName, name, relativePath));
+            languages.Add(new FyzLanguage(key, name, fileFyzZvukName, relativePath));
         }
 
         return languages;
     }
 
     /// <summary>
-    ///     Precita subor FyzBank.dat, ktory obsahuje informacie o jazykoch zvukovej banky.
+    ///     Zapise subor FyzBank.dat, ktory obsahuje informacie o jazykoch zvukovej banky.
     /// </summary>
     public static void WriteFyzBankFile(string pathToBank, List<FyzLanguage> languages)
     {
@@ -113,7 +112,7 @@ public static class RawBankParser
 
                 var snd = new FyzSound(grp, sKey, sName, fileName, relativePath, text, duration);
                 allSounds.AddLast(snd);
-                grp.Add(snd);
+                grp.Sounds.Add(snd);
             }
 
             language.Groups.Add(grp);

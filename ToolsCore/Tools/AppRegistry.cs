@@ -18,6 +18,11 @@ public static class AppRegistry
     private const string REG_RECENT_FILES = "RecentFiles";
 
     /// <summary>
+    ///     Nazov kluca v Registy so zoznamom posledne otvoreneho projektu.
+    /// </summary>
+    private const string REG_LAST_PROJECT = "LastProject";
+
+    /// <summary>
     ///     Vrati zoznam vsetkych ciest poslednych pouzivanych priecinkov s datami
     ///     podla nazvu programu <paramref name="productName"/>.<br></br>
     ///     Ak kluc v Registri s tymto zoznamom neexisstuje, metoda vrati prazdny list.
@@ -25,7 +30,7 @@ public static class AppRegistry
     /// <param name="productName">Nazov programu.</param>
     /// /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
     /// <returns>zoznam ciest.</returns>
-    public static List<string> GetRecentDirs(string productName, bool forFiles = false)
+    public static List<string> GetOpenedProjects(string productName, bool forFiles = false)
     {
         var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{productName}");
         var dirs = new HashSet<string>();
@@ -39,10 +44,17 @@ public static class AppRegistry
         var items = itemsString.Split(';');
 
         foreach (var item in items)
-            if (!string.IsNullOrEmpty(item))
+            if (!string.IsNullOrWhiteSpace(item))
                 dirs.Add(item);
 
         return dirs.ToList();
+    }
+
+    public static string GetLastProject(string productName)
+    {
+        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{productName}");
+        var value = key?.GetValue(REG_LAST_PROJECT);
+        return value is null ? "" : value.ToString();
     }
 
     /// <summary>
@@ -53,7 +65,7 @@ public static class AppRegistry
     /// <param name="productName">Nazov programu.</param>
     /// <param name="path">Cesta k priecinku.</param>
     /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
-    public static void SetNewRecentDir(string productName, string path, bool forFiles = false)
+    public static void AddNewOpenedProject(string productName, string path, bool forFiles = false)
     {
         var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{productName}");
 
@@ -61,7 +73,7 @@ public static class AppRegistry
             return;
 
         var sb = new StringBuilder();
-        var items = GetRecentDirs(productName);
+        var items = GetOpenedProjects(productName);
         foreach (var item in items)
         {
             if (item == path) return;
@@ -74,5 +86,15 @@ public static class AppRegistry
         sb.Append(path);
 
         key.SetValue(forFiles ? REG_RECENT_FILES : REG_RECENT_DIRS, sb.ToString());
+    }
+
+    public static void SetLastProject(string productName, string path)
+    {
+        var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{productName}");
+
+        if (key == null) 
+            return;
+
+        key.SetValue(REG_LAST_PROJECT, path);
     }
 }

@@ -4,24 +4,24 @@
 ///     Trieda reprezentujuca zoznam vlastnosti zorganyzovanych v poliach.
 ///     Kazde pole moze obsahovat este sekciu s komentarom.
 /// </summary>
-public class TXTPropsAreasFields
+public class TxtPropsAreasFields
 {
     private const string EX_MESSAGE = "Súbor {0}: V oblasti {1} sa očakávala vlastnosť {2}.";
 
-    private readonly string fileName;
-    private readonly Dictionary<string, Dictionary<string, string>> Areas;
-    private readonly Dictionary<string, string> AreasComments;
+    private readonly string _fileName;
+    private readonly Dictionary<string, Dictionary<string, string>> _areas;
+    private readonly Dictionary<string, string> _areasComments;
 
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="TXTPropsAreasFields"/>.
+    ///     Vytvori novu instanciu triedy <see cref="TxtPropsAreasFields"/>.
     /// </summary>
     /// <param name="file">Cesta k suboru do/z ktore sa budu ukladat/nacitat subory.</param>
     /// <param name="write">Ak je false, zoznam vlastnosti a hodnot sa nacita zo suboru.</param>
-    public TXTPropsAreasFields(string file, bool write = false)
+    public TxtPropsAreasFields(string file, bool write = false)
     {
-        fileName = file;
-        Areas = new Dictionary<string, Dictionary<string, string>>();
-        AreasComments = new Dictionary<string, string>();
+        _fileName = file;
+        _areas = new Dictionary<string, Dictionary<string, string>>();
+        _areasComments = new Dictionary<string, string>();
 
         if (!write) 
             LoadFromFile(file);
@@ -41,11 +41,10 @@ public class TXTPropsAreasFields
     public string Get(string area, string field, bool nullSensitive = true)
     {
         if (nullSensitive)
-            return Areas.ContainsKey(area) && Areas[area].ContainsKey(field)
-                ? Areas[area][field]
-                : throw new ArgumentNullException("", string.Format(EX_MESSAGE, fileName, area, field));
+            return _areas.ContainsKey(area) && _areas[area].ContainsKey(field) ? _areas[area][field]
+                : throw new ArgumentNullException(nameof(area), string.Format(EX_MESSAGE, _fileName, area, field));
 
-        return Areas.ContainsKey(area) && Areas[area].ContainsKey(field) ? Areas[area][field] : null;
+        return _areas.ContainsKey(area) && _areas[area].ContainsKey(field) ? _areas[area][field] : null;
     }
 
     /// <summary>
@@ -54,19 +53,19 @@ public class TXTPropsAreasFields
     /// </summary>
     /// <param name="area">Nazov pola.</param>
     /// <returns>slovnik vlastnosti alebo <see langword="null"/>, ak pole s nazov <paramref name="area"/> v sloniku poli nenajde.</returns>
-    public Dictionary<string, string> Get(string area) => Areas.ContainsKey(area) ? Areas[area] : null;
+    public Dictionary<string, string> Get(string area) => _areas.ContainsKey(area) ? _areas[area] : null;
 
     /// <summary>
     ///     Vrati cely slovnik s polami a ich vlastnostami.
     /// </summary>
     /// <returns></returns>
-    public Dictionary<string, Dictionary<string, string>> GetAll() => Areas;
+    public Dictionary<string, Dictionary<string, string>> GetAll() => _areas;
 
     /// <summary>
     ///     Vrati zoznam poli.
     /// </summary>
     /// <returns></returns>
-    public List<string> GetAreas() => Areas.Keys.ToList();
+    public List<string> GetAreas() => _areas.Keys.ToList();
 
     /// <summary>
     ///     Nastavi hodnotu <paramref name="value"/> vlastnosti s nazvom <paramref name="field"/> do pola s nazvom <paramref name="area"/>.
@@ -85,7 +84,7 @@ public class TXTPropsAreasFields
             if (value == null)
             {
                 if (type is WriteType.WriteStringANSI or WriteType.WriteStringUTF8)
-                    throw new ArgumentNullException("", string.Format(EX_MESSAGE, fileName, area, field));
+                    throw new ArgumentNullException(nameof(area), string.Format(EX_MESSAGE, _fileName, area, field));
 
                 value = "".Quote();
             }
@@ -99,17 +98,17 @@ public class TXTPropsAreasFields
             }
         }
 
-        if (Areas.ContainsKey(area))
+        if (_areas.ContainsKey(area))
         {
-            if (!Areas[area].ContainsKey(field))
-                Areas[area].Add(field, value.ToString());
+            if (!_areas[area].ContainsKey(field))
+                _areas[area].Add(field, value.ToString());
             else
-                Areas[area][field] = value.ToString();
+                _areas[area][field] = value.ToString();
         }
         else
         {
             var keys = new Dictionary<string, string> { { field, value.ToString() } };
-            Areas.Add(area, keys);
+            _areas.Add(area, keys);
         }
     }
 
@@ -122,12 +121,12 @@ public class TXTPropsAreasFields
     public void Set(string area, Dictionary<string, object> fields)
     {
         foreach (var field in fields.Keys)
-            if (Areas.ContainsKey(area))
+            if (_areas.ContainsKey(area))
             {
-                if (!Areas[area].ContainsKey(field))
-                    Areas[area].Add(field, fields[field].ToString());
+                if (!_areas[area].ContainsKey(field))
+                    _areas[area].Add(field, fields[field].ToString());
                 else
-                    Areas[area][field] = fields[field].ToString();
+                    _areas[area][field] = fields[field].ToString();
             }
             else
             {
@@ -135,7 +134,7 @@ public class TXTPropsAreasFields
                 {
                     { field, fields[field].ToString() }
                 };
-                Areas.Add(area, keys);
+                _areas.Add(area, keys);
             }
     }
 
@@ -145,7 +144,7 @@ public class TXTPropsAreasFields
     /// </summary>
     /// <param name="area">Nazov pola.</param>
     /// <returns>text komentaru, alebo <see cref="string.Empty"/> ak pole s nazvom <paramref name="area"/> nenajde v slovniku poli.</returns>
-    public string GetComment(string area) => AreasComments.ContainsKey(area) ? AreasComments[area] : "";
+    public string GetComment(string area) => _areasComments.ContainsKey(area) ? _areasComments[area] : "";
 
     /// <summary>
     ///     Nastavi komentar pre dane pole. Ak zadany nazov pola <paramref name="area"/> nenajde v slovniku poli,
@@ -155,10 +154,10 @@ public class TXTPropsAreasFields
     /// <param name="comment">Komentár.</param>
     public void SetComment(string area, string comment)
     {
-        if (AreasComments.ContainsKey(area))
-            AreasComments[area] = comment;
+        if (_areasComments.ContainsKey(area))
+            _areasComments[area] = comment;
         else
-            AreasComments.Add(area, comment);
+            _areasComments.Add(area, comment);
     }
 
     /// <summary>
@@ -166,14 +165,14 @@ public class TXTPropsAreasFields
     /// </summary>
     public void Save()
     {
-        var file = new StreamWriter(fileName, false, Encodings.Win1250);
+        var file = new StreamWriter(_fileName, false, Encodings.Win1250);
 
-        foreach (var area in Areas.Keys)
+        foreach (var area in _areas.Keys)
         {
             file.WriteLine("[" + area + "]");
-            if (AreasComments.ContainsKey(area))
+            if (_areasComments.ContainsKey(area))
             {
-                var lines = AreasComments[area].Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                var lines = _areasComments[area].Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
                 for (var i = 0; i < lines.Length; i++)
                     if (!string.IsNullOrEmpty(lines[i]))
                     {
@@ -182,9 +181,8 @@ public class TXTPropsAreasFields
                     }
             }
 
-            foreach (var field in Areas[area].Keys)
-                if (!string.IsNullOrWhiteSpace(Areas[area][field]))
-                    file.WriteLine(field + "=" + Areas[area][field]);
+            foreach (var field in _areas[area].Keys.Where(field => !string.IsNullOrWhiteSpace(_areas[area][field])))
+                file.WriteLine(field + "=" + _areas[area][field]);
 
 
             file.WriteLine(Environment.NewLine);
@@ -213,8 +211,8 @@ public class TXTPropsAreasFields
             {
                 if (propInArea.Count != 0 || !string.IsNullOrEmpty(actualArea))
                 {
-                    Areas.Add(actualArea, propInArea);
-                    AreasComments.Add(actualArea, comments.ToString());
+                    _areas.Add(actualArea, propInArea);
+                    _areasComments.Add(actualArea, comments.ToString());
                 }
 
                 propInArea = new Dictionary<string, string>();
@@ -245,12 +243,15 @@ public class TXTPropsAreasFields
                 {
                     propInArea.Add(key, value);
                 }
-                catch { /*ignored*/ }
+                catch
+                {
+                     /*ignored*/
+                }
             }
         }
 
-        Areas.Add(actualArea, propInArea);
-        AreasComments.Add(actualArea, comments.ToString());
+        _areas.Add(actualArea, propInArea);
+        _areasComments.Add(actualArea, comments.ToString());
     }
 }
 

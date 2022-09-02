@@ -3,22 +3,22 @@
 /// <summary>
 ///     Trieda reprezentujuca zoznam vlastnosti bez polí.
 /// </summary>
-public class TXTProps
+public class TxtProps
 {
     private const string EX_MESSAGE = "Súbor {0}: Očakávala sa vlastnosť {1}.";
 
-    private readonly string fileName;
-    private readonly Dictionary<string, string> dictionary;
+    private readonly string _fileName;
+    private readonly Dictionary<string, string> _dictionary;
 
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="TXTProps"/>.
+    ///     Vytvori novu instanciu triedy <see cref="TxtProps"/>.
     /// </summary>
     /// <param name="file">Cesta k suboru do/z ktore sa budu ukladat/nacitat subory.</param>
     /// <param name="write">Ak je false, zoznam vlastnosti a hodnot sa nacita zo suboru.</param>
-    public TXTProps(string file, bool write = false)
+    public TxtProps(string file, bool write = false)
     {
-        fileName = file;
-        dictionary = new Dictionary<string, string>();
+        _fileName = file;
+        _dictionary = new Dictionary<string, string>();
 
         if (!write) 
             LoadFromFile(file);
@@ -45,9 +45,10 @@ public class TXTProps
     public string Get(string field, bool nullSensitive = true)
     {
         if (nullSensitive)
-            return dictionary.ContainsKey(field) ? dictionary[field] : throw new ArgumentNullException("", string.Format(EX_MESSAGE, fileName, field));
+            return _dictionary.ContainsKey(field) 
+                ? _dictionary[field] : throw new ArgumentNullException(nameof(field), string.Format(EX_MESSAGE, _fileName, field));
 
-        return dictionary.ContainsKey(field) ? dictionary[field] : null;
+        return _dictionary.ContainsKey(field) ? _dictionary[field] : null;
     }
 
     /// <summary>
@@ -58,10 +59,10 @@ public class TXTProps
     /// <param name="value">Hodnota vlastnosti.</param>
     public void Set(string field, object value)
     {
-        if (!dictionary.ContainsKey(field))
-            dictionary.Add(field, value.ToString());
+        if (!_dictionary.ContainsKey(field))
+            _dictionary.Add(field, value.ToString());
         else
-            dictionary[field] = value.ToString();
+            _dictionary[field] = value.ToString();
     }
 
     /// <summary>
@@ -69,11 +70,11 @@ public class TXTProps
     /// </summary>
     public void Save()
     {
-        var file = new StreamWriter(fileName, false, Encodings.Win1250);
+        var file = new StreamWriter(_fileName, false, Encodings.Win1250);
 
-        foreach (var prop in dictionary.Keys.ToArray())
-            if (!string.IsNullOrWhiteSpace(dictionary[prop]))
-                file.WriteLine(prop + "=" + dictionary[prop]);
+        foreach (var prop in _dictionary.Keys.ToArray())
+            if (!string.IsNullOrWhiteSpace(_dictionary[prop]))
+                file.WriteLine(prop + "=" + _dictionary[prop]);
 
         file.Close();
     }
@@ -85,21 +86,24 @@ public class TXTProps
     {
         foreach (var line in File.ReadAllLines(file, Encodings.Win1250))
         {
-            if (!string.IsNullOrEmpty(line) && !line.StartsWith(";") && !line.StartsWith("#") && !line.StartsWith("'") && line.Contains('='))
+            if (string.IsNullOrEmpty(line) || line.StartsWith(";") || line.StartsWith("#") || line.StartsWith("'") || !line.Contains('=')) 
+                continue;
+
+            var index = line.IndexOf('=');
+            var key = line.Substring(0, index).Trim();
+            var value = line.Substring(index + 1).Trim();
+
+            if (value.StartsWith("\"") && value.EndsWith("\"") ||
+                value.StartsWith("'") && value.EndsWith("'"))
+                value = value.Substring(1, value.Length - 2);
+
+            try
             {
-                var index = line.IndexOf('=');
-                var key = line.Substring(0, index).Trim();
-                var value = line.Substring(index + 1).Trim();
-
-                if (value.StartsWith("\"") && value.EndsWith("\"") ||
-                    value.StartsWith("'") && value.EndsWith("'"))
-                    value = value.Substring(1, value.Length - 2);
-
-                try
-                {
-                    dictionary.Add(key, value);
-                }
-                catch { /* ignored */ }
+                _dictionary.Add(key, value);
+            }
+            catch
+            {
+                /* ignored */
             }
         }
     }

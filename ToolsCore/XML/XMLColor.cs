@@ -6,18 +6,15 @@ namespace ToolsCore.XML;
 /// <summary>
 ///     Rozšírenie štruktúry <see cref="Color" /> o to, aby bola serializovateľná do XML.
 /// </summary>
-public struct XMLColor
+public struct XmlColor
 {
-    private Color color;
+    private Color _color;
 
     /// <summary>
-    ///     Vytvori novu instanciu struktury <see cref="XMLColor"/>.
+    ///     Vytvori novu instanciu struktury <see cref="XmlColor"/>.
     /// </summary>
     /// <param name="c"></param>
-    public XMLColor(Color c)
-    {
-        color = c;
-    }
+    public XmlColor(Color c) => _color = c;
 
     /// <summary>
     ///     Farba ako text pre XML.
@@ -25,23 +22,23 @@ public struct XMLColor
     [XmlText]
     public string Default
     {
-        get => FromColor(color);
-        set => color = ToColor(value);
+        get => FromColor(_color);
+        set => _color = ToColor(value);
     }
 
     /// <summary>
-    ///     Implicitny operator sluziaci na konvertovanie <see cref="XMLColor"/> na <see cref="Color"/>.
+    ///     Implicitny operator sluziaci na konvertovanie <see cref="XmlColor"/> na <see cref="Color"/>.
     /// </summary>
-    /// <param name="x">Farba ako <see cref="XMLColor"/>.</param>
+    /// <param name="x">Farba ako <see cref="XmlColor"/>.</param>
     /// <returns>farba ako <see cref="Color"/>.</returns>
-    public static implicit operator Color(XMLColor x) => x.color;
+    public static implicit operator Color(XmlColor x) => x._color;
 
     /// <summary>
-    ///     Implicitny operator sluziaci na konvertovanie <see cref="Color"/> na <see cref="XMLColor"/>.
+    ///     Implicitny operator sluziaci na konvertovanie <see cref="Color"/> na <see cref="XmlColor"/>.
     /// </summary>
     /// <param name="c">Farba ako <see cref="Color"/>.</param>
-    /// <returns>farba ako <see cref="XMLColor"/>.</returns>
-    public static implicit operator XMLColor(Color c) => new(c);
+    /// <returns>farba ako <see cref="XmlColor"/>.</returns>
+    public static implicit operator XmlColor(Color c) => new(c);
 
     /// <summary>
     ///     Vygeneruje reťazec (string) podľa objektu typu <see cref="Color"/>.
@@ -67,13 +64,10 @@ public struct XMLColor
     {
         try
         {
-            if (value[0] == '#')
-            {
-                var argb = (value.Length <= 7 ? unchecked((int)0xFF000000) : 0) + int.Parse(value.Substring(1), NumberStyles.HexNumber);
-                return Color.FromArgb(argb);
-            }
-
-            return Color.FromName(value);
+            if (value[0] != '#') 
+                return Color.FromName(value);
+            var argb = (value.Length <= 7 ? unchecked((int)0xFF000000) : 0) + int.Parse(value.Substring(1), NumberStyles.HexNumber);
+            return Color.FromArgb(argb);
         }
         catch (Exception)
         {

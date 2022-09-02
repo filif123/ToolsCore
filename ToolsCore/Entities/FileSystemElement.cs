@@ -4,12 +4,11 @@ namespace ToolsCore.Entities;
 
 public abstract class FileSystemElement
 {
-    protected FileSystemElement(string name)
-    {
-        Name = name;
-    }
+    protected FileSystemElement(string name) => Name = name;
 
     public string Name { get; set; }
+
+    public DirectoryElement Parent { get; set; }
 
     public static implicit operator FileSystemElement(FileSystemInfo fsi)
     {
@@ -25,16 +24,16 @@ public abstract class FileSystemElement
                 return null;
         }
     }
+
+    public override string ToString() => Name;
 }
 
 public class BackButtonElement : FileSystemElement
 {
     public BackButtonElement(DirectoryElement parent) : base("...")
     {
-        ParentDirectory = parent;
+        Parent = parent;
     }
-
-    public DirectoryElement ParentDirectory { get; }
 }
 
 public class DirectoryElement : FileSystemElement
@@ -42,21 +41,12 @@ public class DirectoryElement : FileSystemElement
     public DirectoryElement(DirectoryInfo dirinfo) : base(dirinfo.Name)
     {
         DirInfo = dirinfo;
-        Children = new List<FileSystemElement>();
         var fis = dirinfo.GetFileSystemInfos();
-        for (var i = 0; i < fis.Length; i++)
+        Children = new List<FileSystemElement>(fis.Length);
+        foreach (FileSystemElement element in fis)
         {
-            var fi = fis[i];
-            Children.Add(fi);
-            switch (Children[i])
-            {
-                case DirectoryElement dir:
-                    dir.Parent = this;
-                    break;
-                case FileElement fe:
-                    fe.Parent = this;
-                    break;
-            }
+            Children.Add(element);
+            element.Parent = this;
         }
     }
 
@@ -64,32 +54,20 @@ public class DirectoryElement : FileSystemElement
     {
     }
 
-    public DirectoryElement Parent { get; set; }
-
     public DirectoryInfo DirInfo { get; set; }
 
     public List<FileSystemElement> Children { get; }
 
     public FyzGroup Group { get; set; }
-
-    public int GetCountChildren() => Children.Count;
 }
 
 public abstract class FileElement : FileSystemElement
 {
-    protected FileElement(FileInfo fileinfo) : base(fileinfo.Name)
-    {
-        FileInfo = fileinfo;
-    }
+    protected FileElement(FileInfo fileinfo) : base(fileinfo.Name) => FileInfo = fileinfo;
 
-    protected FileElement(string absPath) : base(Path.GetFileName(absPath))
-    {
-        FileInfo = new FileInfo(absPath);
-    }
+    protected FileElement(string absPath) : base(Path.GetFileName(absPath)) => FileInfo = new FileInfo(absPath);
 
     public FileInfo FileInfo { get; set; }
-
-    public DirectoryElement Parent { get; set; }
 }
 
 public class SoundFileElement : FileElement
@@ -97,15 +75,9 @@ public class SoundFileElement : FileElement
     public const string WAV_EXT = ".WAV";
     public const string EWA_EXT = ".EWA";
 
-    public SoundFileElement(FileInfo fileinfo) : base(fileinfo)
-    {
-        Duration = -1;
-    }
+    public SoundFileElement(FileInfo fileinfo) : base(fileinfo) => Duration = -1;
 
-    public SoundFileElement(string file) : base(file)
-    {
-        Duration = -1;
-    }
+    public SoundFileElement(string file) : base(file) => Duration = -1;
 
     public int Duration { get; set; }
 

@@ -10,7 +10,7 @@ namespace ToolsCore.Tools;
 /// </summary>
 public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> where T : Enumeration<T>
 {
-    private readonly bool useKey;
+    private readonly bool _useKey;
 
     /// <summary>
     ///     Creates new instance of <see cref="Enumeration{T}" /> with specified ID and name.
@@ -19,10 +19,10 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     /// <param name="name">Name of the element.</param>
     protected Enumeration(int id, string name)
     {
-        ID = id;
+        Id = id;
         Name = name;
         Description = "";
-        useKey = false;
+        _useKey = false;
     }
 
     /// <summary>
@@ -33,10 +33,10 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     /// <param name="description">description of the element.</param>
     protected Enumeration(int id, string name, string description)
     {
-        ID = id;
+        Id = id;
         Name = name;
         Description = description;
-        useKey = false;
+        _useKey = false;
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
         Key = key;
         Name = name;
         Description = "";
-        useKey = true;
+        _useKey = true;
     }
 
     /// <summary>
@@ -63,13 +63,13 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
         Key = key;
         Name = name;
         Description = description;
-        useKey = true;
+        _useKey = true;
     }
 
     /// <summary>
     ///     Identifikator prvku ako poradove cislo.
     /// </summary>
-    public int ID { get; }
+    public int Id { get; }
 
     /// <summary>
     ///     Identifikator prvku ako kluc v tvare retazca.
@@ -123,7 +123,7 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     public int CompareTo(Enumeration<T> other)
     {
         if (ReferenceEquals(this, other)) return 0;
-        return other is null ? 1 : ID.CompareTo(other.ID);
+        return other is null ? 1 : Id.CompareTo(other.Id);
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
         if (obj is not Enumeration<T> otherValue) 
             return false;
         var typeMatches = GetType() == obj.GetType();
-        var valueMatches = useKey ? Key == otherValue.Key : ID == otherValue.ID;
+        var valueMatches = _useKey ? Key == otherValue.Key : Id == otherValue.Id;
         return typeMatches && valueMatches;
     }
 
@@ -153,11 +153,11 @@ public abstract class Enumeration<T> : IComparable, IComparable<Enumeration<T>> 
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    protected bool Equals(Enumeration<T> other) => useKey ? Key == other.Key : ID == other.ID;
+    protected bool Equals(Enumeration<T> other) => _useKey ? Key == other.Key : Id == other.Id;
 
     /// <summary>Serves as the default hash function.</summary>
     /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode() => useKey ? Key.GetHashCode() : ID;
+    public override int GetHashCode() => _useKey ? Key.GetHashCode() : Id;
 
     /// <summary>
     ///     Compares two enumeration types.

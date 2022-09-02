@@ -61,52 +61,20 @@ namespace ToolsCore.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Stlačte klávesovú skratku pre priradenie ku príkazu..
         /// </summary>
-        internal static System.Drawing.Bitmap add {
+        internal static string FAppSettings_lShortcutHelp1 {
             get {
-                object obj = ResourceManager.GetObject("add", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("FAppSettings_lShortcutHelp1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Neplatná klávesová skratka. Stlačte inú..
         /// </summary>
-        internal static System.Drawing.Bitmap correct {
+        internal static string FAppSettings_lShortcutHelp2 {
             get {
-                object obj = ResourceManager.GetObject("correct", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap delete {
-            get {
-                object obj = ResourceManager.GetObject("delete", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap edit {
-            get {
-                object obj = ResourceManager.GetObject("edit", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap rename {
-            get {
-                object obj = ResourceManager.GetObject("rename", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("FAppSettings_lShortcutHelp2", resourceCulture);
             }
         }
     }

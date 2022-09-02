@@ -3,21 +3,22 @@
 public class FyzLanguage
 {
     /// <summary>Initializes a new instance of the <see cref="FyzLanguage" /> class.</summary>
-    public FyzLanguage(string key, string fileDefName, string name, string relativePath)
+    public FyzLanguage(string key, string name, string fileDefName, string relativePath)
     {
         Key = key;
-        FileDefName = fileDefName;
         Name = name;
+        FileDefName = fileDefName;
         RelativePath = relativePath;
     }
 
     /// <summary>Initializes a new instance of the <see cref="FyzLanguage" /> class.</summary>
-    public FyzLanguage(string key, string name)
+    public FyzLanguage(string key, string name) : this(key, name, FileConsts.FILE_FYZZVUK, $"{key}\\")
     {
-        Key = key;
-        FileDefName = FileConsts.FILE_FYZZVUK;
-        Name = name;
-        RelativePath = $"{key}\\";
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="FyzLanguage" /> class.</summary>
+    public FyzLanguage(string key, string name, string relativePath) : this(key, name, FileConsts.FILE_FYZZVUK, relativePath)
+    {
     }
 
     /// <summary>
@@ -66,7 +67,7 @@ public class FyzLanguage
 
     public string GetAbsPath(string pathToBank)
     {
-        if (string.IsNullOrEmpty(pathToBank))
+        if (pathToBank is null)
             throw new ArgumentNullException(nameof(pathToBank));
 
         var path = new StringBuilder(pathToBank);

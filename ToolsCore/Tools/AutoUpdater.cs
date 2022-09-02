@@ -41,7 +41,7 @@ public static class AutoUpdater
         try
         {
             var web = new TimedWebClient();
-            var csv = new CSVStringReader(web.DownloadString(GlobSettings.LinkUpdater));
+            var csv = new CsvStringReader(web.DownloadString(GlobSettings.LinkUpdater));
             //BUG: stranka sa neda otvorit (chyba je vo vsetkych verziach programu)
             for (var i = 0; i < csv.RowCount; i++)
             {
@@ -57,11 +57,11 @@ public static class AutoUpdater
         return allversions;
     }
 
-    private class TimedWebClient : WebClient
+    private sealed class TimedWebClient : WebClient
     {
-        protected override WebRequest GetWebRequest(Uri uri)
+        protected override WebRequest GetWebRequest(Uri address)
         {
-            var w = base.GetWebRequest(uri);
+            var w = base.GetWebRequest(address);
             if (w is not null) w.Timeout = 3000;
             return w;
         }

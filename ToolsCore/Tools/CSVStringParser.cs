@@ -3,15 +3,15 @@
 /// <summary>
 ///     Class to read data from a CSV string.
 /// </summary>
-public class CSVStringReader : TableFileReader
+public class CsvStringReader : TableFileReader
 {
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="CSVStringReader"/>.
+    ///     Vytvori novu instanciu triedy <see cref="CsvStringReader"/>.
     /// </summary>
     /// <param name="text">Text v tvare .CSV suboru.</param>
     /// <param name="linesep">Separator riadkov.</param>
     /// <param name="rowsep">Separator buniek.</param>
-    public CSVStringReader(string text, char linesep = '\n', char rowsep = ';')
+    public CsvStringReader(string text, char linesep = '\n', char rowsep = ';')
     {
         text = text.Replace("\r", "");
         var rows = text.Split(new[] { linesep }, StringSplitOptions.RemoveEmptyEntries);

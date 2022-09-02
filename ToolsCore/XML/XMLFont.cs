@@ -5,30 +5,31 @@ namespace ToolsCore.XML;
 /// <summary>
 ///     Trieda opisujúca font, serializovateľná do XML.
 /// </summary>
-public class XMLFont
+public class XmlFont
 {
     [XmlIgnore] 
-    private readonly Font font;
+    private readonly Font _font;
 
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="XMLFont"/>.
+    ///     Vytvori novu instanciu triedy <see cref="XmlFont"/>.
     /// </summary>
-    private XMLFont()
+    private XmlFont()
     {
     }
 
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="XMLFont"/> podla zadefinovaneho pisma.
+    ///     Vytvori novu instanciu triedy <see cref="XmlFont"/> podla zadefinovaneho pisma.
     /// </summary>
     /// <param name="f">Pismo typu <see cref="Font"/>.</param>
-    public XMLFont(Font f)
+    public XmlFont(Font f)
     {
-        font = f;
+        _font = f;
 
         FontFamily = f.FontFamily.Name;
         Unit = (GraphicsUnit)(int)f.Unit;
         Size = f.Size;
         Style = (FontStyle)(int)f.Style;
+        GdiCharSet = f.GdiCharSet;
     }
 
     /// <summary>
@@ -56,33 +57,40 @@ public class XMLFont
     public FontStyle Style { get; set; }
 
     /// <summary>
-    ///     Implicitny operator sluziaci na konvertovanie <see cref="XMLFont"/> na <see cref="Font"/>.
+    ///     Char set písma.
     /// </summary>
-    /// <param name="x">Pismo ako <see cref="XMLFont"/>.</param>
-    /// <returns>pismo ako <see cref="Font"/>.</returns>
-    public static implicit operator Font(XMLFont x) => x.font;
+    [XmlAttribute("set")]
+    [DefaultValue(1)]
+    public byte GdiCharSet { get; set; } = 1;
 
     /// <summary>
-    ///     Implicitny operator sluziaci na konvertovanie <see cref="Font"/> na <see cref="XMLFont"/>.
+    ///     Implicitny operator sluziaci na konvertovanie <see cref="XmlFont"/> na <see cref="Font"/>.
+    /// </summary>
+    /// <param name="x">Pismo ako <see cref="XmlFont"/>.</param>
+    /// <returns>pismo ako <see cref="Font"/>.</returns>
+    public static implicit operator Font(XmlFont x) => x._font;
+
+    /// <summary>
+    ///     Implicitny operator sluziaci na konvertovanie <see cref="Font"/> na <see cref="XmlFont"/>.
     /// </summary>
     /// <param name="f">Pismo ako <see cref="Font"/>.</param>
-    /// <returns>pismo ako <see cref="XMLFont"/>.</returns>
-    public static implicit operator XMLFont(Font f) => new(f);
+    /// <returns>pismo ako <see cref="XmlFont"/>.</returns>
+    public static implicit operator XmlFont(Font f) => new(f);
 
     /// <summary>
-    ///     Konvertuje <see cref="Font"/> na <see cref="XMLFont"/>.
+    ///     Konvertuje <see cref="Font"/> na <see cref="XmlFont"/>.
     /// </summary>
     /// <param name="font"></param>
     /// <returns></returns>
-    public static XMLFont FromFont(Font font) => new(font);
+    public static XmlFont FromFont(Font font) => new(font);
 
     /// <summary>
-    ///     Konvertuje <see cref="XMLFont"/> na <see cref="Font"/>.
+    ///     Konvertuje <see cref="XmlFont"/> na <see cref="Font"/>.
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    public static Font ToFont(XMLFont x) =>
-        new(x.FontFamily, x.Size, (System.Drawing.FontStyle)(int)x.Style, (System.Drawing.GraphicsUnit)(int)x.Unit);
+    public static Font ToFont(XmlFont x) =>
+        new(x.FontFamily, x.Size, (System.Drawing.FontStyle)(int)x.Style, (System.Drawing.GraphicsUnit)(int)x.Unit, x.GdiCharSet);
 
     /// <summary>
     ///     Štýl písma.

@@ -3,20 +3,20 @@
 /// <summary>
 ///     Trieda reprezentujuca zoznam poli s obsahom bez vlastnosti.
 /// </summary>
-public class TXTPropsAreas
+public class TxtPropsAreas
 {
-    private readonly string fileName;
-    private readonly Dictionary<string, string> dictionary;
+    private readonly string _fileName;
+    private readonly Dictionary<string, string> _dictionary;
 
     /// <summary>
-    ///     Vytvori novu instanciu triedy <see cref="TXTPropsAreas"/>.
+    ///     Vytvori novu instanciu triedy <see cref="TxtPropsAreas"/>.
     /// </summary>
     /// <param name="file">Cesta k suboru do/z ktore sa budu ukladat/nacitat subory.</param>
     /// <param name="write">Ak je false, zoznam vlastnosti a hodnot sa nacita zo suboru.</param>
-    public TXTPropsAreas(string file, bool write = false)
+    public TxtPropsAreas(string file, bool write = false)
     {
-        fileName = file;
-        dictionary = new Dictionary<string, string>();
+        _fileName = file;
+        _dictionary = new Dictionary<string, string>();
 
         if (!write) 
             LoadFromFile(file);
@@ -28,13 +28,13 @@ public class TXTPropsAreas
     /// </summary>
     /// <param name="area">Nazov pola.</param>
     /// <returns></returns>
-    public string Get(string area) => dictionary.ContainsKey(area) ? dictionary[area] : null;
+    public string Get(string area) => _dictionary.ContainsKey(area) ? _dictionary[area] : null;
 
     /// <summary>
     ///     Vrati zoznam vsetkych nazvov poli, ktore sa nachadzaju v slovniku.
     /// </summary>
     /// <returns>zoznam vsetkych nazvov poli, ktore sa nachadzaju v slovniku.</returns>
-    public IEnumerable<string> GetAreas() => dictionary.Keys.ToList();
+    public IEnumerable<string> GetAreas() => _dictionary.Keys.ToList();
 
     /// <summary>
     ///     Nastavi obsah pola. Ak zadany nazov pola <paramref name="area"/> nenajde v slovniku poli,
@@ -44,10 +44,10 @@ public class TXTPropsAreas
     /// <param name="value">Obsah pola.</param>
     public void Set(string area, object value)
     {
-        if (dictionary.ContainsKey(area))
-            dictionary[area] = value.ToString();
+        if (_dictionary.ContainsKey(area))
+            _dictionary[area] = value.ToString();
         else
-            dictionary.Add(area, value.ToString());
+            _dictionary.Add(area, value.ToString());
     }
 
     /// <summary>
@@ -55,12 +55,12 @@ public class TXTPropsAreas
     /// </summary>
     public void Save()
     {
-        var file = new StreamWriter(fileName, false, Encodings.Win1250);
+        var file = new StreamWriter(_fileName, false, Encodings.Win1250);
 
-        foreach (var area in dictionary.Keys)
+        foreach (var area in _dictionary.Keys)
         {
             file.WriteLine("[" + area + "]");
-            file.WriteLine(dictionary[area]);
+            file.WriteLine(_dictionary[area]);
             file.WriteLine(Environment.NewLine);
         }
 
@@ -80,7 +80,7 @@ public class TXTPropsAreas
             if (!string.IsNullOrEmpty(line) && !line.StartsWith(";") && line.StartsWith("[") && line.EndsWith("]"))
             {
                 if (sb.Length != 0 || !string.IsNullOrEmpty(actualArea)) 
-                    dictionary.Add(actualArea!, sb.ToString());
+                    _dictionary.Add(actualArea!, sb.ToString());
 
                 sb = new StringBuilder();
                 var s = line.Replace("[", "");
@@ -93,7 +93,7 @@ public class TXTPropsAreas
 
         if (actualArea is not null)
         {
-            dictionary.Add(actualArea, sb.ToString());
+            _dictionary.Add(actualArea, sb.ToString());
         }
     }
 }

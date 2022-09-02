@@ -1,40 +1,36 @@
-﻿using System.Runtime.CompilerServices;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 using ToolsCore.Tools;
 
 namespace ToolsCore.XML;
 
-public static class XMLSerialization
+public static class XmlSerialization
 {
-    private const string XMLRedundant = " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"";
-
-    private const string XMLNS1 = "xsi:";
-    private const string XMLNS2 = "xsd:";
-
     /// <summary>
-    ///     Nacitava data z XML suboru.
+    ///     Nacita data z XML suboru.
     /// </summary>
-    /// <param name="file">Cesta k suboru.</param>
+    /// <param name="fileName">Cesta k suboru.</param>
     /// <returns></returns>
-    public static T ReadData<T>(string file) where T : new()
+    public static T ReadData<T>(string fileName) where T : new()
     {
         var config = default(T);
         try
         {
-            var text = File.ReadAllText(file, Encodings.Win1250);
-            if (!string.IsNullOrEmpty(text)) config = (T)Deserialize(text, typeof(T));
+            var text = File.ReadAllText(fileName, Encodings.Win1250);
+            if (!string.IsNullOrEmpty(text)) 
+                config = (T) Deserialize(text, typeof(T));
         }
         catch (FileNotFoundException)
         {
+            //ignored, config will be null
         }
 
-        if (config == null)
-        {
-            config = new T();
-            WriteData(file, config);
-        }
+        if (config != null) 
+            return config;
 
+        //config je null (nevedel precitat subor - napr. neexistuje)
+        config = new T();
+        WriteData(fileName, config);
         return config;
     }
 
@@ -43,48 +39,45 @@ public static class XMLSerialization
     /// </summary>
     /// <param name="file">Cesta k suboru</param>
     /// <param name="obj">Data.</param>
-    public static void WriteData<T>(string file, T obj)
-    {
-        SerializeToFile(file, RuntimeHelpers.GetObjectValue(obj));
-    }
+    public static void WriteData<T>(string file, T obj) => SerializeToFile(file, obj);
 
-    internal static string Serialize(object oObject, bool bIndent, XmlSerializer oSerializer = null)
+    private static string Serialize(object obj, bool indent, XmlSerializer serializer = null)
     {
-        oSerializer ??= new XmlSerializer(oObject.GetType());
+        serializer ??= new XmlSerializer(obj.GetType());
 
         var stringWriter = new StringWriter();
         var xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings
         {
-            Indent = bIndent,
+            Indent = indent,
             OmitXmlDeclaration = true
         });
 
-        oSerializer.Serialize(xmlWriter, RuntimeHelpers.GetObjectValue(oObject));
-        var text = stringWriter.ToString();
+        var ns = new XmlSerializerNamespaces();
+        ns.Add("", "");
 
-        if (text.Length < 10000 && text.IndexOf(XMLNS1, StringComparison.Ordinal) < 0 &&
-            text.IndexOf(XMLNS2, StringComparison.Ordinal) < 0) text = text.Replace(XMLRedundant, "");
+        serializer.Serialize(xmlWriter, obj, ns);
+        var text = stringWriter.ToString();
 
         return text.Trim(" \r\n".ToCharArray());
     }
 
-    internal static void SerializeToFile(string sFName, object oObject, Encoding oEncoding = null, XmlSerializer oSerializer = null)
+    internal static void SerializeToFile(string fileName, object obj, Encoding encoding = null, XmlSerializer serializer = null)
     {
-        var text = Serialize(RuntimeHelpers.GetObjectValue(oObject), true, oSerializer);
+        var text = Serialize(obj, true, serializer);
 
-        oEncoding ??= Encodings.Win1250;
+        encoding ??= Encodings.Win1250;
+        text = $"<?xml version=\"1.0\" encoding=\"{encoding.WebName}\"?>\r\n{text}";
 
-        text = "<?xml version=\"1.0\" encoding=\"" + oEncoding.WebName + "\"?>\r\n" + text;
-
-        File.WriteAllText(sFName, text, oEncoding);
+        File.WriteAllText(fileName, text, encoding);
     }
 
-    internal static object Deserialize(string s, Type Type)
+    internal static object Deserialize(string text, Type type)
     {
-        if (string.IsNullOrEmpty(s)) throw new Exception("XML reťazec je prázdny.");
+        if (string.IsNullOrEmpty(text)) 
+            throw new ArgumentException("XML text is empty.");
 
-        var xmlSerializer = new XmlSerializer(Type);
-        var input = new StringReader(s);
+        var xmlSerializer = new XmlSerializer(type);
+        var input = new StringReader(text);
         var xmlReader = new XmlTextReader(input);
 
         return xmlSerializer.Deserialize(xmlReader);

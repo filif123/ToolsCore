@@ -15,30 +15,20 @@ public class FyzGroup
         Type = FyzGroupType.Parse(name);
     }
 
-    public FyzGroup(FyzGroup original)
-    {
-        Language = original.Language;
-        Key = string.Copy(original.Key);
-        Name = string.Copy(original.Name);
-        RelativePath = string.Copy(original.RelativePath);
-        Sounds = original.Sounds;
-        Type = original.Type;
-    }
-
     /// <summary>
     ///     Kluc skupiny (v programe ZvukBase sa neda menit).
     /// </summary>
-    public string Key { get; }
+    public string Key { get; set; }
 
     /// <summary>
     ///     Nazov skupiny (v programe ZvukBase sa da menit).
     /// </summary>
-    public string Name { get; }
+    public string Name { get; set; }
 
     /// <summary>
     ///     Relativna cesta k skupine zvukov.
     /// </summary>
-    public string RelativePath { get; }
+    public string RelativePath { get; set; }
 
     /// <summary>
     ///     Zvuky skupiny.
@@ -60,8 +50,6 @@ public class FyzGroup
     /// </summary>
     public FyzGroupType Type { get; }
 
-    public void Add(FyzSound sound) => Sounds.Add(sound);
-
     /// <summary>Returns a string that represents the current object.</summary>
     /// <returns>A string that represents the current object.</returns>
     public override string ToString() => Name;
@@ -70,7 +58,7 @@ public class FyzGroup
     {
         if (Language == null)
             throw new ArgumentNullException(nameof(Language));
-        if (string.IsNullOrEmpty(pathToBank))
+        if (pathToBank is null)
             throw new ArgumentNullException(nameof(pathToBank));
 
         var path = new StringBuilder(pathToBank);

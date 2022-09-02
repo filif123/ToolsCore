@@ -5,7 +5,7 @@ namespace ToolsCore.XML;
 /// <summary>
 ///     Trieda reprezentujúca nastavenia farieb a písma pre GUI.
 /// </summary>
-public class ColorSetting
+public record ColorSetting
 {
     /// <summary>
     ///     Vytvori novu instanciu triedy <see cref="ColorSetting"/>.
@@ -18,60 +18,62 @@ public class ColorSetting
     ///     Vytvori novu instanciu triedy <see cref="ColorSetting"/> so zadafinovanymi farbami pozadia, popredia
     ///     a ci sa bude dat menit pismo pre dane nastavenie v GUI.
     /// </summary>
-    public ColorSetting(Color backColor, Color foreColor, bool disableFontEdit = false)
+    public ColorSetting(Color backColor, Color foreColor, bool disableFontBoldEdit = false)
     {
         BackColor = backColor;
         ForeColor = foreColor;
-        DisableFontEdit = disableFontEdit;
+        DisableFontBoldEdit = disableFontBoldEdit;
+        DisableBackColorEdit = false;
     }
 
     /// <summary>
     ///     Vytvori novu instanciu triedy <see cref="ColorSetting"/> so zadafinovanymi farbami popredia
     ///     a ci sa bude dat menit pismo pre dane nastavenie v GUI.
     /// </summary>
-    public ColorSetting(Color foreColor, bool disableFontEdit = false)
+    public ColorSetting(Color foreColor, bool disableFontBoldEdit = false)
     {
+        BackColor = default;
         ForeColor = foreColor;
-        DisableFontEdit = disableFontEdit;
+        DisableFontBoldEdit = disableFontBoldEdit;
         DisableBackColorEdit = true;
     }
-
-    /// <summary>
-    ///     Farba pozadia.
-    /// </summary>
-    [XmlIgnore] 
-    public Color BackColor;
-
-    /// <summary>
-    ///     Použiť hrubý rez písma.
-    /// </summary>
-    [XmlAttribute("bold")] 
-    public bool Bold;
-
-    /// <summary>
-    ///     Nastavi, aby pouzivatel nemohol menit farbu pozadia - BackColor.
-    /// </summary>
-    [XmlIgnore] 
-    public bool DisableBackColorEdit;
-
-    /// <summary>
-    ///     Nastavi, aby pouzivatel nemohol menit pismo.
-    /// </summary>
-    [XmlIgnore] 
-    public bool DisableFontEdit;
-
-    /// <summary>
-    ///     Farba popredia.
-    /// </summary>
-    [XmlIgnore] 
-    public Color ForeColor;
 
     /// <summary>
     ///     Názov nastavenia, ktoré sa bude zobrazovať v GUI.
     ///     Lokalizovateľná
     /// </summary>
     [XmlIgnore, Localizable(true)]  
-    public string Name;
+    public string Name { get; set; }
+
+    /// <summary>
+    ///     Farba pozadia.
+    /// </summary>
+    [XmlIgnore] 
+    public Color BackColor { get; set; }
+
+    /// <summary>
+    ///     Farba popredia.
+    /// </summary>
+    [XmlIgnore] 
+    public Color ForeColor { get; set; }
+
+    /// <summary>
+    ///     Použiť hrubý rez písma.
+    /// </summary>
+    [XmlAttribute("bold")] 
+    public bool Bold { get; set; }
+
+    /// <summary>
+    ///     Nastavi, aby pouzivatel nemohol menit farbu pozadia - BackColor.
+    /// </summary>
+    [XmlIgnore] 
+    public bool DisableBackColorEdit { get; set; }
+
+    /// <summary>
+    ///     Nastavi, aby pouzivatel nemohol menit pismo.
+    /// </summary>
+    [XmlIgnore] 
+    public bool DisableFontBoldEdit { get; set; }
 
     /// <summary>
     ///     Farba pozadia vo formáte XML atribútu.
@@ -79,8 +81,8 @@ public class ColorSetting
     [XmlAttribute("b"), DefaultValue("#00000000")]
     public string ColorBackAttr
     {
-        get => XMLColor.FromColor(BackColor);
-        set => BackColor = XMLColor.ToColor(value);
+        get => XmlColor.FromColor(BackColor);
+        set => BackColor = XmlColor.ToColor(value);
     }
 
     /// <summary>
@@ -89,30 +91,10 @@ public class ColorSetting
     [XmlAttribute("f")]
     public string ColorForeAttr
     {
-        get => XMLColor.FromColor(ForeColor);
-        set => ForeColor = XMLColor.ToColor(value);
+        get => XmlColor.FromColor(ForeColor);
+        set => ForeColor = XmlColor.ToColor(value);
     }
 
     /// <inheritdoc />
     public override string ToString() => Name;
-
-    /// <summary>
-    ///     Skopíruje nastavenie.
-    /// </summary>
-    /// <param name="obj">Pôvodné nastavenie.</param>
-    /// <returns></returns>
-    public static ColorSetting Copy(ColorSetting obj)
-    {
-        return new ColorSetting
-        {
-            BackColor = obj.BackColor,
-            ForeColor = obj.ForeColor,
-            DisableBackColorEdit = obj.DisableBackColorEdit,
-            DisableFontEdit = obj.DisableFontEdit,
-            Bold = obj.Bold,
-            ColorBackAttr = obj.ColorBackAttr,
-            ColorForeAttr = obj.ColorForeAttr,
-            Name = obj.Name
-        };
-    }
 }

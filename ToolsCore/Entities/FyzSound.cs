@@ -1,4 +1,5 @@
 ﻿using ToolsCore.Tools;
+// ReSharper disable UnusedMember.Global
 
 namespace ToolsCore.Entities;
 
@@ -82,7 +83,7 @@ public class FyzSound
             throw new ArgumentNullException(nameof(Group));
         if (Group.Language == null)
             throw new ArgumentNullException(nameof(Group.Language));
-        if (string.IsNullOrEmpty(pathToBank))
+        if (pathToBank is null)
             throw new ArgumentNullException(nameof(pathToBank));
 
         var path = new StringBuilder(pathToBank);

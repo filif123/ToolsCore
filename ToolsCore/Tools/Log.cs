@@ -7,40 +7,40 @@ namespace ToolsCore.Tools;
 /// </summary>
 public static class Log
 {
+    private static LogFile _logApp;
+    private static LogFile _logError;
+
     /// <summary>
     ///     Nazov logovacieho suboru Info.log.
     /// </summary>
-    public const string LOG_APP_NAME = "Info.log";
+    private const string LOG_APP_NAME = "info.log";
 
     /// <summary>
     ///     Nazov logovacieho suboru Error.log.
     /// </summary>
-    public const string LOG_ERROR_NAME = "Error.log";
+    private const string LOG_ERROR_NAME = "error.log";
 
     /// <summary>
     ///     Cesta k priecinku s logmi.
     /// </summary>
-    public const string LogPath = "\\Log";
+    private const string LOG_PATH = "\\logs";
 
     /// <summary>
     ///     Cesta k priecinku s programom.
     /// </summary>
-    public static string AppDirPath = Application.StartupPath;
+    public static string AppDirPath { get; set; } = Application.StartupPath;
 
     /// <summary>
     ///     Vykonavaj logy informacii.
     /// </summary>
-    public static bool DoAppLogs = true;
+    public static bool DoAppLogs { get; set; }  = true;
 
     /// <summary>
     ///     Vykonavaj logy chyb a vynimiek.
     /// </summary>
-    public static bool DoErrorLogs = true;
+    public static bool DoErrorLogs { get; set; } = true;
 
-    private static LogFile logApp;
-    private static LogFile logError;
-
-    private static void LogString(LogFile logFile, string text) => logFile.LogString(text);
+    private static void LogString(LogFile logFile, string text) => logFile.SaveToFile(text);
 
     /// <summary>
     ///     Zapise chybu do logovacieho suboru.
@@ -50,20 +50,9 @@ public static class Log
     {
         if (DoErrorLogs)
         {
-            logError ??= new LogFile(LOG_ERROR_NAME, LogFile.DateType.DATETIME);
-            LogString(logError, s);
+            _logError ??= new LogFile(LOG_ERROR_NAME, LogFile.DateType.Datetime);
+            LogString(_logError, s);
         }
-    }
-
-    /// <summary>
-    ///     Zapise chybu do logovacieho suboru zo zadanymi parametrami.
-    /// </summary>
-    /// <param name="sFmt">Formát parametrov.</param>
-    /// <param name="aoPar">Zadane parametre.</param>
-    public static void Error(string sFmt, params object[] aoPar)
-    {
-        if (DoErrorLogs) 
-            Error(string.Format(sFmt, aoPar));
     }
 
     /// <summary>
@@ -85,119 +74,104 @@ public static class Log
     }
 
     /// <summary>
-    ///     Zapise vynimku do logovacieho suburu.
-    /// </summary>
-    /// <param name="e">Vynimka.</param>
-    /// <param name="sFmt">Format parametrov.</param>
-    /// <param name="aoPar">Zadane parametre.</param>
-    public static void Exception(Exception e, string sFmt, params object[] aoPar)
-    {
-        if (DoErrorLogs) 
-            Exception(e, string.Format(sFmt, aoPar));
-    }
-
-    /// <summary>
     ///     Zapise informaciu do logovacieho suboru.
     /// </summary>
     /// <param name="s">Text informacie.</param>
-    public static void AppInfo(string s)
+    public static void Info(string s)
     {
-        if (DoAppLogs)
-        {
-            logApp ??= new LogFile(LOG_APP_NAME, LogFile.DateType.DATETIME);
-            LogString(logApp, s);
-        }
+        if (!DoAppLogs) 
+            return;
+
+        _logApp ??= new LogFile(LOG_APP_NAME, LogFile.DateType.Datetime);
+        LogString(_logApp, s);
     }
 
     internal class LogFile
     {
-        public enum DateType
-        {
-            DATE,
-            DATETIME,
-            DATETIMEMS,
-            TIME,
-            TIMEMS,
-            DATE_LAST
-        }
-
-        private readonly string DateSeparator;
-
-        private readonly DateType DateTypeStamp;
-        private readonly object Locker;
-        private readonly int MaxSize;
-        private DateTime LastDate;
+        private readonly string _dateSeparator;
+        private readonly DateType _dateTypeStamp;
+        private readonly object _locker;
+        private readonly int _maxSize;
+        private DateTime _lastDate;
 
         public LogFile(string fileName, DateType dateType, string dateSeparator = "\t", int maxsize = 1000000)
         {
             FileName = fileName;
-            DateTypeStamp = dateType;
-            DateSeparator = dateSeparator;
-            Locker = RuntimeHelpers.GetObjectValue(new object());
+            _dateTypeStamp = dateType;
+            _dateSeparator = dateSeparator;
+            _locker = RuntimeHelpers.GetObjectValue(new object());
 
-            FullFileDir = Utils.CombinePath(AppDirPath, LogPath);
-            FullFilePath = Utils.CombinePath(AppDirPath, LogPath, fileName);
+            FullFileDir = Utils.CombinePath(AppDirPath, LOG_PATH);
+            FullFilePath = Utils.CombinePath(AppDirPath, LOG_PATH, fileName);
 
             if (!Directory.Exists(FullFileDir)) 
                 Directory.CreateDirectory(FullFileDir);
 
-            MaxSize = maxsize;
+            _maxSize = maxsize;
         }
 
         private string FileName { get; }
         private string FullFilePath { get; }
         private string FullFileDir { get; }
 
-        public void LogString(string text)
+        public void SaveToFile(string text)
         {
             if (text == null) 
                 return;
 
-            lock (Locker)
+            lock (_locker)
             {
                 var now = DateTime.Now;
 
-                if (MaxSize > 0)
-                    if (File.Exists(FullFilePath))
-                        if (MaxSize < new FileInfo(FullFilePath).Length)
-                        {
-                            var newFile = Path.GetFileNameWithoutExtension(FileName) + "_" + now.ToString("dd-MM") + ".log.bak";
-                            File.Move(FullFilePath, Utils.CombinePath(FullFileDir, newFile));
-                        }
-
-                switch (DateTypeStamp)
+                if (_maxSize > 0 && File.Exists(FullFilePath) && _maxSize < new FileInfo(FullFilePath).Length)
                 {
-                    case DateType.DATE:
-                        text = now.ToString("dd.MM.yyyy") + DateSeparator + text;
+                    var newFile = Path.GetFileNameWithoutExtension(FileName) + "_" + now.ToString("dd-MM") + ".log.bak";
+                    File.Move(FullFilePath, Utils.CombinePath(FullFileDir, newFile));
+                }
+
+                switch (_dateTypeStamp)
+                {
+                    case DateType.Date:
+                        text = now.ToString("dd.MM.yyyy") + _dateSeparator + text;
                         break;
-                    case DateType.DATETIME:
-                        text = now.ToString("dd.MM.yyyy HH:mm:ss") + DateSeparator + text;
+                    case DateType.Datetime:
+                        text = now.ToString("dd.MM.yyyy HH:mm:ss") + _dateSeparator + text;
                         break;
-                    case DateType.DATETIMEMS:
-                        text = now.ToString("dd.MM.yyyy HH:mm:ss.fff") + DateSeparator + text;
+                    case DateType.DatetimeMs:
+                        text = now.ToString("dd.MM.yyyy HH:mm:ss.fff") + _dateSeparator + text;
                         break;
-                    case DateType.TIME:
-                        text = now.ToString("HH:mm:ss") + DateSeparator + text;
+                    case DateType.Time:
+                        text = now.ToString("HH:mm:ss") + _dateSeparator + text;
                         break;
-                    case DateType.TIMEMS:
-                        text = now.ToString("HH:mm:ss.fff") + DateSeparator + text;
+                    case DateType.TimeMs:
+                        text = now.ToString("HH:mm:ss.fff") + _dateSeparator + text;
                         break;
-                    case DateType.DATE_LAST:
+                    case DateType.DateLast:
                     {
-                        if (LastDate.Equals(now.Date))
+                        if (_lastDate.Equals(now.Date))
                             text = "--- " + now.ToString("dd.MM.yyyy") + " ---\r\n" + text;
                         break;
                     }
                     default:
-                        throw new ArgumentOutOfRangeException("Neznámy parameter " + DateTypeStamp);
+                        throw new ArgumentOutOfRangeException("Neznámy parameter " + _dateTypeStamp);
                 }
 
                 text += "\r\n";
 
-                LastDate = now.Date;
+                _lastDate = now.Date;
 
                 File.AppendAllText(FullFilePath, text);
             }
+        }
+
+        public enum DateType
+        {
+            Date,
+            Datetime,
+            DatetimeMs,
+            Time,
+            TimeMs,
+            DateLast
         }
     }
 }

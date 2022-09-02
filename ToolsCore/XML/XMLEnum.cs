@@ -4,7 +4,7 @@
 ///     Predstavuje triedu, ktorá spracuváva Enumerácie serializovateľné do XML.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public static class XMLEnum<T> where T : Enum
+public static class XmlEnum<T> where T : Enum
 {
     /// <summary>
     ///     Konvertuje <see cref="string"/> <paramref name="s"/> na prvok enumeracie typu <see cref="T"/>.

@@ -3,10 +3,10 @@
 /// <summary>
 ///     Trieda pre ulozenie CSV riadku.
 /// </summary>
-public class CSVRow : List<string>
+public class CsvRow : List<string>
 {
     /// <inheritdoc />
-    public CSVRow()
+    public CsvRow()
     {
     }
 
@@ -14,7 +14,7 @@ public class CSVRow : List<string>
     ///     Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1" /> class that is empty and
     ///     has the default initial capacity.
     /// </summary>
-    public CSVRow(int initCount) : base(initCount)
+    public CsvRow(int initCount) : base(initCount)
     {
     }
 
@@ -27,10 +27,10 @@ public class CSVRow : List<string>
 /// <summary>
 ///     Trieda pre ulozenie dat do textoveho suboru.
 /// </summary>
-public class CSVFileWriter : StreamWriter
+public class CsvFileWriter : StreamWriter
 {
     /// <inheritdoc />
-    public CSVFileWriter(string filename) : base(filename, false, Encodings.Win1250)
+    public CsvFileWriter(string filename) : base(filename, false, Encodings.Win1250)
     {
     }
 
@@ -38,7 +38,7 @@ public class CSVFileWriter : StreamWriter
     ///     Zapise jeden riadok do suboru.
     /// </summary>
     /// <param name="row">Riadok k zapisaniu.</param>
-    public void WriteRow(CSVRow row)
+    public void WriteRow(CsvRow row)
     {
         var builder = new StringBuilder();
         var firstColumn = true;
@@ -70,10 +70,10 @@ public class CSVFileWriter : StreamWriter
 /// <summary>
 ///     Trieda pre citanie dat z textoveho suboru.
 /// </summary>
-public class CSVFileReader : StreamReader
+public class CsvFileReader : StreamReader
 {
     /// <inheritdoc />
-    public CSVFileReader(string filename) : base(filename, Encodings.Win1250)
+    public CsvFileReader(string filename) : base(filename, Encodings.Win1250)
     {
     }
 
@@ -82,7 +82,7 @@ public class CSVFileReader : StreamReader
     /// </summary>
     /// <param name="row"></param>
     /// <returns></returns>
-    public ReadStartChar ReadRow(CSVRow row)
+    public ReadStartChar ReadRow(CsvRow row)
     {
         row.LineText = ReadLine();
 
