@@ -9,7 +9,7 @@ public class ProgressStatus
         TotalProgress = totalProgress;
     }
 
-    public string ProgressPartName { get; set; }
+    public string ProgressPartName { get; }
 
-    public int TotalProgress { get; set; }
+    public int TotalProgress { get; }
 }

@@ -26,7 +26,6 @@ public static class RawBankParser
             var relativePath = reader.ReadBytes(reader.ReadNumWithVarLength()).ANSItoUTF();
             var key = reader.ReadBytes(reader.ReadNumWithVarLength()).ANSItoUTF();
             var name = reader.ReadBytes(reader.ReadNumWithVarLength()).ANSItoUTF();
-
             reader.ReadBytes(4); // 4 byte padding
             languages.Add(new FyzLanguage(key, name, fileFyzZvukName, relativePath));
         }
@@ -47,13 +46,17 @@ public static class RawBankParser
         foreach (var language in languages)
         {
             writer.WriteNumWithVarLength(language.FileDefName.Length);
-            writer.Write(language.FileDefName.UTFtoANSI());
+            writer.Write(language.FileDefName.UTFtoANSI().ToCharArray());
+
             writer.WriteNumWithVarLength(language.RelativePath.Length);
-            writer.Write(language.RelativePath.UTFtoANSI());
+            writer.Write(language.RelativePath.UTFtoANSI().ToCharArray());
+
             writer.WriteNumWithVarLength(language.Key.Length);
-            writer.Write(language.Key.UTFtoANSI());
+            writer.Write(language.Key.UTFtoANSI().ToCharArray());
+
             writer.WriteNumWithVarLength(language.Name.Length);
-            writer.Write(language.Name.UTFtoANSI());
+            writer.Write(language.Name.UTFtoANSI().ToCharArray());
+
             writer.Write(0xffffffff); // 4 byte padding
         }
     }
@@ -140,23 +143,31 @@ public static class RawBankParser
         foreach (var grp in language.Groups)
         {
             writer.WriteNumWithVarLength(grp.Name.Length);
-            writer.Write(grp.Name.UTFtoANSI());
+            writer.Write(grp.Name.UTFtoANSI().ToCharArray());
+
             writer.WriteNumWithVarLength(grp.Key.Length);
-            writer.Write(grp.Key.UTFtoANSI());
+            writer.Write(grp.Key.UTFtoANSI().ToCharArray());
+
             writer.WriteNumWithVarLength(grp.RelativePath.Length);
-            writer.Write(grp.RelativePath.UTFtoANSI());
-            writer.WriteNumWithVarLength(grp.Sounds.Count);
+            writer.Write(grp.RelativePath.UTFtoANSI().ToCharArray());
+
+            writer.Write(grp.Sounds.Count);
 
             foreach (var sound in grp.Sounds)
             {
                 writer.WriteNumWithVarLength(sound.Text.Length);
-                writer.Write(sound.Text.UTFtoANSI());
+                writer.Write(sound.Text.UTFtoANSI().ToCharArray());
+
                 writer.WriteNumWithVarLength(sound.Name.Length);
-                writer.Write(sound.Name.UTFtoANSI());
+                writer.Write(sound.Name.UTFtoANSI().ToCharArray());
+
                 writer.WriteNumWithVarLength(sound.Key.Length);
-                writer.Write(sound.Key.UTFtoANSI());
-                writer.WriteNumWithVarLength(sound.AdditionalRelativePath.Length);
-                writer.Write(sound.AdditionalRelativePath.UTFtoANSI());
+                writer.Write(sound.Key.UTFtoANSI().ToCharArray());
+
+                var path = string.IsNullOrEmpty(sound.AdditionalRelativePath) ? sound.FileName : sound.AdditionalRelativePath + sound.FileName;
+                writer.WriteNumWithVarLength(path.Length);
+                writer.Write(path.UTFtoANSI().ToCharArray());
+
                 writer.Write(sound.Duration);
             }
         }
@@ -179,5 +190,5 @@ public static class RawBankParser
             writer.Write((byte) value);
     }
 
-    public static bool AddPathIsEmpty(string path) => string.IsNullOrEmpty(path) || path is "." or ".\\";
+    public static bool AdditionalPathIsEmpty(string path) => string.IsNullOrEmpty(path) || path is "." or ".\\";
 }

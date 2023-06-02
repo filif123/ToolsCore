@@ -56,7 +56,7 @@ public static class Log
     }
 
     /// <summary>
-    ///     Zapise vynimku do logovacieho suburu.
+    ///     Zapise vynimku do logovacieho suboru.
     /// </summary>
     /// <param name="e">Vynimka.</param>
     /// <param name="s">Dobrovodna informacia o vynimke (dobrovolna).</param>
@@ -64,10 +64,7 @@ public static class Log
     {
         if (e != null)
         {
-            if (s == null)
-                s = e + "\r\n";
-            else
-                s = s + "\r\n" + e + "\r\n";
+            s = s == null ? $"{e}\r\n" : $"{s}\r\n{e}\r\n";
         }
 
         Error(s);

@@ -31,6 +31,11 @@ public class FyzGroup
     public string RelativePath { get; set; }
 
     /// <summary>
+    ///     Pocet zvukov v danej skupine.
+    /// </summary>
+    public int CountSounds => Sounds.Count;
+
+    /// <summary>
     ///     Zvuky skupiny.
     /// </summary>
     public IList<FyzSound> Sounds { get; }

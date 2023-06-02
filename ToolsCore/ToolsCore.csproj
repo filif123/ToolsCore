@@ -77,6 +77,12 @@
     <Compile Include="Forms\FAppSettingsBase.Designer.cs">
       <DependentUpon>FAppSettingsBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FError.Designer.cs">
+      <DependentUpon>FError.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,7 +114,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Tools\AppRegistry.cs" />
-    <Compile Include="Tools\AutoUpdater.cs" />
     <Compile Include="Tools\CsvParser.cs" />
     <Compile Include="Tools\CsvStringParser.cs" />
     <Compile Include="Tools\Encodings.cs" />
@@ -151,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FAppSettingsBase.resx">
       <DependentUpon>FAppSettingsBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FError.resx">
+      <DependentUpon>FError.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FInputBox.resx">
       <DependentUpon>FInputBox.cs</DependentUpon>

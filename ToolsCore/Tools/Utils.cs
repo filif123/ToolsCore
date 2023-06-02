@@ -90,8 +90,7 @@ public static class Utils
 
         for (var i = 1; i < paths.Length; i++)
         {
-            paths[i] = paths[i].TrimStart(Path.DirectorySeparatorChar);
-            paths[i] = paths[i].TrimStart(Path.AltDirectorySeparatorChar);
+            paths[i] = paths[i].TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 
         return Path.Combine(paths);
@@ -171,6 +170,25 @@ public static class Utils
         var zv = totalSec % 60;
 
         return $"{mins:D2}:{zv:D2}";
+    }
+
+    /// <summary>
+    ///     Konvertuje dlzku zvuku v textovej podobe "m:ss"/"mm:ss"/"h:mm:ss" do trvania ako cislo v milisekundach (ms).
+    /// </summary>
+    /// <param name="text">textovu podobu dlzky zvuku vo formate "mm:ss".</param>
+    /// <returns>Dlzka zvuku v ms.</returns>
+    public static int StringToLengthInt(string text)
+    {
+        if (text is null)
+            throw new ArgumentNullException(nameof(text));
+        if (text == "--:--")
+            return -1;
+
+        string[] timeformats = { @"m\:ss", @"mm\:ss", @"h\:mm\:ss" };
+        if(TimeSpan.TryParseExact(text, timeformats, CultureInfo.InvariantCulture, out var duration))
+            return (int)duration.TotalMilliseconds;
+        else
+            throw new ArgumentException("Neplatný formát času");
     }
 
     /// <summary>
@@ -339,7 +357,7 @@ public static class Utils
         char[] charSizes = { 'i', 'a', 'Z', '%', '#', 'a', 'B', 'l', 'm', ',', '.' };
         var charWidth = g.MeasureString("I", ft).Width;
 
-        return charSizes.All(c => !(Math.Abs(g.MeasureString(c.ToString(), ft).Width - charWidth) > 0.0001f));
+        return charSizes.All(c => Math.Abs(g.MeasureString(c.ToString(), ft).Width - charWidth) <= 0.0001f);
     }
 
     /// <summary>
@@ -513,6 +531,18 @@ public static class Utils
     public static bool IsTime(string str) => TryParseTime(str, out _);
 
     /// <summary>
+    /// Zisti, ci zadany datum sa nachadza medzi dvoma datumami start a end.
+    /// </summary>
+    /// <param name="dt">hladany datum</param>
+    /// <param name="start">zaciatok intervalu</param>
+    /// <param name="end">koniec intervalu</param>
+    /// <returns></returns>
+    public static bool IsBewteenTwoDates(this DateTime dt, DateTime start, DateTime end)
+    {
+        return dt >= start && dt <= end;
+    }
+
+    /// <summary>
     ///     Porovna retazce, pricom ignoruje velkost pismen (VELKE/male).
     /// </summary>
     /// <param name="str1">Prvy retazec na porovnavanie.</param>
@@ -556,7 +586,7 @@ public static class Utils
     ///     If <paramref name="oldValue" /> is not found in the current instance, the method returns the current instance
     ///     unchanged.
     /// </returns>
-    public static string ExReplace(this string str, string oldValue, string newValue, StringComparison comparisonType)
+    public static string Replace(this string str, string oldValue, string newValue, StringComparison comparisonType)
     {
         // Check inputs.
         if (str == null)
@@ -650,7 +680,7 @@ public static class Utils
     /// </summary>
     /// <param name="fullPath">povodna cesta k suboru</param>
     /// <returns>ci sa podarilo obnovit subor/priecinok</returns>
-    public static bool RecoverFileOrDirFromBin(string fullPath)
+    public static bool TryRecoverFileOrDirFromBin(string fullPath)
     {
         var shell = new Shell();
         var recycler = shell.NameSpace(10);
@@ -673,13 +703,12 @@ public static class Utils
 
     private static bool DoVerb(FolderItem item, string verb)
     {
-        foreach (var fiVerb in item.Verbs().Cast<FolderItemVerb>().Where(fiVerb => fiVerb.Name.ToUpper().Contains(verb.ToUpper())))
-        {
-            fiVerb.DoIt();
-            return true;
-        }
+        var fiVerb = item.Verbs().Cast<FolderItemVerb>().FirstOrDefault(fiVerb => fiVerb.Name.ToUpper().Contains(verb.ToUpper()));
+        if (fiVerb is null) 
+            return false;
 
-        return false;
+        fiVerb.DoIt();
+        return true;
     }
 
     /// <summary>
@@ -694,38 +723,26 @@ public static class Utils
     /// </summary>
     /// <param name="fullPath"></param>
     /// <param name="fileName"></param>
+    /// <param name="checkIfExists"></param>
     /// <returns></returns>
-    public static bool IsFileNameCorrect(string fullPath, string fileName) 
-        => !string.IsNullOrWhiteSpace(fileName) && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && !File.Exists(CombinePath(fullPath, fileName));
-
-    ///<summary>Finds the index of the first item matching an expression in an enumerable.</summary>
-    ///<param name="items">The enumerable to search.</param>
-    ///<param name="predicate">The expression to test the items against.</param>
-    ///<returns>The index of the first matching item, or -1 if no items match.</returns>
-    public static int FindIndex<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+    public static bool IsFileNameCorrect(string fullPath, string fileName, bool checkIfExists = true)
     {
-        if (items == null) 
-            throw new ArgumentNullException(nameof(items));
-        if (predicate == null) 
-            throw new ArgumentNullException(nameof(predicate));
-
-        int retVal = 0;
-        foreach (var item in items)
-        {
-            if (predicate(item)) 
-                return retVal;
-            retVal++;
-        }
-        return -1;
+        return !string.IsNullOrWhiteSpace(fileName) &&
+               fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 &&
+               (!checkIfExists || !File.Exists(CombinePath(fullPath, fileName)));
     }
 
-    ///<summary>Finds the index of the first occurrence of an item in an enumerable.</summary>
-    ///<param name="items">The enumerable to search.</param>
-    ///<param name="item">The item to find.</param>
-    ///<returns>The index of the first matching item, or -1 if the item was not found.</returns>
-    public static int IndexOf<T>(this IEnumerable<T> items, T item)
+    public static bool StartsWithAny(this string text, params char[] values)
     {
-        return items.FindIndex(i => EqualityComparer<T>.Default.Equals(item, i));
+        if (string.IsNullOrEmpty(text))
+            return false;
+        foreach (var c in values)
+        {
+            if (text[0] == c)
+                return true;
+        }
+
+        return false;
     }
 }
 

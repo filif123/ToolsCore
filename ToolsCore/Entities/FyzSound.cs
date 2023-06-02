@@ -89,7 +89,7 @@ public class FyzSound
         var path = new StringBuilder(pathToBank);
 
         path.Append(Group.Language.RelativePath);
-        path.Append(RawBankParser.AddPathIsEmpty(AdditionalRelativePath) ? Group.RelativePath : AdditionalRelativePath);
+        path.Append(RawBankParser.AdditionalPathIsEmpty(AdditionalRelativePath) ? Group.RelativePath : AdditionalRelativePath);
         path.Append(FileName);
 
         return path.ToString();

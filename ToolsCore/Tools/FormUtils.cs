@@ -92,26 +92,32 @@ public static class FormUtils
                 }
                 case PropertyGrid grid:
                 {
-                    if (style.ControlsDefaultStyle)
-                        break;
-                    grid.BackColor = scheme.Panel.BackColor;
-                    grid.ForeColor = scheme.Panel.ForeColor;
-                    grid.ViewBackColor = scheme.Box.BackColor;
-                    grid.ViewForeColor = scheme.Box.ForeColor;
-                    grid.HelpBorderColor = scheme.Border.ForeColor;
-                    grid.HelpBackColor = scheme.Panel.BackColor;
-                    grid.HelpForeColor = scheme.Panel.ForeColor;
-                    grid.LineColor = scheme.Button.BackColor;
-                    grid.CategoryForeColor = scheme.Box.ForeColor;
-                    grid.CategorySplitterColor = scheme.Box.ForeColor;
-                    grid.ViewBorderColor = scheme.Border.ForeColor;
-                    grid.CommandsBorderColor = scheme.Panel.BackColor;
-                    grid.CommandsForeColor = scheme.Panel.ForeColor;
-                    grid.CommandsBackColor = scheme.Panel.BackColor;
-                    grid.SelectedItemWithFocusBackColor = scheme.Highlight.BackColor;
-                    grid.SelectedItemWithFocusForeColor = scheme.Highlight.ForeColor;
+                    if (!style.ControlsDefaultStyle)
+                    {
+                        grid.BackColor = scheme.Panel.BackColor;
+                        grid.ForeColor = scheme.Panel.ForeColor;
+                        grid.ViewBackColor = scheme.Box.BackColor;
+                        grid.ViewForeColor = scheme.Box.ForeColor;
+                        grid.HelpBorderColor = scheme.Border.ForeColor;
+                        grid.HelpBackColor = scheme.Panel.BackColor;
+                        grid.HelpForeColor = scheme.Panel.ForeColor;
+                        grid.LineColor = scheme.Button.BackColor;
+                        grid.CategoryForeColor = scheme.Box.ForeColor;
+                        grid.CategorySplitterColor = scheme.Box.ForeColor;
+                        grid.ViewBorderColor = scheme.Border.ForeColor;
+                        grid.CommandsBorderColor = scheme.Panel.BackColor;
+                        grid.CommandsForeColor = scheme.Panel.ForeColor;
+                        grid.CommandsBackColor = scheme.Panel.BackColor;
+                        grid.SelectedItemWithFocusBackColor = scheme.Highlight.BackColor;
+                        grid.SelectedItemWithFocusForeColor = scheme.Highlight.ForeColor;
+                    }
                     if (style.DarkScrollBar) 
                         grid.Controls[2].Controls[0].SetTheme(WindowsTheme.DarkExplorer);
+                    if (grid is ExPropertyGrid ex && !style.ControlsDefaultStyle)
+                    {
+                        ex.InnerToolStrip.RenderMode = ToolStripRenderMode.Professional;
+                        ex.InnerToolStrip.Renderer = new MyMenuRenderer(new MyColorTable(), false);
+                    }
                     break;
                 }
                 case ExGroupBox dgb:
@@ -472,7 +478,9 @@ public static class FormUtils
                     dgv.DefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
                     dgv.DefaultCellStyle.SelectionForeColor = scheme.Highlight.ForeColor;
                     dgv.RowHeadersDefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
+                    dgv.RowHeadersDefaultCellStyle.SelectionForeColor = scheme.Highlight.ForeColor;
                     dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = scheme.Highlight.BackColor;
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = scheme.Highlight.ForeColor;
 
                     if (!style.ControlsDefaultStyle)
                     {
@@ -671,7 +679,7 @@ public static class FormUtils
         public override Color ToolStripBorder => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
         public override Color SeparatorDark => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
         public override Color SeparatorLight => Color.Transparent;
-        public override Color MenuItemBorder => Color.Transparent;
+        public override Color MenuItemBorder => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
         public override Color GripDark => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
         public override Color GripLight => Color.Transparent;
         public override Color MenuStripGradientBegin => GlobSettings.UsingStyle.ControlsColorScheme.Border.ForeColor;
@@ -695,9 +703,9 @@ public static class FormUtils
         public override Color ButtonSelectedHighlight => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
         public override Color ButtonSelectedHighlightBorder => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
 
-        public override Color ButtonSelectedGradientBegin => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
-        public override Color ButtonSelectedGradientEnd => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
-        public override Color ButtonSelectedGradientMiddle => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
+        public override Color ButtonSelectedGradientBegin => ControlPaint.Light(GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor);
+        public override Color ButtonSelectedGradientEnd => ControlPaint.Light(GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor);
+        public override Color ButtonSelectedGradientMiddle => ControlPaint.Light(GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor);
         public override Color ButtonSelectedBorder => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
 
         public override Color ButtonPressedGradientBegin => GlobSettings.UsingStyle.ControlsColorScheme.Highlight.BackColor;
@@ -719,7 +727,7 @@ public static class FormUtils
 
     public class MyMenuRenderer : ToolStripProfessionalRenderer
     {
-        private bool WithBorder { get; set; }
+        private bool WithBorder { get; }
         public MyMenuRenderer(ProfessionalColorTable table, bool withBorder) : base(table)
         {
             WithBorder = withBorder;

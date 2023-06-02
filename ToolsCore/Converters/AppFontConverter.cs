@@ -18,8 +18,7 @@ public class AppFontConverter : FontConverter
 
         if (destinationType == typeof(InstanceDescriptor) && value is AppFont af)
         {
-            var type = typeof(AppFont);
-            var ctor = type.GetConstructor(new[] { typeof(Font) });
+            var ctor = typeof(AppFont).GetConstructor(new[] { typeof(Font) });
             return new InstanceDescriptor(ctor, new object[] { af.Font ?? SystemFonts.DefaultFont });
         }
 

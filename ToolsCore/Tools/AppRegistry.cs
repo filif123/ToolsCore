@@ -1,12 +1,19 @@
-﻿using Microsoft.Win32;
+﻿using System.Globalization;
+using System.Reflection;
+using Microsoft.Win32;
 
 namespace ToolsCore.Tools;
 
 /// <summary>
-///     Trieda spracujuca zoznam poslednych pouzivanych priecinkov s datami.
+///     Trieda spracujuca zoznam poslednych pouzivanych projektov.
 /// </summary>
 public static class AppRegistry
 {
+    private static string _productName;
+    private static ProjectInfo[] _projects;
+
+    private static string ProductName => _productName ??= Assembly.GetEntryAssembly()?.GetName().Name;
+
     /// <summary>
     ///     Nazov kluca v Registy so zoznamom poslednych pouzivanych priecinkov s datami.
     /// </summary>
@@ -18,21 +25,18 @@ public static class AppRegistry
     private const string REG_RECENT_FILES = "RecentFiles";
 
     /// <summary>
-    ///     Nazov kluca v Registy so zoznamom posledne otvoreneho projektu.
+    ///     Nazov kluca v Registy s posledne otvorenehym projektom.
     /// </summary>
     private const string REG_LAST_PROJECT = "LastProject";
 
     /// <summary>
-    ///     Vrati zoznam vsetkych ciest poslednych pouzivanych priecinkov s datami
-    ///     podla nazvu programu <paramref name="productName"/>.<br></br>
-    ///     Ak kluc v Registri s tymto zoznamom neexisstuje, metoda vrati prazdny list.
+    ///     Nazov kluca v Registy so zoznamom posledne pouzivanych projektu.
     /// </summary>
-    /// <param name="productName">Nazov programu.</param>
-    /// /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
-    /// <returns>zoznam ciest.</returns>
-    public static List<string> GetOpenedProjects(string productName, bool forFiles = false)
+    private const string REG_OPENED_PROJECTS = "OpenedProjects";
+
+    private static List<string> GetOpenedProjectsOld(bool forFiles = false)
     {
-        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{productName}");
+        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{ProductName}");
         var dirs = new HashSet<string>();
 
         var value = key?.GetValue(forFiles ? REG_RECENT_FILES : REG_RECENT_DIRS);
@@ -50,51 +54,134 @@ public static class AppRegistry
         return dirs.ToList();
     }
 
-    public static string GetLastProject(string productName)
+    /// <summary>
+    ///     Vrati zoznam vsetkych ciest poslednych pouzivanych priecinkov s datami.<br></br>
+    ///     Ak kluc v Registri s tymto zoznamom neexisstuje, metoda vrati prazdny list.
+    /// </summary>
+    /// <returns>zoznam ciest.</returns>
+    public static ProjectInfo[] GetOpenedProjects()
     {
-        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{productName}");
+        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{ProductName}");
+        if (key is null)
+            return Array.Empty<ProjectInfo>();
+
+        var projects = new HashSet<ProjectInfo>();
+        var regValue = key.GetValue(REG_OPENED_PROJECTS);
+        if (regValue is null)
+        {
+            //konvertovanie stareho listu priecinkov na novy zoznam projektov
+            //nebude fungovat ak sa pouzival kluc REG_RECENT_FILES
+            var dirs = GetOpenedProjectsOld();
+            foreach (var dir in dirs)
+            {
+                projects.Add(new ProjectInfo(dir, DateTime.MinValue));
+            }
+        }
+        else
+        {
+            var itemsString = regValue.ToString();
+            var items = itemsString.Split('|');
+            foreach (var item in items)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+
+                var pathAndDate = item.Split('*');
+                switch (pathAndDate.Length)
+                {
+                    case 0:
+                        continue;
+                    case 1:
+                        projects.Add(new ProjectInfo(pathAndDate[0], DateTime.MinValue));
+                        break;
+                    case 2:
+                        projects.Add(new ProjectInfo(pathAndDate[0], DateTime.Parse(pathAndDate[1], CultureInfo.InvariantCulture)));
+                        break;
+                    default:
+                        continue;
+                }
+            }
+        }
+
+        return _projects = projects.ToArray();
+    }
+
+    /// <summary>
+    ///     Prida novu cestu na koniec zoznamu poslednych pouzivanych projektov.<br/>
+    ///     Ak kluc v Registry neexistuje, vytvori sa a prida zadanu cestu path.
+    /// </summary>
+    /// <param name="path">Cesta k projektu.</param>
+    public static void SetUsageOfProject(string path)
+    {
+        var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{ProductName}");
+        if (key == null)
+            return;
+
+        var sb = new StringBuilder();
+        var projects = _projects ?? GetOpenedProjects();
+        var exists = false;
+        foreach (var project in projects)
+        {
+            if (project.Path == path)
+            {
+                project.LastAccess = DateTime.Now;
+                exists = true;
+            }
+
+            sb.Append(project.Path);
+            sb.Append('*');
+            sb.Append(project.LastAccess.ToString(CultureInfo.InvariantCulture));
+            sb.Append('|');
+        }
+
+        if (!exists)
+        {
+            sb.Append(path);
+            sb.Append('*');
+            sb.Append(DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            sb.Append('|');
+        }
+
+        key.SetValue(REG_OPENED_PROJECTS, sb.ToString());
+    }
+
+    public static string GetLastProject()
+    {
+        var key = Registry.CurrentUser.OpenSubKey($"SOFTWARE\\{ProductName}");
         var value = key?.GetValue(REG_LAST_PROJECT);
         return value is null ? "" : value.ToString();
     }
 
-    /// <summary>
-    ///     Prida novu cestu na koniec zoznamu poslednych pouzivanych priecinkov
-    ///     s datami podla nazvu programu <paramref name="productName"/>.<br></br>
-    ///     Ak kluc v Registry neexistuje, vytvori sa a prida zadanu cestu path.
-    /// </summary>
-    /// <param name="productName">Nazov programu.</param>
-    /// <param name="path">Cesta k priecinku.</param>
-    /// <param name="forFiles">Ci sa jedna o pracu so subormi.</param>
-    public static void AddNewOpenedProject(string productName, string path, bool forFiles = false)
+    public static void SetLastProject(string path)
     {
-        var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{productName}");
+        var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{ProductName}");
+        key?.SetValue(REG_LAST_PROJECT, path);
+    }
+}
 
-        if (key == null) 
-            return;
+public class ProjectInfo
+{
+    public string Path { get; }
+    public DateTime LastAccess { get; set; }
 
-        var sb = new StringBuilder();
-        var items = GetOpenedProjects(productName);
-        foreach (var item in items)
-        {
-            if (item == path) return;
-
-            sb.Append(";");
-            sb.Append(item);
-        }
-
-        sb.Append(";");
-        sb.Append(path);
-
-        key.SetValue(forFiles ? REG_RECENT_FILES : REG_RECENT_DIRS, sb.ToString());
+    public ProjectInfo(string path, DateTime lastAccess)
+    {
+        Path = path;
+        LastAccess = lastAccess;
     }
 
-    public static void SetLastProject(string productName, string path)
+    public override bool Equals(object obj)
     {
-        var key = Registry.CurrentUser.CreateSubKey($"SOFTWARE\\{productName}");
+        return obj is ProjectInfo pi && Equals(pi);
+    }
 
-        if (key == null) 
-            return;
+    public bool Equals(ProjectInfo other)
+    {
+        return Path == other.Path;
+    }
 
-        key.SetValue(REG_LAST_PROJECT, path);
+    public override int GetHashCode()
+    {
+        return (Path != null ? Path.GetHashCode() : 0);
     }
 }

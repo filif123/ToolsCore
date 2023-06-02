@@ -57,12 +57,6 @@ public record ConfigBase()
     public ControlFonts Fonts { get; set; } = new();
 
     /// <summary>
-    ///     Ci sa ma zobrazovat stavovy riadok na pracovnej ploche programu.
-    /// </summary>
-    [XmlElement("ShowStateRow"), DefaultValue(true)]
-    public bool ShowStateRow { get; set; } = true;
-
-    /// <summary>
     ///     Vrati alebo nastavi, ci sa maju zobrazovat hlavicky riadkov v tabulke na pracovnej ploche programu.
     /// </summary>
     [XmlElement("ShowRowsHeader"), DefaultValue(true)]
@@ -95,7 +89,6 @@ public record ConfigBase()
         MoreInstance = original.MoreInstance;
         FitLastColumn = original.FitLastColumn;
         Fonts = original.Fonts with { };
-        ShowStateRow = original.ShowStateRow;
         ShowRowsHeader = original.ShowRowsHeader;
         LoggingInfo = original.LoggingInfo;
         LoggingError = original.LoggingError;

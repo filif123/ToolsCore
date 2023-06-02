@@ -38,11 +38,13 @@ public class TxtPropsAreasFields
     /// <returns>hodnotu vlastnosti, alebo <paramref name="defValue"/> ak zadany nazov vlastnosti nebol najdeny v slovniku vlastnosti.</returns>
     public string Get(string area, string field, string defValue) => Get(area, field, false) ?? defValue;
 
-    public string Get(string area, string field, bool nullSensitive = true)
+    public string Get(string area, string field, bool throwIfNull = true)
     {
-        if (nullSensitive)
-            return _areas.ContainsKey(area) && _areas[area].ContainsKey(field) ? _areas[area][field]
-                : throw new ArgumentNullException(nameof(area), string.Format(EX_MESSAGE, _fileName, area, field));
+        if (throwIfNull)
+            if (_areas.ContainsKey(area) && _areas[area].ContainsKey(field))
+                return _areas[area][field];
+            else
+                throw new ArgumentNullException(nameof(area), string.Format(EX_MESSAGE, _fileName, area, field));
 
         return _areas.ContainsKey(area) && _areas[area].ContainsKey(field) ? _areas[area][field] : null;
     }
@@ -56,7 +58,7 @@ public class TxtPropsAreasFields
     public Dictionary<string, string> Get(string area) => _areas.ContainsKey(area) ? _areas[area] : null;
 
     /// <summary>
-    ///     Vrati cely slovnik s polami a ich vlastnostami.
+    ///     Vrati cely slovnik s poliami a ich vlastnostami.
     /// </summary>
     /// <returns></returns>
     public Dictionary<string, Dictionary<string, string>> GetAll() => _areas;
@@ -202,12 +204,7 @@ public class TxtPropsAreasFields
 
         foreach (var line in File.ReadAllLines(file, Encodings.Win1250))
         {
-            if (!string.IsNullOrEmpty(line) && 
-                !line.StartsWith(";") && 
-                !line.StartsWith("#") &&
-                !line.StartsWith("'") && 
-                line.StartsWith("[") && 
-                line.EndsWith("]"))
+            if (!string.IsNullOrEmpty(line) && !line.StartsWithAny(';','#', '\'') && line.StartsWith("[") && line.EndsWith("]"))
             {
                 if (propInArea.Count != 0 || !string.IsNullOrEmpty(actualArea))
                 {

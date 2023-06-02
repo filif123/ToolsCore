@@ -61,6 +61,17 @@ public partial class FAppSettingsBase : Form
         UsingStyle = usingStyle;
     }
 
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            var handleParam = base.CreateParams;
+            if (!DesignMode) 
+                handleParam.ExStyle |= 0x02000000; // WS_EX_COMPOSITED 
+            return handleParam;
+        }
+    }
+
     private void LoadComponents()
     {
         switch (Config.DesktopMenuMode)
@@ -99,8 +110,6 @@ public partial class FAppSettingsBase : Form
 
         configBindingSource.DataSource = Config;
         pgFonts.SelectedObject = Config.Fonts;
-        cbFont.DataSource = _allSystemFonts;
-
         tvStyles.SelectedNode = tvStyles.Nodes.Count == 0 ? null : tvStyles.Nodes[0];
     }
 
@@ -115,11 +124,11 @@ public partial class FAppSettingsBase : Form
         if (Shortcuts is not null) 
             FindAndCheckDuplicateShortcuts();
 
+        cbFont.DataSource = _allSystemFonts;
         tscbStyles.ComboBox.DataSource = Styles;
-        tscbStyles.SelectedItem = UsingStyle;
+        tscbStyles.SelectedItem = Styles.Cast<Style>().FirstOrDefault(s => s.Name == UsingStyle.Name);
         tsbApplyStyle.Enabled = false;
         optionsView.TreeView.ExpandAll();
-
         OnLoad();
     }
 
@@ -259,7 +268,7 @@ public partial class FAppSettingsBase : Form
             for (var j = 0; j < Shortcuts.Count; j++)
             {
                 var s2 = Shortcuts[j].Shortcut.Value;
-                if (i != j && s1 == s2 && (s1 != Shortcut.None || s2 != Shortcut.None))
+                if (i != j && s1 == s2 && s1 != Shortcut.None)
                 {
                     dgvShortcuts.Rows[i].Cells["cShortcut"].Style.ForeColor = Color.Red;
                     dgvShortcuts.Rows[j].Cells["cShortcut"].Style.ForeColor = Color.Red;
@@ -327,12 +336,13 @@ public partial class FAppSettingsBase : Form
         if (tscbStyles.SelectedIndex == -1)
             return;
 
-        var style = (Style)tscbStyles.SelectedItem;
+        var style = (Style)Styles[tscbStyles.SelectedIndex];
         FillTreeViewStyles(style, tvStyles);
         tvStyles.ExpandAll();
         cboxDefaultVisual.Checked = style.ControlsDefaultStyle;
         cboxDarkTitlebar.Checked = style.DarkTitleBar;
         cboxDarkScrollbars.Checked = style.DarkScrollBar;
+        cboxHighlightStatusBar.Checked = style.HighlightStatusBar;
 
         if (style.Name is StyleNames.LIGHT or StyleNames.DARK)
         {
@@ -347,6 +357,34 @@ public partial class FAppSettingsBase : Form
 
         tsbApplyStyle.Enabled = style != UsingStyle;
         tvStyles.SelectedNode = tvStyles.Nodes.Count != 0 ? tvStyles.Nodes[0] : null;
+    }
+
+    private void CboxDefaultVisual_CheckedChanged(object sender, EventArgs e)
+    {
+        var style = (Style)tscbStyles.SelectedItem;
+        if (style is not null) 
+            style.ControlsDefaultStyle = cboxDefaultVisual.Checked;
+    }
+
+    private void CboxDarkTitlebar_CheckedChanged(object sender, EventArgs e)
+    {
+        var style = (Style)tscbStyles.SelectedItem;
+        if (style is not null)
+            style.DarkTitleBar = cboxDarkTitlebar.Checked;
+    }
+
+    private void CboxDarkScrollbars_CheckedChanged(object sender, EventArgs e)
+    {
+        var style = (Style)tscbStyles.SelectedItem;
+        if (style is not null)
+            style.DarkScrollBar = cboxDarkScrollbars.Checked;
+    }
+
+    private void CboxHighlightStatusBar_CheckedChanged(object sender, EventArgs e)
+    {
+        var style = (Style)tscbStyles.SelectedItem;
+        if (style is not null)
+            style.HighlightStatusBar = cboxHighlightStatusBar.Checked;
     }
 
     protected virtual void FillTreeViewStyles(object selectedStyle, ExTreeView tv)
@@ -391,20 +429,14 @@ public partial class FAppSettingsBase : Form
         if (e.Node.Tag is IColorScheme sc)
         {
             //tag je katagoria poloziek
-            cbFont.Enabled = !sc.DisableFontEdit;
-            nudFontSize.Enabled = !sc.DisableFontEdit;
-            cboxOnlyNonPropFont.Enabled = !sc.DisableFontEdit;
-            cbFont.SelectedItem = sc.DisableFontEdit ? SystemFonts.DefaultFont.FontFamily.Name : sc.Font.FontFamily.Name;
+            gbCategorySettings.Enabled = !sc.DisableFontEdit;
+            gbColorItemSettings.Enabled = false;
+            cbFont.SelectedItem = sc.DisableFontEdit ? null : sc.Font.FontFamily.Name;
             nudFontSize.Value = sc.DisableFontEdit ? 1 : (decimal) sc.Font.Size;
-            cboxBold.Enabled = false;
             csForeColor.SelectedColor = Color.Transparent;
             csForeColor.BorderColor = SystemColors.ButtonShadow;
-            csForeColor.Enabled = false;
-            lStyleForeColor.Enabled = false;
             csBackColor.SelectedColor = Color.Transparent;
             csBackColor.BorderColor = SystemColors.ButtonShadow;
-            csBackColor.Enabled = false;
-            lStyleBackColor.Enabled = false;
 
             lFontStyleExample.Text = "";
             lFontStyleExample.BackColor = Color.Transparent;
@@ -419,8 +451,9 @@ public partial class FAppSettingsBase : Form
         }
         
         //tag je nastavenie polozky
-        cbFont.Enabled = false;
-        cbFont.SelectedItem = (e.Node.Parent?.Tag as IColorScheme)?.Font?.FontFamily.Name ?? SystemFonts.DefaultFont.FontFamily.Name;
+        gbCategorySettings.Enabled = false;
+        gbColorItemSettings.Enabled = true;
+        cbFont.SelectedItem = (e.Node.Parent?.Tag as IColorScheme)?.Font?.FontFamily.Name;
         cboxBold.Enabled = !setting.DisableFontBoldEdit;
         csForeColor.Enabled = true;
         csBackColor.Enabled = !setting.DisableBackColorEdit;
@@ -430,6 +463,7 @@ public partial class FAppSettingsBase : Form
         csBackColor.BorderColor = setting.DisableBackColorEdit ? SystemColors.ButtonShadow : Color.Black;
         lStyleBackColor.Enabled = !setting.DisableBackColorEdit;
         lStyleForeColor.Enabled = true;
+        bResetColorSetting.Enabled = true;
 
         lFontStyleExample.Text = STYLES_EXAMPLE_TEXT;
 
@@ -439,9 +473,9 @@ public partial class FAppSettingsBase : Form
     private void CboxOnlyNonPropFont_CheckedChanged(object sender, EventArgs e)
     {
         var selected = cbFont.SelectedItem;
-        cbFont.DataSource = cboxOnlyNonPropFont.Checked ? _monospacedFonts : _allSystemFonts;
-        cbFont.ResetBindings();
-        cbFont.SelectedItem = selected;
+        var fonts = cboxOnlyNonPropFont.Checked ? _monospacedFonts : _allSystemFonts;
+        cbFont.DataSource = fonts;
+        cbFont.SelectedIndex = fonts.IndexOf(selected);
     }
 
     private void InitMonospacedFonts()
@@ -450,7 +484,7 @@ public partial class FAppSettingsBase : Form
         _monospacedFonts = new List<string>(_allSystemFonts);
         foreach (var fontStr in _allSystemFonts)
         {
-            var font = new Font(fontStr, 10);
+            var font = new Font(fontStr, 12);
             if (!Utils.IsFontMonospaced(graphics, font)) 
                 _monospacedFonts.Remove(fontStr);
         }
@@ -559,10 +593,12 @@ public partial class FAppSettingsBase : Form
         var style = (Style)tscbStyles.SelectedItem;
         var newStyle = OnResetStyle(style.Name == StyleNames.DARK);
         newStyle.Name = style.Name;
-        Styles[tscbStyles.SelectedIndex] = newStyle;
-        tscbStyles.ComboBox.ResetBindings();
-        tscbStyles.SelectedItem = newStyle;
-
+        newStyle.Used = style.Used;
+        var actualIndex = tscbStyles.SelectedIndex;
+        Styles[actualIndex] = newStyle;
+        tscbStyles.ComboBox.DataSource = Styles;
+        tscbStyles.SelectedIndex = -1;
+        tscbStyles.SelectedIndex = actualIndex;
         FillTreeViewStyles(newStyle, tvStyles);
         tvStyles.ExpandAll();
         tvStyles.SelectedNode = tvStyles.Nodes.Count != 0 ? tvStyles.Nodes[0] : null;
@@ -619,6 +655,4 @@ public partial class FAppSettingsBase : Form
         Styles.Remove(tscbStyles.SelectedItem);
         tscbStyles.ComboBox.ResetBindings();
     }
-
-    
 }

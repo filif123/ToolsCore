@@ -20,15 +20,15 @@ public record ControlsColorScheme() : IColorScheme
     public string Name => "Ovládacie prvky";
 
     [XmlIgnore]
-    private static readonly Dictionary<string, ColorSetting> props = new()
+    private static readonly Dictionary<string, ColorSetting> Props = new()
     {
         [nameof(Button)] = new(SystemColors.ButtonFace, SystemColors.ControlText, true) {Name = GlobalResources.NameColorSettings_Button},
         [nameof(Label)] = new(SystemColors.Control, SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Label },
-        [nameof(Box)] = new(SystemColors.Control, SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Box },
+        [nameof(Box)] = new(Color.White, SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Box },
         [nameof(Border)] = new(SystemColors.WindowFrame, true) { Name = GlobalResources.NameColorSettings_Border },
         [nameof(Panel)] = new(SystemColors.Control, SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Panel },
         [nameof(Mark)] = new(SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Mark },
-        [nameof(Highlight)] = new(SystemColors.Highlight, SystemColors.ControlText, true) { Name = GlobalResources.NameColorSettings_Highlight },
+        [nameof(Highlight)] = new(SystemColors.Highlight, SystemColors.HighlightText, true) { Name = GlobalResources.NameColorSettings_Highlight },
     };
 
     #region Fields
@@ -143,7 +143,7 @@ public record ControlsColorScheme() : IColorScheme
         }
     }
 
-    private static ColorSetting InitProperty(string propname) => props[propname] with { };
+    private static ColorSetting InitProperty(string propname) => Props[propname] with { };
 
     private static void AssignProperty(ref ColorSetting prop, string propname)
     {
@@ -151,9 +151,9 @@ public record ControlsColorScheme() : IColorScheme
             InitProperty(propname);
         else
         {
-            prop.Name = props[propname].Name;
-            prop.DisableBackColorEdit = props[propname].DisableBackColorEdit;
-            prop.DisableFontBoldEdit = props[propname].DisableFontBoldEdit;
+            prop.Name = Props[propname].Name;
+            prop.DisableBackColorEdit = Props[propname].DisableBackColorEdit;
+            prop.DisableFontBoldEdit = Props[propname].DisableFontBoldEdit;
         }
     }
 

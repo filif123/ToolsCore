@@ -56,7 +56,6 @@ namespace ToolsCore.Forms
             this.cbStartup = new ExControls.ExComboBox();
             this.configBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label3 = new System.Windows.Forms.Label();
-            this.cboxCheckUpdate = new ExControls.ExCheckBox();
             this.cboxClassicGui = new ExControls.ExCheckBox();
             this.cboxMultipleInstances = new ExControls.ExCheckBox();
             this.pDesktop = new ExControls.ExOptionsPanel(this.optionsView);
@@ -66,7 +65,6 @@ namespace ToolsCore.Forms
             this.rbMenuToolStrip = new ExControls.ExRadioButton();
             this.cboxShowRowHeaders = new ExControls.ExCheckBox();
             this.rbMenuOnly = new ExControls.ExRadioButton();
-            this.cboxShowStateRow = new ExControls.ExCheckBox();
             this.rbToolOnly = new ExControls.ExRadioButton();
             this.pDesktopColumns = new ExControls.ExOptionsPanel(this.optionsView);
             this.dgvColumns = new System.Windows.Forms.DataGridView();
@@ -105,28 +103,30 @@ namespace ToolsCore.Forms
             this.tsbAddStyle = new System.Windows.Forms.ToolStripButton();
             this.tsbRenameStyle = new System.Windows.Forms.ToolStripButton();
             this.tsbDeleteStyle = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbResetStyle = new System.Windows.Forms.ToolStripButton();
             this.exGroupBox1 = new ExControls.ExGroupBox();
             this.lFontStyleExample = new System.Windows.Forms.Label();
             this.tvStyles = new ExControls.ExTreeView();
-            this.exGroupBox7 = new ExControls.ExGroupBox();
+            this.gbColorItemSettings = new ExControls.ExGroupBox();
             this.bResetColorSetting = new ExControls.ExButton();
             this.cboxBold = new ExControls.ExCheckBox();
             this.csForeColor = new ExControls.ExColorSelector();
             this.lStyleBackColor = new ExControls.ExLabel();
             this.lStyleForeColor = new ExControls.ExLabel();
             this.csBackColor = new ExControls.ExColorSelector();
-            this.exGroupBox9 = new ExControls.ExGroupBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.gbCategorySettings = new ExControls.ExGroupBox();
+            this.label8 = new ExControls.ExLabel();
             this.cbFont = new ExControls.ExComboBox();
             this.nudFontSize = new ExControls.ExNumericUpDown();
             this.cboxOnlyNonPropFont = new ExControls.ExCheckBox();
             this.exGroupBox8 = new ExControls.ExGroupBox();
+            this.cboxHighlightStatusBar = new ExControls.ExCheckBox();
             this.cboxDarkScrollbars = new ExControls.ExCheckBox();
             this.cboxDarkTitlebar = new ExControls.ExCheckBox();
             this.cboxDefaultVisual = new ExControls.ExCheckBox();
             this.pFonts = new ExControls.ExOptionsPanel(this.optionsView);
             this.pgFonts = new ExControls.ExPropertyGrid();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.exGroupBox3 = new ExControls.ExGroupBox();
             this.lFontExample = new System.Windows.Forms.Label();
             this.pEnvironment = new ExControls.ExOptionsPanel(this.optionsView);
@@ -140,8 +140,6 @@ namespace ToolsCore.Forms
             this.appLanguageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.debugModeBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.styleBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbResetStyle = new System.Windows.Forms.ToolStripButton();
             desktopMenuModeLabel = new System.Windows.Forms.Label();
             this.panelBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsView)).BeginInit();
@@ -164,8 +162,8 @@ namespace ToolsCore.Forms
             this.ppStyles.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.exGroupBox1.SuspendLayout();
-            this.exGroupBox7.SuspendLayout();
-            this.exGroupBox9.SuspendLayout();
+            this.gbColorItemSettings.SuspendLayout();
+            this.gbCategorySettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFontSize)).BeginInit();
             this.exGroupBox8.SuspendLayout();
             this.pFonts.SuspendLayout();
@@ -184,7 +182,7 @@ namespace ToolsCore.Forms
             desktopMenuModeLabel.AutoSize = true;
             desktopMenuModeLabel.Location = new System.Drawing.Point(13, 14);
             desktopMenuModeLabel.Name = "desktopMenuModeLabel";
-            desktopMenuModeLabel.Size = new System.Drawing.Size(65, 13);
+            desktopMenuModeLabel.Size = new System.Drawing.Size(71, 15);
             desktopMenuModeLabel.TabIndex = 1;
             desktopMenuModeLabel.Text = "Zobrazovať:";
             // 
@@ -303,9 +301,9 @@ namespace ToolsCore.Forms
             // pConcreteGeneral
             // 
             this.pConcreteGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pConcreteGeneral.Location = new System.Drawing.Point(0, 129);
+            this.pConcreteGeneral.Location = new System.Drawing.Point(0, 108);
             this.pConcreteGeneral.Name = "pConcreteGeneral";
-            this.pConcreteGeneral.Size = new System.Drawing.Size(538, 270);
+            this.pConcreteGeneral.Size = new System.Drawing.Size(538, 291);
             this.pConcreteGeneral.TabIndex = 0;
             // 
             // gboxGeneralProgram
@@ -313,13 +311,13 @@ namespace ToolsCore.Forms
             this.gboxGeneralProgram.AutoSize = true;
             this.gboxGeneralProgram.Controls.Add(this.cbStartup);
             this.gboxGeneralProgram.Controls.Add(this.label3);
-            this.gboxGeneralProgram.Controls.Add(this.cboxCheckUpdate);
             this.gboxGeneralProgram.Controls.Add(this.cboxClassicGui);
             this.gboxGeneralProgram.Controls.Add(this.cboxMultipleInstances);
+            this.gboxGeneralProgram.DisabledForeColor = System.Drawing.SystemColors.GrayText;
             this.gboxGeneralProgram.Dock = System.Windows.Forms.DockStyle.Top;
             this.gboxGeneralProgram.Location = new System.Drawing.Point(0, 0);
             this.gboxGeneralProgram.Name = "gboxGeneralProgram";
-            this.gboxGeneralProgram.Size = new System.Drawing.Size(538, 129);
+            this.gboxGeneralProgram.Size = new System.Drawing.Size(538, 108);
             this.gboxGeneralProgram.TabIndex = 0;
             this.gboxGeneralProgram.TabStop = false;
             this.gboxGeneralProgram.Text = "Všeobecné";
@@ -330,7 +328,7 @@ namespace ToolsCore.Forms
             this.cbStartup.DropDownSelectedRowBackColor = System.Drawing.SystemColors.Highlight;
             this.cbStartup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStartup.FormattingEnabled = true;
-            this.cbStartup.Location = new System.Drawing.Point(159, 89);
+            this.cbStartup.Location = new System.Drawing.Point(158, 68);
             this.cbStartup.Name = "cbStartup";
             this.cbStartup.Size = new System.Drawing.Size(188, 21);
             this.cbStartup.StyleDisabled.ArrowColor = null;
@@ -371,22 +369,11 @@ namespace ToolsCore.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 94);
+            this.label3.Location = new System.Drawing.Point(6, 73);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(146, 13);
+            this.label3.Size = new System.Drawing.Size(167, 15);
             this.label3.TabIndex = 3;
             this.label3.Text = "Pri spustení programu otvoriť:";
-            // 
-            // cboxCheckUpdate
-            // 
-            this.cboxCheckUpdate.AutoSize = true;
-            this.cboxCheckUpdate.BoxBackColor = System.Drawing.Color.White;
-            this.cboxCheckUpdate.HighlightColor = System.Drawing.SystemColors.Highlight;
-            this.cboxCheckUpdate.Location = new System.Drawing.Point(7, 66);
-            this.cboxCheckUpdate.Name = "cboxCheckUpdate";
-            this.cboxCheckUpdate.Size = new System.Drawing.Size(307, 17);
-            this.cboxCheckUpdate.TabIndex = 2;
-            this.cboxCheckUpdate.Text = "Pri spúšťaní programu skontrolovať dostupnosť aktualizácie";
             // 
             // cboxClassicGui
             // 
@@ -396,7 +383,7 @@ namespace ToolsCore.Forms
             this.cboxClassicGui.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.cboxClassicGui.Location = new System.Drawing.Point(7, 43);
             this.cboxClassicGui.Name = "cboxClassicGui";
-            this.cboxClassicGui.Size = new System.Drawing.Size(234, 17);
+            this.cboxClassicGui.Size = new System.Drawing.Size(255, 19);
             this.cboxClassicGui.TabIndex = 0;
             this.cboxClassicGui.Text = "Používať klasický dizajn ovládacích prvkov";
             // 
@@ -408,7 +395,7 @@ namespace ToolsCore.Forms
             this.cboxMultipleInstances.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.cboxMultipleInstances.Location = new System.Drawing.Point(7, 20);
             this.cboxMultipleInstances.Name = "cboxMultipleInstances";
-            this.cboxMultipleInstances.Size = new System.Drawing.Size(199, 17);
+            this.cboxMultipleInstances.Size = new System.Drawing.Size(231, 19);
             this.cboxMultipleInstances.TabIndex = 0;
             this.cboxMultipleInstances.Text = "Povoliť duplicitné inštancie programu";
             // 
@@ -444,9 +431,9 @@ namespace ToolsCore.Forms
             // pConcreteDesktopComponents
             // 
             this.pConcreteDesktopComponents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pConcreteDesktopComponents.Location = new System.Drawing.Point(0, 95);
+            this.pConcreteDesktopComponents.Location = new System.Drawing.Point(0, 69);
             this.pConcreteDesktopComponents.Name = "pConcreteDesktopComponents";
-            this.pConcreteDesktopComponents.Size = new System.Drawing.Size(538, 304);
+            this.pConcreteDesktopComponents.Size = new System.Drawing.Size(538, 330);
             this.pConcreteDesktopComponents.TabIndex = 8;
             // 
             // ppDesktopComponents
@@ -456,12 +443,11 @@ namespace ToolsCore.Forms
             this.ppDesktopComponents.Controls.Add(this.rbMenuToolStrip);
             this.ppDesktopComponents.Controls.Add(this.cboxShowRowHeaders);
             this.ppDesktopComponents.Controls.Add(this.rbMenuOnly);
-            this.ppDesktopComponents.Controls.Add(this.cboxShowStateRow);
             this.ppDesktopComponents.Controls.Add(this.rbToolOnly);
             this.ppDesktopComponents.Dock = System.Windows.Forms.DockStyle.Top;
             this.ppDesktopComponents.Location = new System.Drawing.Point(0, 0);
             this.ppDesktopComponents.Name = "ppDesktopComponents";
-            this.ppDesktopComponents.Size = new System.Drawing.Size(538, 95);
+            this.ppDesktopComponents.Size = new System.Drawing.Size(538, 69);
             this.ppDesktopComponents.TabIndex = 7;
             // 
             // rbMenuToolStrip
@@ -470,7 +456,7 @@ namespace ToolsCore.Forms
             this.rbMenuToolStrip.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.rbMenuToolStrip.Location = new System.Drawing.Point(93, 12);
             this.rbMenuToolStrip.Name = "rbMenuToolStrip";
-            this.rbMenuToolStrip.Size = new System.Drawing.Size(129, 17);
+            this.rbMenuToolStrip.Size = new System.Drawing.Size(150, 19);
             this.rbMenuToolStrip.TabIndex = 2;
             this.rbMenuToolStrip.TabStop = true;
             this.rbMenuToolStrip.Text = "MenuStrip aj ToolStrip";
@@ -482,9 +468,9 @@ namespace ToolsCore.Forms
             this.cboxShowRowHeaders.BoxBackColor = System.Drawing.Color.White;
             this.cboxShowRowHeaders.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.configBindingSource, "ShowRowsHeader", true));
             this.cboxShowRowHeaders.HighlightColor = System.Drawing.SystemColors.Highlight;
-            this.cboxShowRowHeaders.Location = new System.Drawing.Point(16, 75);
+            this.cboxShowRowHeaders.Location = new System.Drawing.Point(16, 47);
             this.cboxShowRowHeaders.Name = "cboxShowRowHeaders";
-            this.cboxShowRowHeaders.Size = new System.Drawing.Size(211, 17);
+            this.cboxShowRowHeaders.Size = new System.Drawing.Size(231, 19);
             this.cboxShowRowHeaders.TabIndex = 6;
             this.cboxShowRowHeaders.Text = "Zobrazovať hlavičku riadkov v tabuľke";
             // 
@@ -494,23 +480,11 @@ namespace ToolsCore.Forms
             this.rbMenuOnly.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.rbMenuOnly.Location = new System.Drawing.Point(255, 12);
             this.rbMenuOnly.Name = "rbMenuOnly";
-            this.rbMenuOnly.Size = new System.Drawing.Size(94, 17);
+            this.rbMenuOnly.Size = new System.Drawing.Size(109, 19);
             this.rbMenuOnly.TabIndex = 3;
             this.rbMenuOnly.TabStop = true;
             this.rbMenuOnly.Text = "Len MenuStrip";
             this.rbMenuOnly.UseVisualStyleBackColor = true;
-            // 
-            // cboxShowStateRow
-            // 
-            this.cboxShowStateRow.AutoSize = true;
-            this.cboxShowStateRow.BoxBackColor = System.Drawing.Color.White;
-            this.cboxShowStateRow.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.configBindingSource, "ShowStateRow", true));
-            this.cboxShowStateRow.HighlightColor = System.Drawing.SystemColors.Highlight;
-            this.cboxShowStateRow.Location = new System.Drawing.Point(16, 52);
-            this.cboxShowStateRow.Name = "cboxShowStateRow";
-            this.cboxShowStateRow.Size = new System.Drawing.Size(153, 17);
-            this.cboxShowStateRow.TabIndex = 5;
-            this.cboxShowStateRow.Text = "Zobrazovať stavový riadok";
             // 
             // rbToolOnly
             // 
@@ -518,7 +492,7 @@ namespace ToolsCore.Forms
             this.rbToolOnly.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.rbToolOnly.Location = new System.Drawing.Point(381, 12);
             this.rbToolOnly.Name = "rbToolOnly";
-            this.rbToolOnly.Size = new System.Drawing.Size(88, 17);
+            this.rbToolOnly.Size = new System.Drawing.Size(101, 19);
             this.rbToolOnly.TabIndex = 4;
             this.rbToolOnly.TabStop = true;
             this.rbToolOnly.Text = "Len ToolStrip";
@@ -553,6 +527,7 @@ namespace ToolsCore.Forms
             this.dgvColumns.Location = new System.Drawing.Point(0, 33);
             this.dgvColumns.Name = "dgvColumns";
             this.dgvColumns.RowHeadersVisible = false;
+            this.dgvColumns.RowHeadersWidth = 51;
             this.dgvColumns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvColumns.Size = new System.Drawing.Size(538, 366);
             this.dgvColumns.TabIndex = 1;
@@ -562,25 +537,28 @@ namespace ToolsCore.Forms
             this.cColName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cColName.DataPropertyName = "Name";
             this.cColName.HeaderText = "Názov";
+            this.cColName.MinimumWidth = 6;
             this.cColName.Name = "cColName";
             this.cColName.ReadOnly = true;
-            this.cColName.Width = 63;
+            this.cColName.Width = 70;
             // 
             // cColVisible
             // 
             this.cColVisible.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cColVisible.DataPropertyName = "Visible";
             this.cColVisible.HeaderText = "Viditeľný";
+            this.cColVisible.MinimumWidth = 6;
             this.cColVisible.Name = "cColVisible";
             this.cColVisible.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.cColVisible.SquareBackColor = System.Drawing.Color.White;
-            this.cColVisible.Width = 54;
+            this.cColVisible.Width = 59;
             // 
             // cColMinWidth
             // 
             this.cColMinWidth.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cColMinWidth.DataPropertyName = "MinWidth";
             this.cColMinWidth.HeaderText = "Minimálna šírka (px)";
+            this.cColMinWidth.MinimumWidth = 6;
             this.cColMinWidth.Name = "cColMinWidth";
             // 
             // desktopColumnBindingSource
@@ -640,7 +618,7 @@ namespace ToolsCore.Forms
             this.cboxFitLastCol.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.cboxFitLastCol.Location = new System.Drawing.Point(3, 9);
             this.cboxFitLastCol.Name = "cboxFitLastCol";
-            this.cboxFitLastCol.Size = new System.Drawing.Size(155, 17);
+            this.cboxFitLastCol.Size = new System.Drawing.Size(178, 19);
             this.cboxFitLastCol.TabIndex = 0;
             this.cboxFitLastCol.Text = "Prispôsobiť posledný stĺpec";
             // 
@@ -721,7 +699,7 @@ namespace ToolsCore.Forms
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 12);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(167, 13);
+            this.label2.Size = new System.Drawing.Size(187, 15);
             this.label2.TabIndex = 0;
             this.label2.Text = "Jazyk používateľského rozhrania:";
             // 
@@ -757,6 +735,7 @@ namespace ToolsCore.Forms
             this.dgvShortcuts.Name = "dgvShortcuts";
             this.dgvShortcuts.ReadOnly = true;
             this.dgvShortcuts.RowHeadersVisible = false;
+            this.dgvShortcuts.RowHeadersWidth = 51;
             this.dgvShortcuts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvShortcuts.Size = new System.Drawing.Size(538, 367);
             this.dgvShortcuts.TabIndex = 1;
@@ -768,9 +747,10 @@ namespace ToolsCore.Forms
             this.cShortcutName.DataPropertyName = "Name";
             this.cShortcutName.Frozen = true;
             this.cShortcutName.HeaderText = "Názov";
+            this.cShortcutName.MinimumWidth = 6;
             this.cShortcutName.Name = "cShortcutName";
             this.cShortcutName.ReadOnly = true;
-            this.cShortcutName.Width = 63;
+            this.cShortcutName.Width = 70;
             // 
             // cShortcut
             // 
@@ -778,30 +758,36 @@ namespace ToolsCore.Forms
             this.cShortcut.DataPropertyName = "Shortcut";
             this.cShortcut.Frozen = true;
             this.cShortcut.HeaderText = "Skratka";
+            this.cShortcut.MinimumWidth = 6;
             this.cShortcut.Name = "cShortcut";
             this.cShortcut.ReadOnly = true;
-            this.cShortcut.Width = 69;
+            this.cShortcut.Width = 77;
             // 
             // cShortcutAttach
             // 
             this.cShortcutAttach.HeaderText = "Priradiť";
+            this.cShortcutAttach.MinimumWidth = 6;
             this.cShortcutAttach.Name = "cShortcutAttach";
             this.cShortcutAttach.ReadOnly = true;
             this.cShortcutAttach.Text = "Priradiť";
             this.cShortcutAttach.UseColumnTextForButtonValue = true;
+            this.cShortcutAttach.Width = 125;
             // 
             // cShortcutDeattach
             // 
             this.cShortcutDeattach.HeaderText = "Odobrať";
+            this.cShortcutDeattach.MinimumWidth = 6;
             this.cShortcutDeattach.Name = "cShortcutDeattach";
             this.cShortcutDeattach.ReadOnly = true;
             this.cShortcutDeattach.Text = "Odobrať";
             this.cShortcutDeattach.UseColumnTextForButtonValue = true;
+            this.cShortcutDeattach.Width = 125;
             // 
             // cShortcutReset
             // 
             this.cShortcutReset.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cShortcutReset.HeaderText = "Resetovať";
+            this.cShortcutReset.MinimumWidth = 6;
             this.cShortcutReset.Name = "cShortcutReset";
             this.cShortcutReset.ReadOnly = true;
             this.cShortcutReset.Text = "Resetovať";
@@ -837,7 +823,7 @@ namespace ToolsCore.Forms
             this.lShortcutMsg.AutoSize = true;
             this.lShortcutMsg.Location = new System.Drawing.Point(3, 8);
             this.lShortcutMsg.Name = "lShortcutMsg";
-            this.lShortcutMsg.Size = new System.Drawing.Size(18, 13);
+            this.lShortcutMsg.Size = new System.Drawing.Size(19, 15);
             this.lShortcutMsg.TabIndex = 0;
             this.lShortcutMsg.Text = "txt";
             // 
@@ -858,8 +844,8 @@ namespace ToolsCore.Forms
             this.ppStyles.Controls.Add(this.toolStrip1);
             this.ppStyles.Controls.Add(this.exGroupBox1);
             this.ppStyles.Controls.Add(this.tvStyles);
-            this.ppStyles.Controls.Add(this.exGroupBox7);
-            this.ppStyles.Controls.Add(this.exGroupBox9);
+            this.ppStyles.Controls.Add(this.gbColorItemSettings);
+            this.ppStyles.Controls.Add(this.gbCategorySettings);
             this.ppStyles.Controls.Add(this.exGroupBox8);
             this.ppStyles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ppStyles.Location = new System.Drawing.Point(0, 0);
@@ -870,6 +856,7 @@ namespace ToolsCore.Forms
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.tscbStyles,
@@ -882,14 +869,14 @@ namespace ToolsCore.Forms
             this.tsbResetStyle});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(538, 26);
+            this.toolStrip1.Size = new System.Drawing.Size(538, 31);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(29, 23);
+            this.toolStripLabel1.Size = new System.Drawing.Size(36, 28);
             this.toolStripLabel1.Text = "Štýl:";
             // 
             // tscbStyles
@@ -898,7 +885,7 @@ namespace ToolsCore.Forms
             this.tscbStyles.DropDownWidth = 121;
             this.tscbStyles.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
             this.tscbStyles.Name = "tscbStyles";
-            this.tscbStyles.Size = new System.Drawing.Size(150, 23);
+            this.tscbStyles.Size = new System.Drawing.Size(150, 28);
             this.tscbStyles.SelectedIndexChanged += new System.EventHandler(this.TscbStyles_SelectedIndexChanged);
             // 
             // tsbApplyStyle
@@ -907,14 +894,14 @@ namespace ToolsCore.Forms
             this.tsbApplyStyle.Image = global::ToolsCore.GlobalResources.correct;
             this.tsbApplyStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbApplyStyle.Name = "tsbApplyStyle";
-            this.tsbApplyStyle.Size = new System.Drawing.Size(23, 23);
+            this.tsbApplyStyle.Size = new System.Drawing.Size(29, 28);
             this.tsbApplyStyle.Text = "Použiť štýl";
             this.tsbApplyStyle.Click += new System.EventHandler(this.TsbApplyStyle_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbAddStyle
             // 
@@ -922,7 +909,7 @@ namespace ToolsCore.Forms
             this.tsbAddStyle.Image = global::ToolsCore.GlobalResources.add;
             this.tsbAddStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAddStyle.Name = "tsbAddStyle";
-            this.tsbAddStyle.Size = new System.Drawing.Size(23, 23);
+            this.tsbAddStyle.Size = new System.Drawing.Size(29, 28);
             this.tsbAddStyle.Text = "Pridať štýl...";
             this.tsbAddStyle.Click += new System.EventHandler(this.TsbAddStyle_Click);
             // 
@@ -932,7 +919,7 @@ namespace ToolsCore.Forms
             this.tsbRenameStyle.Image = global::ToolsCore.GlobalResources.rename;
             this.tsbRenameStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRenameStyle.Name = "tsbRenameStyle";
-            this.tsbRenameStyle.Size = new System.Drawing.Size(23, 23);
+            this.tsbRenameStyle.Size = new System.Drawing.Size(29, 28);
             this.tsbRenameStyle.Text = "Premenovať štýl...";
             this.tsbRenameStyle.Click += new System.EventHandler(this.TsbRenameStyle_Click);
             // 
@@ -942,14 +929,30 @@ namespace ToolsCore.Forms
             this.tsbDeleteStyle.Image = global::ToolsCore.GlobalResources.delete;
             this.tsbDeleteStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDeleteStyle.Name = "tsbDeleteStyle";
-            this.tsbDeleteStyle.Size = new System.Drawing.Size(23, 23);
+            this.tsbDeleteStyle.Size = new System.Drawing.Size(29, 28);
             this.tsbDeleteStyle.Text = "Odstrániť štýl";
             this.tsbDeleteStyle.Click += new System.EventHandler(this.TsbDeleteStyle_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsbResetStyle
+            // 
+            this.tsbResetStyle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbResetStyle.Image = global::ToolsCore.GlobalResources.restart;
+            this.tsbResetStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbResetStyle.Name = "tsbResetStyle";
+            this.tsbResetStyle.Size = new System.Drawing.Size(29, 28);
+            this.tsbResetStyle.Text = "Resetovať štýl";
+            this.tsbResetStyle.Click += new System.EventHandler(this.TsbResetStyle_Click);
             // 
             // exGroupBox1
             // 
             this.exGroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.exGroupBox1.Controls.Add(this.lFontStyleExample);
+            this.exGroupBox1.DisabledForeColor = System.Drawing.SystemColors.GrayText;
             this.exGroupBox1.Location = new System.Drawing.Point(288, 319);
             this.exGroupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.exGroupBox1.Name = "exGroupBox1";
@@ -988,23 +991,24 @@ namespace ToolsCore.Forms
             this.tvStyles.TabIndex = 2;
             this.tvStyles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvStyles_AfterSelect);
             // 
-            // exGroupBox7
+            // gbColorItemSettings
             // 
-            this.exGroupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.exGroupBox7.Controls.Add(this.bResetColorSetting);
-            this.exGroupBox7.Controls.Add(this.cboxBold);
-            this.exGroupBox7.Controls.Add(this.csForeColor);
-            this.exGroupBox7.Controls.Add(this.lStyleBackColor);
-            this.exGroupBox7.Controls.Add(this.lStyleForeColor);
-            this.exGroupBox7.Controls.Add(this.csBackColor);
-            this.exGroupBox7.Location = new System.Drawing.Point(288, 200);
-            this.exGroupBox7.Margin = new System.Windows.Forms.Padding(2);
-            this.exGroupBox7.Name = "exGroupBox7";
-            this.exGroupBox7.Padding = new System.Windows.Forms.Padding(2);
-            this.exGroupBox7.Size = new System.Drawing.Size(246, 115);
-            this.exGroupBox7.TabIndex = 4;
-            this.exGroupBox7.TabStop = false;
-            this.exGroupBox7.Text = "Nastavenia položky";
+            this.gbColorItemSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbColorItemSettings.Controls.Add(this.bResetColorSetting);
+            this.gbColorItemSettings.Controls.Add(this.cboxBold);
+            this.gbColorItemSettings.Controls.Add(this.csForeColor);
+            this.gbColorItemSettings.Controls.Add(this.lStyleBackColor);
+            this.gbColorItemSettings.Controls.Add(this.lStyleForeColor);
+            this.gbColorItemSettings.Controls.Add(this.csBackColor);
+            this.gbColorItemSettings.DisabledForeColor = System.Drawing.SystemColors.GrayText;
+            this.gbColorItemSettings.Location = new System.Drawing.Point(288, 200);
+            this.gbColorItemSettings.Margin = new System.Windows.Forms.Padding(2);
+            this.gbColorItemSettings.Name = "gbColorItemSettings";
+            this.gbColorItemSettings.Padding = new System.Windows.Forms.Padding(2);
+            this.gbColorItemSettings.Size = new System.Drawing.Size(246, 115);
+            this.gbColorItemSettings.TabIndex = 4;
+            this.gbColorItemSettings.TabStop = false;
+            this.gbColorItemSettings.Text = "Nastavenia položky";
             // 
             // bResetColorSetting
             // 
@@ -1024,7 +1028,7 @@ namespace ToolsCore.Forms
             this.cboxBold.Location = new System.Drawing.Point(7, 22);
             this.cboxBold.Margin = new System.Windows.Forms.Padding(2);
             this.cboxBold.Name = "cboxBold";
-            this.cboxBold.Size = new System.Drawing.Size(89, 17);
+            this.cboxBold.Size = new System.Drawing.Size(100, 19);
             this.cboxBold.TabIndex = 0;
             this.cboxBold.Text = "Tučné písmo";
             this.cboxBold.CheckedChanged += new System.EventHandler(this.CboxBold_CheckedChanged);
@@ -1046,7 +1050,7 @@ namespace ToolsCore.Forms
             this.lStyleBackColor.Location = new System.Drawing.Point(4, 89);
             this.lStyleBackColor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lStyleBackColor.Name = "lStyleBackColor";
-            this.lStyleBackColor.Size = new System.Drawing.Size(77, 13);
+            this.lStyleBackColor.Size = new System.Drawing.Size(89, 15);
             this.lStyleBackColor.TabIndex = 3;
             this.lStyleBackColor.Text = "Farba pozadia:";
             // 
@@ -1056,7 +1060,7 @@ namespace ToolsCore.Forms
             this.lStyleForeColor.Location = new System.Drawing.Point(4, 53);
             this.lStyleForeColor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lStyleForeColor.Name = "lStyleForeColor";
-            this.lStyleForeColor.Size = new System.Drawing.Size(113, 13);
+            this.lStyleForeColor.Size = new System.Drawing.Size(131, 15);
             this.lStyleForeColor.TabIndex = 1;
             this.lStyleForeColor.Text = "Farba popredia (textu):";
             // 
@@ -1071,21 +1075,22 @@ namespace ToolsCore.Forms
             this.csBackColor.TabIndex = 4;
             this.csBackColor.SelectedColorChanged += new System.EventHandler(this.CsBackColor_SelectedColorChanged);
             // 
-            // exGroupBox9
+            // gbCategorySettings
             // 
-            this.exGroupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.exGroupBox9.Controls.Add(this.label8);
-            this.exGroupBox9.Controls.Add(this.cbFont);
-            this.exGroupBox9.Controls.Add(this.nudFontSize);
-            this.exGroupBox9.Controls.Add(this.cboxOnlyNonPropFont);
-            this.exGroupBox9.Location = new System.Drawing.Point(288, 94);
-            this.exGroupBox9.Margin = new System.Windows.Forms.Padding(2);
-            this.exGroupBox9.Name = "exGroupBox9";
-            this.exGroupBox9.Padding = new System.Windows.Forms.Padding(2);
-            this.exGroupBox9.Size = new System.Drawing.Size(246, 106);
-            this.exGroupBox9.TabIndex = 3;
-            this.exGroupBox9.TabStop = false;
-            this.exGroupBox9.Text = "Nastavenia kategórie";
+            this.gbCategorySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbCategorySettings.Controls.Add(this.label8);
+            this.gbCategorySettings.Controls.Add(this.cbFont);
+            this.gbCategorySettings.Controls.Add(this.nudFontSize);
+            this.gbCategorySettings.Controls.Add(this.cboxOnlyNonPropFont);
+            this.gbCategorySettings.DisabledForeColor = System.Drawing.SystemColors.GrayText;
+            this.gbCategorySettings.Location = new System.Drawing.Point(288, 94);
+            this.gbCategorySettings.Margin = new System.Windows.Forms.Padding(2);
+            this.gbCategorySettings.Name = "gbCategorySettings";
+            this.gbCategorySettings.Padding = new System.Windows.Forms.Padding(2);
+            this.gbCategorySettings.Size = new System.Drawing.Size(246, 106);
+            this.gbCategorySettings.TabIndex = 3;
+            this.gbCategorySettings.TabStop = false;
+            this.gbCategorySettings.Text = "Nastavenia kategórie";
             // 
             // label8
             // 
@@ -1093,7 +1098,7 @@ namespace ToolsCore.Forms
             this.label8.Location = new System.Drawing.Point(4, 74);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(66, 13);
+            this.label8.Size = new System.Drawing.Size(72, 15);
             this.label8.TabIndex = 2;
             this.label8.Text = "Veľkosť (pt):";
             // 
@@ -1103,7 +1108,6 @@ namespace ToolsCore.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbFont.DropDownSelectedRowBackColor = System.Drawing.SystemColors.Highlight;
             this.cbFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFont.Enabled = false;
             this.cbFont.FormattingEnabled = true;
             this.cbFont.Location = new System.Drawing.Point(7, 14);
             this.cbFont.Margin = new System.Windows.Forms.Padding(2);
@@ -1171,7 +1175,7 @@ namespace ToolsCore.Forms
             this.cboxOnlyNonPropFont.Location = new System.Drawing.Point(7, 46);
             this.cboxOnlyNonPropFont.Margin = new System.Windows.Forms.Padding(2);
             this.cboxOnlyNonPropFont.Name = "cboxOnlyNonPropFont";
-            this.cboxOnlyNonPropFont.Size = new System.Drawing.Size(199, 17);
+            this.cboxOnlyNonPropFont.Size = new System.Drawing.Size(231, 19);
             this.cboxOnlyNonPropFont.TabIndex = 1;
             this.cboxOnlyNonPropFont.Text = "Zobraziť len neproporcionálne písma";
             this.cboxOnlyNonPropFont.CheckedChanged += new System.EventHandler(this.CboxOnlyNonPropFont_CheckedChanged);
@@ -1180,9 +1184,11 @@ namespace ToolsCore.Forms
             // 
             this.exGroupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.exGroupBox8.Controls.Add(this.cboxHighlightStatusBar);
             this.exGroupBox8.Controls.Add(this.cboxDarkScrollbars);
             this.exGroupBox8.Controls.Add(this.cboxDarkTitlebar);
             this.exGroupBox8.Controls.Add(this.cboxDefaultVisual);
+            this.exGroupBox8.DisabledForeColor = System.Drawing.SystemColors.GrayText;
             this.exGroupBox8.Location = new System.Drawing.Point(6, 29);
             this.exGroupBox8.Margin = new System.Windows.Forms.Padding(2);
             this.exGroupBox8.Name = "exGroupBox8";
@@ -1192,18 +1198,32 @@ namespace ToolsCore.Forms
             this.exGroupBox8.TabStop = false;
             this.exGroupBox8.Text = "Nastavenia štýlu";
             // 
+            // cboxHighlightStatusBar
+            // 
+            this.cboxHighlightStatusBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboxHighlightStatusBar.AutoSize = true;
+            this.cboxHighlightStatusBar.BoxBackColor = System.Drawing.Color.White;
+            this.cboxHighlightStatusBar.HighlightColor = System.Drawing.SystemColors.Highlight;
+            this.cboxHighlightStatusBar.Location = new System.Drawing.Point(240, 17);
+            this.cboxHighlightStatusBar.Name = "cboxHighlightStatusBar";
+            this.cboxHighlightStatusBar.Size = new System.Drawing.Size(280, 19);
+            this.cboxHighlightStatusBar.TabIndex = 3;
+            this.cboxHighlightStatusBar.Text = "Zafarbiť stavový riadok podľa farby zvýraznenia";
+            this.cboxHighlightStatusBar.CheckedChanged += new System.EventHandler(this.CboxHighlightStatusBar_CheckedChanged);
+            // 
             // cboxDarkScrollbars
             // 
             this.cboxDarkScrollbars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboxDarkScrollbars.AutoSize = true;
             this.cboxDarkScrollbars.BoxBackColor = System.Drawing.Color.White;
             this.cboxDarkScrollbars.HighlightColor = System.Drawing.SystemColors.Highlight;
-            this.cboxDarkScrollbars.Location = new System.Drawing.Point(336, 17);
+            this.cboxDarkScrollbars.Location = new System.Drawing.Point(240, 38);
             this.cboxDarkScrollbars.Margin = new System.Windows.Forms.Padding(2);
             this.cboxDarkScrollbars.Name = "cboxDarkScrollbars";
-            this.cboxDarkScrollbars.Size = new System.Drawing.Size(187, 17);
+            this.cboxDarkScrollbars.Size = new System.Drawing.Size(209, 19);
             this.cboxDarkScrollbars.TabIndex = 1;
             this.cboxDarkScrollbars.Text = "Použiť tmavé posuvníky (>Win10)";
+            this.cboxDarkScrollbars.CheckedChanged += new System.EventHandler(this.CboxDarkScrollbars_CheckedChanged);
             // 
             // cboxDarkTitlebar
             // 
@@ -1213,9 +1233,10 @@ namespace ToolsCore.Forms
             this.cboxDarkTitlebar.Location = new System.Drawing.Point(4, 38);
             this.cboxDarkTitlebar.Margin = new System.Windows.Forms.Padding(2);
             this.cboxDarkTitlebar.Name = "cboxDarkTitlebar";
-            this.cboxDarkTitlebar.Size = new System.Drawing.Size(203, 17);
+            this.cboxDarkTitlebar.Size = new System.Drawing.Size(231, 19);
             this.cboxDarkTitlebar.TabIndex = 2;
             this.cboxDarkTitlebar.Text = "Použiť tmavé záhlavie okna (>Win10)";
+            this.cboxDarkTitlebar.CheckedChanged += new System.EventHandler(this.CboxDarkTitlebar_CheckedChanged);
             // 
             // cboxDefaultVisual
             // 
@@ -1225,9 +1246,10 @@ namespace ToolsCore.Forms
             this.cboxDefaultVisual.Location = new System.Drawing.Point(4, 17);
             this.cboxDefaultVisual.Margin = new System.Windows.Forms.Padding(2);
             this.cboxDefaultVisual.Name = "cboxDefaultVisual";
-            this.cboxDefaultVisual.Size = new System.Drawing.Size(240, 17);
+            this.cboxDefaultVisual.Size = new System.Drawing.Size(246, 19);
             this.cboxDefaultVisual.TabIndex = 0;
-            this.cboxDefaultVisual.Text = "Použiť predvolený vzhľad ovládacích prvkov";
+            this.cboxDefaultVisual.Text = "Použiť klasický vzhľad ovládacích prvkov";
+            this.cboxDefaultVisual.CheckedChanged += new System.EventHandler(this.CboxDefaultVisual_CheckedChanged);
             // 
             // pFonts
             // 
@@ -1250,20 +1272,20 @@ namespace ToolsCore.Forms
             // 
             this.pgFonts.ButtonAlphabetical.ImageIndex = 0;
             this.pgFonts.ButtonAlphabetical.Name = "";
-            this.pgFonts.ButtonAlphabetical.Size = new System.Drawing.Size(23, 22);
+            this.pgFonts.ButtonAlphabetical.Size = new System.Drawing.Size(29, 28);
             // 
             // 
             // 
             this.pgFonts.ButtonCategorized.ImageIndex = 1;
             this.pgFonts.ButtonCategorized.Name = "";
-            this.pgFonts.ButtonCategorized.Size = new System.Drawing.Size(23, 22);
+            this.pgFonts.ButtonCategorized.Size = new System.Drawing.Size(29, 28);
             // 
             // 
             // 
             this.pgFonts.ButtonPropertyPages.Enabled = false;
             this.pgFonts.ButtonPropertyPages.ImageIndex = 3;
             this.pgFonts.ButtonPropertyPages.Name = "";
-            this.pgFonts.ButtonPropertyPages.Size = new System.Drawing.Size(23, 22);
+            this.pgFonts.ButtonPropertyPages.Size = new System.Drawing.Size(29, 22);
             this.pgFonts.ButtonPropertyPages.Visible = false;
             this.pgFonts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pgFonts.FirstHideAllProperties = false;
@@ -1278,18 +1300,16 @@ namespace ToolsCore.Forms
             this.pgFonts.InnerToolStrip.AllowMerge = false;
             this.pgFonts.InnerToolStrip.AutoSize = false;
             this.pgFonts.InnerToolStrip.CanOverflow = false;
-            this.pgFonts.InnerToolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.pgFonts.InnerToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.pgFonts.InnerToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pgFonts.ButtonCategorized,
             this.pgFonts.ButtonAlphabetical,
             this.pgFonts.Separator,
-            this.pgFonts.ButtonPropertyPages,
-            this.toolStripButton4});
-            this.pgFonts.InnerToolStrip.Location = new System.Drawing.Point(0, 1);
+            this.pgFonts.ButtonPropertyPages});
+            this.pgFonts.InnerToolStrip.Location = new System.Drawing.Point(0, 0);
             this.pgFonts.InnerToolStrip.Name = "InnerToolStrip";
             this.pgFonts.InnerToolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 1, 0);
-            this.pgFonts.InnerToolStrip.Size = new System.Drawing.Size(538, 25);
+            this.pgFonts.InnerToolStrip.Size = new System.Drawing.Size(538, 31);
             this.pgFonts.InnerToolStrip.TabIndex = 1;
             this.pgFonts.InnerToolStrip.TabStop = true;
             this.pgFonts.InnerToolStrip.Text = "PropertyGridToolBar";
@@ -1300,17 +1320,10 @@ namespace ToolsCore.Forms
             this.pgFonts.TabIndex = 0;
             this.pgFonts.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.PgFonts_SelectedGridItemChanged);
             // 
-            // toolStripButton4
-            // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton4.Text = "toolStripButton4";
-            // 
             // exGroupBox3
             // 
             this.exGroupBox3.Controls.Add(this.lFontExample);
+            this.exGroupBox3.DisabledForeColor = System.Drawing.SystemColors.GrayText;
             this.exGroupBox3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.exGroupBox3.Location = new System.Drawing.Point(0, 340);
             this.exGroupBox3.Name = "exGroupBox3";
@@ -1406,6 +1419,7 @@ namespace ToolsCore.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbLogging.Controls.Add(this.cboxLoggingInfo);
             this.gbLogging.Controls.Add(this.cboxLoggingError);
+            this.gbLogging.DisabledForeColor = System.Drawing.SystemColors.GrayText;
             this.gbLogging.Location = new System.Drawing.Point(3, 3);
             this.gbLogging.Name = "gbLogging";
             this.gbLogging.Size = new System.Drawing.Size(531, 70);
@@ -1421,7 +1435,7 @@ namespace ToolsCore.Forms
             this.cboxLoggingInfo.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.cboxLoggingInfo.Location = new System.Drawing.Point(6, 19);
             this.cboxLoggingInfo.Name = "cboxLoggingInfo";
-            this.cboxLoggingInfo.Size = new System.Drawing.Size(260, 17);
+            this.cboxLoggingInfo.Size = new System.Drawing.Size(299, 19);
             this.cboxLoggingInfo.TabIndex = 0;
             this.cboxLoggingInfo.Text = "Logovanie informácií o stave programu do súboru";
             // 
@@ -1433,7 +1447,7 @@ namespace ToolsCore.Forms
             this.cboxLoggingError.HighlightColor = System.Drawing.SystemColors.Highlight;
             this.cboxLoggingError.Location = new System.Drawing.Point(6, 42);
             this.cboxLoggingError.Name = "cboxLoggingError";
-            this.cboxLoggingError.Size = new System.Drawing.Size(205, 17);
+            this.cboxLoggingError.Size = new System.Drawing.Size(232, 19);
             this.cboxLoggingError.TabIndex = 1;
             this.cboxLoggingError.Text = "Logovanie chýb a výnimiek do súboru";
             // 
@@ -1442,7 +1456,7 @@ namespace ToolsCore.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 90);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(142, 13);
+            this.label1.Size = new System.Drawing.Size(155, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Zobrazovať chybové hlášky:";
             // 
@@ -1457,21 +1471,6 @@ namespace ToolsCore.Forms
             // styleBindingSource
             // 
             this.styleBindingSource.DataSource = typeof(ToolsCore.XML.Style);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
-            // 
-            // tsbResetStyle
-            // 
-            this.tsbResetStyle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbResetStyle.Image = global::ToolsCore.GlobalResources.restart;
-            this.tsbResetStyle.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbResetStyle.Name = "tsbResetStyle";
-            this.tsbResetStyle.Size = new System.Drawing.Size(23, 23);
-            this.tsbResetStyle.Text = "Resetovať štýl";
-            this.tsbResetStyle.Click += new System.EventHandler(this.TsbResetStyle_Click);
             // 
             // FAppSettingsBase
             // 
@@ -1523,10 +1522,10 @@ namespace ToolsCore.Forms
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.exGroupBox1.ResumeLayout(false);
-            this.exGroupBox7.ResumeLayout(false);
-            this.exGroupBox7.PerformLayout();
-            this.exGroupBox9.ResumeLayout(false);
-            this.exGroupBox9.PerformLayout();
+            this.gbColorItemSettings.ResumeLayout(false);
+            this.gbColorItemSettings.PerformLayout();
+            this.gbCategorySettings.ResumeLayout(false);
+            this.gbCategorySettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFontSize)).EndInit();
             this.exGroupBox8.ResumeLayout(false);
             this.exGroupBox8.PerformLayout();
@@ -1563,7 +1562,6 @@ namespace ToolsCore.Forms
         protected DataGridView dgvColumns;
         private Label label2;
         private ExControls.ExGroupBox gboxGeneralProgram;
-        private ExControls.ExCheckBox cboxCheckUpdate;
         private ExControls.ExCheckBox cboxClassicGui;
         private ExControls.ExCheckBox cboxMultipleInstances;
         private BindingSource appLanguageBindingSource;
@@ -1572,10 +1570,8 @@ namespace ToolsCore.Forms
         private BindingSource desktopColumnBindingSource;
         private ExControls.ExGroupBox exGroupBox3;
         private ExControls.ExPropertyGrid pgFonts;
-        private ToolStripButton toolStripButton4;
         private Label lFontExample;
         private ExCheckBox cboxShowRowHeaders;
-        private ExCheckBox cboxShowStateRow;
         private ExRadioButton rbToolOnly;
         private ExRadioButton rbMenuOnly;
         private ExRadioButton rbMenuToolStrip;
@@ -1599,14 +1595,14 @@ namespace ToolsCore.Forms
         private ExGroupBox exGroupBox1;
         private Label lFontStyleExample;
         private ExTreeView tvStyles;
-        private ExGroupBox exGroupBox7;
+        private ExGroupBox gbColorItemSettings;
         private ExCheckBox cboxBold;
         private ExColorSelector csForeColor;
         private ExLabel lStyleBackColor;
         private ExLabel lStyleForeColor;
         private ExColorSelector csBackColor;
-        private ExGroupBox exGroupBox9;
-        private Label label8;
+        private ExGroupBox gbCategorySettings;
+        private ExLabel label8;
         private ExComboBox cbFont;
         private ExNumericUpDown nudFontSize;
         private ExCheckBox cboxOnlyNonPropFont;
@@ -1643,5 +1639,6 @@ namespace ToolsCore.Forms
         private ExButton bResetColorSetting;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton tsbResetStyle;
+        private ExCheckBox cboxHighlightStatusBar;
     }
 }

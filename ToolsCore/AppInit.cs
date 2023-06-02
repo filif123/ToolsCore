@@ -3,8 +3,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using ExControls;
+using Microsoft.Office.Interop.Excel;
 using ToolsCore.Tools;
 using ToolsCore.XML;
+using Application = System.Windows.Forms.Application;
+using Style = ToolsCore.XML.Style;
 
 namespace ToolsCore;
 
